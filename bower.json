@@ -3,7 +3,7 @@
   "description": "",
   "main": "",
   "authors": [
-    "SickAustrian <SickAustrian@users.noreply.github.com>"
+    "VSTS Team B"
   ],
   "license": "MIT",
   "homepage": "",
@@ -16,5 +16,7 @@
     "test",
     "tests"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "polymer": "Polymer#^1.7.1"
+  }
 }
