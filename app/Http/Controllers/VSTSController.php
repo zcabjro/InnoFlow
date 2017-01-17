@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use App\Models\User;
 
 
 class VSTSController extends Controller
@@ -34,6 +35,7 @@ class VSTSController extends Controller
 
     public function authorizeAppCallback( Request $request )
     {
-        dd( $request );
+        $user = new User();
+        $user -> save();
     }
 }

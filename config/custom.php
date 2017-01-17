@@ -11,7 +11,7 @@ return [
     'vsts' => [
         'clientId' => env( 'VSTS_APP_ID' ),
         'scopes' => 'vso.code vso.project_manage',
-        'redirectUri' => 'redirect_uri'
+        'redirectUri' => 'https://innoflow.herokuapp.com/api/authorize-callback'
     ],
 
 ];

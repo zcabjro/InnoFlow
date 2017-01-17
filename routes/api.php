@@ -14,5 +14,5 @@
 
 Route::post( '/commits', 'CommitController@create' );
 
-Route::post( '/authorize', 'VSTSController@authorizeApp' );
-Route::post( '/authorize-callback', 'VSTSController@authorizeAppCallback' );
+Route::get( '/authorize', 'VSTSController@authorizeApp' );
+Route::get( '/authorize-callback', 'VSTSController@authorizeAppCallback' );
