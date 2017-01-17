@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,3 +13,6 @@ use Illuminate\Http\Request;
 */
 
 Route::post( '/commits', 'CommitController@create' );
+
+Route::post( '/authorize', 'VSTSController@authorizeApp' );
+Route::post( '/authorize-callback', 'VSTSController@authorizeAppCallback' );
