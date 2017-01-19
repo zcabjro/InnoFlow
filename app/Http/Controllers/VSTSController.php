@@ -16,6 +16,12 @@ use App\Models\User;
 
 class VSTSController extends Controller
 {
+    public function login( Request $request )
+    {
+
+    }
+
+
     public function authorizeApp( Request $request )
     {
         $client = new Client( [ 'base_uri' => 'https://app.vssps.visualstudio.com/oauth2' ] );

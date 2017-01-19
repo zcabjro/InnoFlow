@@ -12,7 +12,16 @@
 |
 */
 
-Route::post( '/commits', 'CommitController@create' );
 
-Route::get( '/authorize', 'VSTSController@authorizeApp' );
-Route::get( '/authorize-callback', 'VSTSController@authorizeAppCallback' );
+/*Route::get( '/authorize', 'VSTSController@authorizeApp' );
+Route::get( '/authorize-callback', 'VSTSController@authorizeAppCallback' );*/
+
+Route::post( '/login', "AuthController@loginUser" );
+Route::post( '/register', "AuthController@registerUser" );
+
+
+Route::group( [ 'middleware' => 'jwt-auth' ], function () {
+
+    Route::post( '/commits', 'CommitController@create' );
+
+});
