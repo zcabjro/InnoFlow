@@ -30,3 +30,7 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
     });
 
 });
+
+
+// VSTS callback route
+Route::put( 'vsts/token/{id}', 'VSTS\TokenController@store' );

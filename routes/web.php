@@ -15,5 +15,6 @@
 // Index route
 Route::get( '/', 'Web\HomeController@getIndex' );
 
+
 // VSTS callback route
 Route::get( 'vsts/authorize', 'Web\HomeController@getAuthorizeIndex' );
