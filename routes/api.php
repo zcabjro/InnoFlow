@@ -16,11 +16,12 @@
 // Auth routes
 Route::post( 'login', 'Auth\AuthController@loginUser' );
 Route::post( 'register', 'Auth\AuthController@registerUser' );
-Route::get( 'logout', 'Auth\AuthController@logoutUser' );
 
 
 // JWT token protected routes
 Route::group( [ 'middleware' => 'jwt-auth' ], function () {
+
+    Route::get( 'logout', 'Auth\AuthController@logoutUser' );
 
     // VSTS token protected routes
     Route::group( [ 'middleware' => 'vsts-auth' ], function () {

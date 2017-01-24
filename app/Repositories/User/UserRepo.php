@@ -8,8 +8,6 @@
 
 namespace App\Repositories\User;
 
-use App\Repositories\User\UserRepoInterface;
-use Illuminate\Support\Facades\Input;
 use App\Models\User;
 use JWTAuth;
 
@@ -35,7 +33,7 @@ class UserRepo implements UserRepoInterface
 
     public function logout()
     {
-        JWTAuth::getToken() -> invalidate();
+        JWTAuth::invalidate( JWTAuth::getToken() );
     }
 
 
