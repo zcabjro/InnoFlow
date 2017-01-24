@@ -8,10 +8,7 @@
 
 return [
 
-    'vsts' => [
-        'clientId' => env( 'VSTS_APP_ID' ),
-        'scopes' => 'vso.code vso.project_manage',
-        'redirectUri' => 'https://innoflow.herokuapp.com/api/authorize-callback'
-    ],
-
+    'cookie' => [
+        'ttl' => 60 * 60 * 24,
+    ]
 ];

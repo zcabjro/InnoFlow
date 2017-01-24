@@ -1,0 +1,31 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: andreas
+ * Date: 24/01/2017
+ * Time: 22:19
+ */
+
+
+namespace App\Http\Controllers\Web;
+
+use App\Http\Requests\VSTSAuthRequest;
+use App\Services\VSTSService;
+use App\Http\Controllers\Controller;
+
+
+class HomeController extends Controller
+{
+    public function index()
+    {
+        return view( 'index' );
+    }
+
+
+    public function getAuthorizeIndex( VSTSService $service, VSTSAuthRequest $request )
+    {
+        $service -> requestToken( $request -> all() );
+
+        return view( 'index' ) -> with( [ "waitForToken" => true ] );
+    }
+}

@@ -686,7 +686,11 @@
                 "sftp",
                 "storage"
             ],
+<<<<<<< Updated upstream
             "time": "2017-01-23 10:32:09"
+=======
+            "time": "2017-01-23T10:32:09+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "league/fractal",
@@ -749,7 +753,11 @@
                 "league",
                 "rest"
             ],
+<<<<<<< Updated upstream
             "time": "2016-12-28 01:30:30"
+=======
+            "time": "2016-12-28T01:30:30+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "monolog/monolog",
@@ -871,7 +879,11 @@
                 "cron",
                 "schedule"
             ],
+<<<<<<< Updated upstream
             "time": "2017-01-23 04:29:33"
+=======
+            "time": "2017-01-23T04:29:33+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "namshi/jose",
@@ -1474,7 +1486,11 @@
                 "spatie",
                 "transform"
             ],
+<<<<<<< Updated upstream
             "time": "2017-01-19 20:51:03"
+=======
+            "time": "2017-01-19T20:51:03+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "spatie/laravel-fractal",
@@ -1532,7 +1548,11 @@
                 "spatie",
                 "transform"
             ],
+<<<<<<< Updated upstream
             "time": "2017-01-23 13:41:40"
+=======
+            "time": "2017-01-23T13:41:40+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3007,7 +3027,11 @@
                 "testing",
                 "xunit"
             ],
+<<<<<<< Updated upstream
             "time": "2017-01-20 15:06:43"
+=======
+            "time": "2017-01-20T15:06:43+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3270,7 +3294,11 @@
                 "testing",
                 "xunit"
             ],
+<<<<<<< Updated upstream
             "time": "2017-01-22 08:39:59"
+=======
+            "time": "2017-01-22T08:39:59+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "phpunit/phpunit-mock-objects",

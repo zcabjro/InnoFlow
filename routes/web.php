@@ -11,8 +11,9 @@
 |
 */
 
-use App\Models\Commit;
 
-Route::get( '/', function () {
-    return view( 'index', [ 'commits' => Commit::all()]);
-});
+// Index route
+Route::get( '/', 'Web\HomeController@getIndex' );
+
+// VSTS callback route
+Route::get( 'vsts/authorize', 'Web\HomeController@getAuthorizeIndex' );

@@ -13,15 +13,20 @@
 */
 
 
-/*Route::get( '/authorize', 'VSTSController@authorizeApp' );
-Route::get( '/authorize-callback', 'VSTSController@authorizeAppCallback' );*/
+// Auth routes
+Route::post( 'login', 'Auth\AuthController@loginUser' );
+Route::post( 'register', 'Auth\AuthController@registerUser' );
+Route::get( 'logout', 'Auth\AuthController@logoutUser' );
 
-Route::post( '/login', "AuthController@loginUser" );
-Route::post( '/register', "AuthController@registerUser" );
 
-
+// JWT token protected routes
 Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
-    Route::post( '/commits', 'CommitController@create' );
+    // VSTS token protected routes
+    Route::group( [ 'middleware' => 'vsts-auth' ], function () {
+
+        Route::post( '/commits', 'CommitController@create' );
+
+    });
 
 });

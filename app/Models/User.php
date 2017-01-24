@@ -10,7 +10,7 @@ class User extends Authenticatable
     use Notifiable;
 
 
-    protected $primaryKey = "userId";
+    protected $primaryKey = 'userId';
 
 
     /**

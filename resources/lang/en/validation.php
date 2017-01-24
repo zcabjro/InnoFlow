@@ -97,6 +97,8 @@ return [
     |
     */
 
+    'user' => "The :attribute must be a valid user id.",
+
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',

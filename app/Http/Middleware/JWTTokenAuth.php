@@ -10,12 +10,11 @@ use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use App\Traits\JsonResponseTrait;
 
 use JWTAuth;
-use Tymon\JWTAuth\Token;
 use Closure;
 
 
 
-class TokenBasedAuth
+class JWTTokenAuth
 {
     use JsonResponseTrait;
 
@@ -37,7 +36,7 @@ class TokenBasedAuth
             JWTAuth::setToken( $token );
 
             // User cannot be found
-            if ( is_null( JWTAuth::toUser( JWTAuth::getToken() ) ) )
+            if ( is_null( JWTAuth::toUser( $token ) ) )
             {
                 return $this -> respondNotFound( "User not found" );
             }
@@ -45,10 +44,11 @@ class TokenBasedAuth
         // Token expired
         catch ( TokenExpiredException $e )
         {
-            // Refresh token (no login required, new token send back)
+            // Refresh token
             try
             {
                 $newToken = JWTAuth::refresh( $token );
+                JWTAuth::setToken( $newToken );
             }
             // Token is blacklisted (login again)
             catch ( TokenBlacklistedException $e )
@@ -78,7 +78,7 @@ class TokenBasedAuth
         // Token was refreshed, hence update http only cookie
         if ( !is_null( $newToken ) )
         {
-            $response -> cookie( 'token', $newToken, 60 );
+            $response -> cookie( 'token', $newToken, config( 'cookie.ttl' ) );
         }
 
         return $response;
