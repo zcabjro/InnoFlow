@@ -12,8 +12,7 @@ require('laravel-elixir-vue-2');
  | file for your application as well as publishing vendor resources.
  |
  */
-
-
+ 
 elixir((mix) =>
 {
     mix.less('app.less', 'resources/assets/sass/_less-to-css.scss')

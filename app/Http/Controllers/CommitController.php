@@ -9,7 +9,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Commit;
+use App\Models\Commit;
 
 
 class CommitController extends Controller

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,4 +12,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post( '/commits', 'CommitController@create' );
+
+/*Route::get( '/authorize', 'VSTSController@authorizeApp' );
+Route::get( '/authorize-callback', 'VSTSController@authorizeAppCallback' );*/
+
+Route::post( '/login', "AuthController@loginUser" );
+Route::post( '/register', "AuthController@registerUser" );
+
+
+Route::group( [ 'middleware' => 'jwt-auth' ], function () {
+
+    Route::post( '/commits', 'CommitController@create' );
+
+});

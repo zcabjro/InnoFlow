@@ -11,7 +11,7 @@
 |
 */
 
-use App\Commit;
+use App\Models\Commit;
 
 Route::get( '/', function () {
     return view( 'index', [ 'commits' => Commit::all()]);
