@@ -16,7 +16,5 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "polymer": "Polymer#^1.7.1"
-  }
+  "dependencies": {}
 }

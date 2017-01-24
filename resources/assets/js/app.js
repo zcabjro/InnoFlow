@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * include Vue and Vue Resource. This gives a great starting point for
@@ -13,8 +12,11 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
+import Vue from 'vue'
+import {router} from './router'
 
-const app = new Vue({
-    el: '#app'
-});
+new Vue({
+  mode: 'history',
+  base: __dirname,
+  router
+}).$mount('#app')
