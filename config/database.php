@@ -79,7 +79,7 @@ return [
             'sslmode' => 'prefer',
         ],
 
-        'heroku' => [
+        /*'heroku' => [
             'driver'   => 'pgsql',
             'host'     => parse_url(getenv("DATABASE_URL"))["host"],
             'database' => substr(parse_url(getenv("DATABASE_URL"))["path"], 1),
@@ -88,7 +88,7 @@ return [
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'public',
-        ],
+        ],*/
     ],
 
     /*

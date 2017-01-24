@@ -30,8 +30,8 @@ class VSTSAuthRequest extends ApiRequest
     {
         return [
 
-            'auth_code' => 'required|string',
-            'user_id' => 'required|user',
+            'code' => 'required|string',
+            'state' => 'required|user',
 
         ];
     }
