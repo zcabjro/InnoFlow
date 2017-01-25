@@ -46,8 +46,7 @@ class AuthController extends Controller
     public function logoutUser()
     {
         $this -> userRepo -> logout();
-        $cookie = Cookie::forget( 'token' );
-        return response() -> json() -> withCookie( $cookie );
+        return response() -> json() -> withCookie( Cookie::forget( 'token' ) );
     }
 
 
