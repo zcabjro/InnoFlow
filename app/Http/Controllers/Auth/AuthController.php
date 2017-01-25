@@ -13,6 +13,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Repositories\User\UserRepo;
 use App\Traits\JsonResponseTrait;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cookie;
 
 
 class AuthController extends Controller
@@ -45,6 +46,8 @@ class AuthController extends Controller
     public function logoutUser()
     {
         $this -> userRepo -> logout();
+        $cookie = Cookie::forget( 'token' );
+        return response() -> json() -> withCookie( $cookie );
     }
 
 
