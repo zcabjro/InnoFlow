@@ -7,3 +7,6 @@ Homestead.json
 Homestead.yaml
 /.env
 /config/database.php
+/public/js/app.js
+/public/css/app.css
+/public/css/app.css.map

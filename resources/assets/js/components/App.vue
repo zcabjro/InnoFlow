@@ -36,10 +36,9 @@
       </div>
     </div>
     
-      
     <transition class="animated" appear name="fadeDown" mode="out-in">
       <keep-alive>
-        <router-view></router-view>
+        <router-view id="child"></router-view>
       </keep-alive>
     </transition>
   </div>
@@ -65,6 +64,10 @@
 <style>
   #appNav {
     border-radius: 0;
+  }
+  
+  #child {
+    margin-top: 50px;
   }
   
   #appNav .navbar-brand {
