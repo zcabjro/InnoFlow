@@ -8,8 +8,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Repositories\User\UserRepo;
 use App\Traits\JsonResponseTrait;
 use App\Http\Controllers\Controller;

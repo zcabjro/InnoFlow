@@ -9,7 +9,7 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Requests\VSTSAuthRequest;
+use App\Http\Requests\VSTS\VSTSAuthRequest;
 use App\Services\VSTSService;
 use App\Http\Controllers\Controller;
 

@@ -9,7 +9,7 @@
 
 namespace App\Http\Controllers\VSTS;
 
-use App\Http\Requests\VSTSTokenRequest;
+use App\Http\Requests\VSTS\VSTSTokenRequest;
 use App\Repositories\User\UserRepo;
 use App\Http\Controllers\Controller;
 

@@ -7,7 +7,9 @@
  */
 
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\VSTS;
+
+use App\Http\Requests\ApiRequest;
 
 
 class VSTSTokenRequest extends ApiRequest

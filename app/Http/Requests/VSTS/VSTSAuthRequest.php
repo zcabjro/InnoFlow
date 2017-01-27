@@ -6,7 +6,9 @@
  * Time: 16:37
  */
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\VSTS;
+
+use App\Http\Requests\ApiRequest;
 
 
 class VSTSAuthRequest extends ApiRequest

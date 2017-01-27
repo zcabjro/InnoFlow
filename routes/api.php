@@ -18,6 +18,10 @@ Route::post( 'login', 'Auth\AuthController@loginUser' );
 Route::post( 'register', 'Auth\AuthController@registerUser' );
 
 
+// InnoFlow extension routes
+Route::post( 'innovation', 'IdeExtension\InnovationController@store' );
+
+
 // JWT token protected routes
 Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
