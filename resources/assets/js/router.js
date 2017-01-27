@@ -7,6 +7,7 @@ import Landing from './components/Landing.vue'
 import Register from './components/Register.vue'
 import Login from './components/Login.vue'
 import Dashboard from './components/Dashboard.vue'
+import CreateClass from './components/CreateClass.vue'
 
 Vue.use(VueRouter)
 
@@ -37,6 +38,11 @@ const routes = [{
     // Dashboard
     path: 'dashboard',
     component: Dashboard
+  }, {
+
+    // Create class
+    path: 'create',
+    component: CreateClass
   }]
 }, {
   // Redirect fallback
