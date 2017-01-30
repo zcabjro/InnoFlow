@@ -36,11 +36,13 @@
       </div>
     </div>
     
-    <transition class="animated" appear name="fadeDown" mode="out-in">
-      <keep-alive>
-        <router-view id="child"></router-view>
-      </keep-alive>
-    </transition>
+    <div id="child">
+      <transition class="animated" appear name="fadeDown" mode="out-in">
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
+      </transition>
+    </div>
   </div>
 </template>
 

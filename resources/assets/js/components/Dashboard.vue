@@ -3,7 +3,8 @@
     <!-- Sidebar -->
     <div v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
       <ul class="sidebar-nav">
-        <item v-for="item in menu" :name="item.name" :alt="item.alt" :active="menuOpen" :children="item.children"></item>
+        <item :name="menu.projects.name" :alt="menu.projects.alt" :children="menu.projects.children" :active="menuOpen"></item>
+        <item :name="menu.classes.name" :alt="menu.classes.alt" :children="menu.classes.children" :active="menuOpen"></item>
       </ul>
     </div>
 
@@ -27,32 +28,56 @@
   import Item from './Item.vue'
 
   export default {
+    name: 'dashboard',
     data() {
       return {
         menuOpen: $('#wrapper').hasClass('toggled'),
-        menu: [{
-          name: 'Projects',
-          alt: 'P',
-          children: ['A', 'B']
-        }, {
-          name: 'Classes',
-          alt: 'C',
-          children: []
-        }]
+        menu: {
+          projects: {
+            name: 'Projects',
+            alt: 'P',
+            children: []
+          },
+          classes: {
+            name: 'Classes',
+            alt: 'C',
+            children: []
+          }
+        }
       }
     },
-    
-    components : {
+
+    components: {
       Item
     },
-    
+
+    created: function () {
+      this.loadProjects();
+    },
+
+    watch: {
+      '$route': 'loadProjects'
+    },
+
     methods: {
       toggleMenu(caller) {
         if (caller !== 'sidebar' || !this.menuOpen) {
           this.menuOpen = !this.menuOpen;
-          $("#wrapper").toggleClass("toggled"); 
+          $('#wrapper').toggleClass('toggled');
         }
       },
+      loadProjects() {
+        this.$http
+          .get('/api/projects')
+          .then(this.loadSuccess, this.loadFailure);
+      },
+      loadSuccess(res) {
+        this.projects.children = res.body['projects'] ? res.body['projects'] : [];
+        this.classes.children = res.body['classes'] ? res.body['classes'] : [];
+      },
+      loadFailure(res) {
+        console.log('Failed to load projects');
+      }
     }
   }
 </script>

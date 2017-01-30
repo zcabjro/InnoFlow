@@ -10099,12 +10099,14 @@ body {
 
 #sidebar-wrapper {
   z-index: 1000;
-  position: fixed;
+  position: absolute;
+  top: 50px;
   left: 250px;
   width: 50px;
-  height: 100%;
+  height: calc(100% - 50px);
   margin-left: -250px;
-  overflow-y: auto;
+  overflow-x: hidden;
+  overflow-y: hidden;
   background: #000;
   -webkit-transition: width 0.25s ease;
   transition: width 0.25s ease;
