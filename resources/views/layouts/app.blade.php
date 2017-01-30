@@ -18,6 +18,8 @@
         window.Laravel = <?php echo json_encode([
             'csrfToken' => csrf_token(),
         ]); ?>
+
+        window.waitForToken = <?php echo json_encode( isset( $waitForToken ) ); ?>;
     </script>
 </head>
 <body>
