@@ -26,6 +26,7 @@ Route::post( 'innovation', 'IdeExtension\InnovationController@store' );
 Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
     Route::get( 'logout', 'Auth\AuthController@logoutUser' );
+    Route::get( 'token', 'Auth\AuthController@isAuthorized' );
 
     // VSTS token protected routes
     Route::group( [ 'middleware' => 'vsts-auth' ], function () {

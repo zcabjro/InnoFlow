@@ -54,4 +54,12 @@ class AuthController extends Controller
     {
         $this -> userRepo -> create( $request -> all() );
     }
+
+
+    public function isAuthorized()
+    {
+        $user = $this -> userRepo -> loggedIn();
+        $authorized = !is_null( $user -> vsts_token );
+        return response() -> json( [ 'authorized' => $authorized ] );
+    }
 }

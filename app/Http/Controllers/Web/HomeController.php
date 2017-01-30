@@ -26,6 +26,6 @@ class HomeController extends Controller
     {
         $service -> requestToken( $request -> all() );
 
-        return view( 'index' ) -> with( [ "waitForToken" => true ] );
+        return view( 'index' ) -> with( [ 'waitForToken' => true ] );
     }
 }
