@@ -44,9 +44,11 @@
     },
     methods: {
       register(e) {
-        this.$http
-            .post('/api/register', {email: this.email.value, password: this.password.value})
+        if (!this.passwordMismatch) {
+          this.$http
+            .post('/api/register', { email: this.email.value, password: this.password.value })
             .then(this.registerSuccess, this.registerFailure);
+        }
       },
       registerSuccess(res) {
         console.log("Success");
