@@ -35,9 +35,9 @@ class VSTSService
     {
         $client = new Client( [ 'base_uri' => 'https://app.vssps.visualstudio.com/oauth2' ] );
 
-        $client -> request( 'POST', 'token', [
+        $response = $client -> request( 'POST', 'token', [
 
-            'query' => [
+            'form_params' => [
                 'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
                 'client_assertion' => env( 'VSTS_APP_SECRET' ),
                 'grant_type' => 'ietf:params:oauth:grant-type:jwt-bearer',
@@ -47,6 +47,7 @@ class VSTSService
 
         ]);
 
+        dd( $response );
         //  'redirect_uri' => 'https://innoflow.herokuapp.com/api/vsts/token/' . $input[ "state" ]
     }
 
