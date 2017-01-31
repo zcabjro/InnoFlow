@@ -7,19 +7,30 @@
  */
 
 namespace App\Services;
-
-use App\Models\Test;
+;
 use JWTAuth;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Psr7;
+use App\Repositories\User\UserRepo;
 
 
 class VSTSService
 {
+    private $userRepo;
+    private $client;
+
+
+    public function __construct( UserRepo $userRepo )
+    {
+        $this -> userRepo = $userRepo;
+        $this -> client = new Client();
+    }
+
+
     public function getAuthorizationURL( $user )
     {
         $url = 'https://app.vssps.visualstudio.com/oauth2/authorize';
+
         $parameters = http_build_query([
 
             'client_id' => env( 'VSTS_APP_ID' ),
@@ -36,11 +47,9 @@ class VSTSService
 
     public function requestToken( $input )
     {
-        $client = new Client();
-
         try
         {
-            $response = $client -> request( 'POST', 'https://app.vssps.visualstudio.com/oauth2/token', [
+            $response = $this -> client -> request( 'POST', 'https://app.vssps.visualstudio.com/oauth2/token', [
 
                 'form_params' => [
                     'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
@@ -52,20 +61,14 @@ class VSTSService
 
             ]);
 
-            $body = $response -> getBody();
-            $test = new Test();
-            $test -> token = (string) $body;
-            $test -> save();
+            $json = json_decode( $response -> getBody(), true );
+            $updates = [ 'vsts_token' => $json[ 'access_token' ], 'vsts_refresh_token' => $json[ 'refresh_token' ] ];
+            $this -> userRepo -> update( $input[ 'state' ], $updates );
         }
         catch ( ClientException $e )
         {
-            $test = new Test();
-            $test -> request = Psr7\str( $e->getRequest() );
-            $test -> response = Psr7\str($e->getResponse() );
-            $test -> save();
+            // Error occured
         }
-
-        //'redirect_uri' => 'https://innoflow.herokuapp.com/api/vsts/token/' . $input[ "state" ]
     }
 
 

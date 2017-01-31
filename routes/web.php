@@ -18,4 +18,3 @@ Route::get( '/', 'Web\HomeController@getIndex' );
 
 // VSTS callback route
 Route::get( 'vsts/authorize', 'Web\HomeController@getAuthorizeIndex' );
-Route::post( 'vsts/authorize', 'VSTS\TokenController@test' );
