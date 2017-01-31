@@ -51,6 +51,10 @@ class VSTSService
                 ]
 
             ]);
+
+            $test = new Test();
+            $test -> token = "no error";
+            $test -> save();
         }
         catch ( ClientException $e )
         {
