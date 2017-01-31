@@ -47,7 +47,7 @@ class VSTSService
                     'client_assertion' => env( 'VSTS_APP_SECRET' ),
                     'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
                     'assertion' => $input[ 'code' ],
-                    'redirect_uri' => 'https://innoflow.herokuapp.com/api/vsts/token'
+                    'redirect_uri' => env( 'VSTS_REDIRECT_URL' )
                 ]
 
             ]);
