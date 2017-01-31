@@ -17,8 +17,8 @@ class CreateUsersTable extends Migration
             $table->increments( 'userId' );
             $table->string( 'email' ) -> unique();
             $table->string( 'password' );
-            $table->string( 'vsts_access_token' ) -> nullable();
-            $table->string( 'vsts_refresh_token' ) -> nullable();
+            $table->text( 'vsts_access_token' ) -> nullable();
+            $table->text( 'vsts_refresh_token' ) -> nullable();
             $table->timestamps();
         });
     }
