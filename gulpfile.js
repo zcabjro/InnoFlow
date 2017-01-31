@@ -12,11 +12,11 @@ require('laravel-elixir-vue-2');
  | file for your application as well as publishing vendor resources.
  |
  */
- 
-elixir((mix) =>
-{
+
+elixir((mix) => {
     mix.less('app.less', 'resources/assets/sass/_less-to-css.scss')
         .sass('app.scss')
         .webpack('app.js')
-        .copy('node_modules/bootstrap-sass/assets/fonts', 'public/fonts');
+        .copy('node_modules/bootstrap-sass/assets/fonts', 'public/fonts')
+        .copy('node_modules/animate.css/animate.min.css', 'public/css/animate.css');
 });

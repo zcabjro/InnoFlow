@@ -5,6 +5,7 @@
     "dev": "gulp watch"
   },
   "devDependencies": {
+    "animate.css": "^3.5.2",
     "axios": "^0.15.3",
     "bootstrap-sass": "^3.3.7",
     "buble": "^0.15.2",

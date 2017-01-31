@@ -52,6 +52,10 @@
       </div>
     </div>
 
+    <if-message :animated="messageAnimated" :active="messageActive">
+      <p>Hello world!</p>
+    </if-message>
+
     <div id="child">
       <transition class="animated" appear name="fadeDown" mode="out-in">
         <keep-alive>
@@ -64,13 +68,22 @@
 
 <script>
   import bus from '../bus.js'
+  import IfMessage from './IfMessage.vue'
 
   export default {
     name: 'app',
 
+    components: {
+      IfMessage
+    },
+
     data() {
+      setTimeout(() => { this.messageAnimated = true; this.messageActive = true }, 3000);
+      setTimeout(() => this.messageActive = false, 6000);
       return {
-        auth: false
+        auth: false,
+        messageAnimated: false,
+        messageActive: false        
       }
     },
 
@@ -78,12 +91,6 @@
       bus.$on('login', this.isAuthorised);
       this.checkAuth();
     },
-
-    // beforeRouteEnter(to, from, next) {
-    //   next(vm => {
-    //     vm.checkAuth();
-    //   });
-    // },
 
     methods: {
       collapse(e) {
@@ -131,11 +138,11 @@
   }
 </script>
 
-<style>
+<style scoped>
   #appNav {
     border-radius: 0;
   }
-  
+
   #child {
     margin-top: 50px;
   }
