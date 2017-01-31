@@ -1,10 +1,11 @@
 <template>
-    <div class="loader">Loading...</div>
+  <div class="loader">Loading...</div>
 </template>
 
 <script>
   export default {
     name: 'loading',
+
     data() {
       return {
         loadTimeout: null,
@@ -12,21 +13,23 @@
         polls: 0
       }
     },
-    mounted: function() {
+
+    created() {
       this.startPolling();
     },
-    methods: {            
+
+    methods: {
       pollToken() {
         console.log('GET api/token');
-        this.$http
-            .get('/api/token')
-            .then(this.authorised, this.error);
+          axios.get('/api/token')
+          .then(this.authorised)
+          .catch(this.pollError);
       },
       authorised(res) {
-        console.log(res.body['authorized']);
-        if (res.body['authorized']) {
+        console.log(res.data);
+        if (res.data && res.data.authorized) {
           this.stopPolling();
-          this.$router.go('/dashboard');
+          this.$router.push('/dashboard');
         }
         else if (this.polls++ == this.maxPolls) {
           this.stopPolling('Max polls reached');
@@ -35,7 +38,7 @@
           console.log("polls: " + this.polls + ", max: " + this.maxPolls);
         }
       },
-      error(res) {
+      pollError(error) {
         this.stopPolling('Error response');
       },
       startPolling() {

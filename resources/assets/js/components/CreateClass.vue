@@ -17,6 +17,7 @@
 import UserForm from './UserForm.vue'
 export default {
 	name: 'create-class',
+
 	components: {
 		UserForm
 	},
@@ -30,21 +31,21 @@ export default {
 	},
 
 	computed: {
-		validFields: function() {
+		validFields() {
 			return this.className.value && this.classCode.value;
 		}	
 	},
 
 	methods: {
 		create(e) {
-			this.$http
-            .post('/api/createclass', { name: this.className.value, code: this.code.value })
-            .then(this.createSuccess, this.createFailure);
+    	axios.post('/api/createclass', { name: this.className.value, code: this.code.value })
+				.then(this.createSuccess)
+				.catch(this.createFailure);
 		},
 		createSuccess(res) {
 			console.log('Success');
 		},
-		createFailure(res) {
+		createFailure(error) {
 			console.log('Failure');
 		}
 	}

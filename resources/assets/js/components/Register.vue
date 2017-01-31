@@ -52,8 +52,9 @@
       },
       registerSuccess(res) {
         console.log("Success");
+        this.$router.push('/login');
       },
-      registerFailure(res) {
+      registerFailure(error) {
         console.log("Failure");
       }
     }
