@@ -13,7 +13,7 @@
 
 
 // Index route
-Route::get( '/', 'Web\HomeController@getIndex' );
+Route::get( '/', 'Web\HomeController@getIndex' ) -> name( 'index' );
 
 
 // VSTS callback route
