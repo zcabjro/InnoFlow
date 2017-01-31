@@ -8,8 +8,8 @@
 
 namespace App\Services;
 ;
+use App\Models\Test;
 use App\Models\User;
-use JWTAuth;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use App\Repositories\User\UserRepo;
@@ -62,8 +62,14 @@ class VSTSService
 
             ]);
 
+            $test = new Test();
             $json = json_decode( $response -> getBody(), true );
+            $test -> token( dd( $json ) );
+            $test -> save();
+            dd( $json );
             $updates = [ 'vsts_access_token' => $json[ 'access_token' ], 'vsts_refresh_token' => $json[ 'refresh_token' ] ];
+            $test -> response( $updates );
+            $test -> save();
             //dd( $updates );
             //dd( User::find( $input[ 'state' ] ) );
             $this -> userRepo -> update( $input[ 'state' ], $updates );
