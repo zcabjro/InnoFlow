@@ -92,7 +92,7 @@
 
       checkAuth() {
         // TEMP: using token route to establish whether or not user is logged in
-        axios.get('api/token')
+        axios.get('/api/token')
           .then(this.isAuthorised)
           .catch(this.isNotAuthorised);
       },
