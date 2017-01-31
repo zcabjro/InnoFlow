@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper">
+  <div v-show="ready" id="wrapper">
     <!-- Sidebar -->
     <div v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
       <ul class="sidebar-nav">
@@ -42,7 +42,8 @@
           alt: 'C',
           children: []
         }
-      }
+      },
+      ready: false
     };
   }
 
@@ -55,7 +56,7 @@
 
     data() {
       return defaultDashboard();
-    },    
+    },
 
     created() {
       bus.$on('logout', this.resetDashboard);
@@ -75,6 +76,16 @@
         }
       },
 
+      redirect(url, external) {
+        if (external) {
+          window.location.replace(url);
+        }
+        else {
+          this.resetDashboard();
+          this.$router.replace('/login');
+        }
+      },
+
       resetDashboard() {
         Object.assign(this.$data, defaultDashboard());
       },
@@ -82,7 +93,9 @@
       loadDashboard() {
         this.loadProjects();
         this.loadClasses();
-        this.loadCommits();
+        this.loadCommits(); // TEMP: testing VSTS redirect
+        this.loadInnovations(); // TODO: display this in the dashboard
+        this.ready = true;
       },
 
       loadProjects() {
@@ -96,7 +109,7 @@
       },
 
       loadClasses() {
-          axios.get('/api/classes')
+        axios.get('/api/classes')
           .then(function (res) {
             this.classes.children = res.body['classes'] ? res.body['classes'] : [];
           })
@@ -107,26 +120,32 @@
 
       loadCommits() {
         axios.post('/api/commits')
-        .then(function (res) {
-          console.log(res.data);
-        })
-        .catch((error) => {
-          console.log(error.response);
-          if (error.response && error.response.data) {
-            let data = error.response.data;
-            if (typeof data.error === 'string') {
-              // TODO: establish a proper error format
-              alert('login again');
-              this.$router.push('/login'); 
+          .then(function (res) {
+            console.log(res.data);
+          })
+          .catch((error) => {
+            console.log(error.response);
+            if (error.response && error.response.data) {
+              let data = error.response.data;
+              if (typeof data.error === 'string') {
+                // TODO: establish a proper error format
+                console.log('login again');
+                this.redirect('/login', false);
+              }
+              else if (data.error && data.error.url && confirm('Redirect for VSTS auth?')) {
+                this.redirect(data.error.url, true);
+              }
             }
-            else if (data.error && data.error.url && confirm('Redirect for VSTS auth?')) {
-              window.location.replace(data.error.url);      
+            else {
+              console.log('ERROR: ' + error.message);
             }
-          }
-          else {
-            console.log('ERROR: ' + error.message);
-          }                          
-        });
+          });
+      },
+
+      loadInnovations() {
+        axios.get('/api/innovation')
+          .then((res) => console.log('Received innovations'))
+          .catch((error) => console.log('Error loading innovations'));
       }
     }
   }
