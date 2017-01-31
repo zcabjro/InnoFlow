@@ -3,7 +3,7 @@
     <user-form :legend="legend" :fields="[email, password, confirmPassword]"></user-form>
     <div class="form-group">
       <div class="col-md-4 col-md-offset-4">
-          <p class="password-err" v-show="passwordMismatch">Passwords do not match</p>
+        <p class="password-err" v-show="passwordMismatch">Passwords do not match</p>
       </div>
     </div>
     <div class="form-group">
@@ -12,7 +12,9 @@
       </div>
       <br><br>
       <div class="col-md-4 col-md-offset-4">
-        <p>Already registered? <router-link to="/login">Login</router-link></p>
+        <p>Already registered?
+          <router-link to="/login">Login</router-link>
+        </p>
       </div>
     </div>
   </div>
@@ -28,7 +30,7 @@
     },
     data() {
       return {
-        
+
         legend: 'Register',
         email: { label: 'Email', type: 'text', placeholder: 'mail@example.com', value: '' },
         password: { label: 'Password', type: 'password', placeholder: 'password', value: '' },
@@ -36,18 +38,18 @@
       }
     },
     computed: {
-      passwordMismatch: function() {
-        return this.password.value 
-            && this.confirmPassword.value 
-            && this.password.value !== this.confirmPassword.value;
+      passwordMismatch: function () {
+        return this.password.value
+          && this.confirmPassword.value
+          && this.password.value !== this.confirmPassword.value;
       }
     },
     methods: {
       register(e) {
         if (!this.passwordMismatch) {
-          this.$http
-            .post('/api/register', { email: this.email.value, password: this.password.value })
-            .then(this.registerSuccess, this.registerFailure);
+          axios.post('/api/register', { email: this.email.value, password: this.password.value })
+            .then(this.registerSuccess)
+            .catch(this.registerFailure);
         }
       },
       registerSuccess(res) {
