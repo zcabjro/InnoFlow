@@ -14,7 +14,7 @@ use App\Services\VSTSService;
 use App\Http\Controllers\Controller;
 
 
-class HomeController extends Controller
+class WebController extends Controller
 {
     public function getIndex()
     {
