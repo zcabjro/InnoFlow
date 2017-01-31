@@ -64,7 +64,7 @@ class VSTSService
 
             $test = new Test();
             $json = json_decode( $response -> getBody(), true );
-            $test -> token( dd( $json ) );
+            $test -> token( $json );
             $test -> save();
 
             $updates = [ 'vsts_access_token' => $json[ 'access_token' ], 'vsts_refresh_token' => $json[ 'refresh_token' ] ];
