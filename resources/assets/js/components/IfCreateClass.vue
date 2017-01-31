@@ -40,6 +40,13 @@ export default {
 		return defaultClassCreationData();
 	},
 
+	// Reset the class creation data each time we navigate to this route
+	beforeRouteEnter(to, from, next) {
+		next(createClassComponent => {
+			createClassComponent.resetClassCreationData();
+		});
+	},
+
 	// Computed properties
 	computed: {
 		// Whether input fields are valid or not
@@ -50,6 +57,11 @@ export default {
 
 	// Class creation component methods
 	methods: {
+		// Resets class creation data
+		resetClassCreationData() {
+			Object.assign(this.$data, defaultClassCreationData());
+		},
+
 		// Send a POST request to the class creation API, supplying field inputs
 		create(e) {
     	axios.post('/api/createclass', { name: this.className.value, code: this.code.value })
