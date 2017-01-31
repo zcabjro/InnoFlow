@@ -48,7 +48,7 @@ class VSTSService
         ]);
 
         //dd( $response -> getBody() );
-        //  'redirect_uri' => 'https://innoflow.herokuapp.com/api/vsts/token/' . $input[ "state" ]
+        //'redirect_uri' => 'https://innoflow.herokuapp.com/api/vsts/token/' . $input[ "state" ]
     }
 
 
