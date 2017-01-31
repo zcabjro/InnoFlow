@@ -7,7 +7,9 @@
       </div>
       <br><br>
       <div class="col-md-4 col-md-offset-4">
-        <p>Need an account? <router-link to="/register">Register</router-link></p>
+        <p>Need an account?
+          <router-link to="/register">Register</router-link>
+        </p>
       </div>
     </div>
   </div>
@@ -15,12 +17,15 @@
 
 <script>
   import UserForm from './UserForm.vue'
+  import bus from '../bus.js'
 
   export default {
     name: 'login',
+
     components: {
       UserForm
     },
+
     data() {
       return {
         legend: 'Login',
@@ -28,16 +33,19 @@
         password: { label: 'Password', type: 'password', placeholder: 'password', value: '' }
       }
     },
+
     methods: {
       login(e) {
-        this.$http
-            .post('/api/login', {email: this.email.value, password: this.password.value})
-            .then(this.loginSuccess, this.loginFailure);
+          axios.post('/api/login', { email: this.email.value, password: this.password.value })
+          .then(this.loginSuccess)
+          .catch(this.loginFailure);
       },
       loginSuccess(res) {
-        console.log("Success");
+        console.log("Login success");
+        bus.$emit('login');
+        this.$router.push('/dashboard');
       },
-      loginFailure(res) {
+      loginFailure(error) {
         console.log("Failure");
       }
     }

@@ -31,7 +31,7 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
     // VSTS token protected routes
     Route::group( [ 'middleware' => 'vsts-auth' ], function () {
 
-        Route::post( '/commits', 'CommitController@create' );
+        Route::post( 'commits', 'CommitController@create' );
 
     });
 

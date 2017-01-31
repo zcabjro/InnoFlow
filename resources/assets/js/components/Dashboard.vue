@@ -26,37 +26,45 @@
 
 <script>
   import Item from './Item.vue'
+  import bus from '../bus.js'
+
+  function defaultDashboard() {
+    return {
+      menuOpen: $('#wrapper').hasClass('toggled'),
+      menu: {
+        projects: {
+          name: 'Projects',
+          alt: 'P',
+          children: []
+        },
+        classes: {
+          name: 'Classes',
+          alt: 'C',
+          children: []
+        }
+      }
+    };
+  }
 
   export default {
     name: 'dashboard',
-    data() {
-      return {
-        menuOpen: $('#wrapper').hasClass('toggled'),
-        menu: {
-          projects: {
-            name: 'Projects',
-            alt: 'P',
-            children: []
-          },
-          classes: {
-            name: 'Classes',
-            alt: 'C',
-            children: []
-          }
-        }
-      }
-    },
 
     components: {
       Item
     },
 
-    created: function () {
-      this.loadProjects();
+    data() {
+      return defaultDashboard();
+    },    
+
+    created() {
+      bus.$on('logout', this.resetDashboard);
     },
 
-    watch: {
-      '$route': 'loadProjects'
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        vm.loadDashboard();
+      });
     },
 
     methods: {
@@ -66,30 +74,70 @@
           $('#wrapper').toggleClass('toggled');
         }
       },
+
+      resetDashboard() {
+        Object.assign(this.$data, defaultDashboard());
+      },
+
+      loadDashboard() {
+        this.loadProjects();
+        this.loadClasses();
+        this.loadCommits();
+      },
+
       loadProjects() {
-        this.$http
-          .get('/api/projects')
-          .then(this.loadSuccess, this.loadFailure);
+        axios.get('/api/projects')
+          .then(function (res) {
+            this.projects.children = res.body['projects'] ? res.body['projects'] : [];
+          })
+          .catch(function (error) {
+            console.log("Load projects failed");
+          });
       },
-      loadSuccess(res) {
-        this.projects.children = res.body['projects'] ? res.body['projects'] : [];
-        this.classes.children = res.body['classes'] ? res.body['classes'] : [];
+
+      loadClasses() {
+          axios.get('/api/classes')
+          .then(function (res) {
+            this.classes.children = res.body['classes'] ? res.body['classes'] : [];
+          })
+          .catch(function (error) {
+            console.log("Load classes failed");
+          });
       },
-      loadFailure(res) {
-        console.log('Failed to load projects');
+
+      loadCommits() {
+        axios.post('/api/commits')
+        .then(function (res) {
+          console.log(res.data);
+        })
+        .catch((error) => {
+          console.log(error.response);
+          if (error.response && error.response.data) {
+            let data = error.response.data;
+            if (typeof data.error === 'string') {
+              // TODO: establish a proper error format
+              alert('login again');
+              this.$router.push('/login'); 
+            }
+            else if (data.error && data.error.url && confirm('Redirect for VSTS auth?')) {
+              window.location.replace(data.error.url);      
+            }
+          }
+          else {
+            console.log('ERROR: ' + error.message);
+          }                          
+        });
       }
     }
   }
 </script>
 
-<style>
-  
+<style>  
   #blanket {
     position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
     height: 100%;
-  }
-  
+  }  
 </style>

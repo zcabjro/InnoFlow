@@ -10,6 +10,8 @@ namespace App\Services;
 
 use JWTAuth;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Psr7;
 
 
 class VSTSService
@@ -33,21 +35,28 @@ class VSTSService
 
     public function requestToken( $input )
     {
-        $client = new Client( [ 'base_uri' => 'https://app.vssps.visualstudio.com/oauth2' ] );
+        $client = new Client();
 
-        $response = $client -> request( 'POST', 'token', [
+        try
+        {
+            $client -> request( 'POST', 'https://app.vssps.visualstudio.com/oauth2/token', [
 
-            'form_params' => [
-                'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-                'client_assertion' => env( 'VSTS_APP_SECRET' ),
-                'grant_type' => 'ietf:params:oauth:grant-type:jwt-bearer',
-                'assertion' => $input[ "code" ],
-                'redirect_uri' => env( 'VSTS_REDIRECT_URL' )
-            ]
+                'form_params' => [
+                    'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+                    'client_assertion' => env( 'VSTS_APP_SECRET' ),
+                    'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+                    'assertion' => $input[ 'code' ],
+                    'redirect_uri' => env( 'VSTS_REDIRECT_URL' )
+                ]
 
-        ]);
+            ]);
+        }
+        catch ( ClientException $e )
+        {
+            //echo Psr7\str($e->getRequest());
+            //echo Psr7\str($e->getResponse());
+        }
 
-        //dd( $response -> getBody() );
         //'redirect_uri' => 'https://innoflow.herokuapp.com/api/vsts/token/' . $input[ "state" ]
     }
 

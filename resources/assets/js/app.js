@@ -13,10 +13,12 @@ require('./bootstrap');
  */
 
 import Vue from 'vue'
-import {router} from './router'
+import { router } from './router'
 
 new Vue({
   mode: 'history',
   base: __dirname,
   router
 }).$mount('#app')
+
+
