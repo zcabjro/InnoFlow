@@ -63,7 +63,6 @@ class VSTSService
 
             $json = json_decode( $response -> getBody(), true );
             $updates = [ 'vsts_access_token' => $json[ 'access_token' ], 'vsts_refresh_token' => $json[ 'refresh_token' ] ];
-            dd( $input[ 'state' ] );
 
             $this -> userRepo -> update( $input[ 'state' ], $updates );
             dd( User::find( $input[ 'state' ] ) );
