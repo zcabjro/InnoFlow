@@ -32,6 +32,7 @@ class TokenController extends Controller
         $this -> userRepo -> update( $id, $updates );
     }
 
+
     public function test()
     {
         $test = new Test();

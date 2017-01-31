@@ -40,7 +40,7 @@ class VSTSService
 
         try
         {
-            $client -> request( 'POST', 'https://app.vssps.visualstudio.com/oauth2/token', [
+            $response = $client -> request( 'POST', 'https://app.vssps.visualstudio.com/oauth2/token', [
 
                 'form_params' => [
                     'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
@@ -52,8 +52,9 @@ class VSTSService
 
             ]);
 
+            $body = $response -> getBody();
             $test = new Test();
-            $test -> token = "no error";
+            $test -> token = (string) $body;
             $test -> save();
         }
         catch ( ClientException $e )
