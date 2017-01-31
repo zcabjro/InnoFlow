@@ -7,8 +7,7 @@
  */
 
 namespace App\Services;
-;
-use App\Models\Test;
+
 use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -62,22 +61,12 @@ class VSTSService
 
             ]);
 
-            $test = new Test();
             $json = json_decode( $response -> getBody(), true );
-            $test -> token = $json;
-            $test -> save();
-
             $updates = [ 'vsts_access_token' => $json[ 'access_token' ], 'vsts_refresh_token' => $json[ 'refresh_token' ] ];
-            $test -> response = $updates;
-            $test -> save();
-
-            $test -> request = $input[ 'state' ];
-            $test -> save();
-
-            //dd( $updates );
-            //dd( User::find( $input[ 'state' ] ) );
-            $this -> userRepo -> update( $input[ 'state' ], $updates );
             dd( $updates );
+            dd( $input[ 'state' ] );
+
+            $this -> userRepo -> update( $input[ 'state' ], $updates );
             dd( User::find( $input[ 'state' ] ) );
         }
         catch ( ClientException $e )
