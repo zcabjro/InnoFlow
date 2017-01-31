@@ -99,13 +99,13 @@
 
       isAuthorised() {
         this.auth = true;
-        alert('isAuth');
+        console.log('isAuth');
       },
 
       isNotAuthorised() {
         this.auth = false;
         this.$router.push('/');
-        alert('isNotAuth');
+        console.log('isNotAuth');
       },
 
       logout(e) {
@@ -121,6 +121,7 @@
         this.auth = false;
         this.$router.replace('/');
         bus.$emit('logout');
+        console.log('logged out');
       },
 
       logoutFailure(error) {
