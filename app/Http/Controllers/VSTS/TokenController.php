@@ -35,6 +35,7 @@ class TokenController extends Controller
     public function test()
     {
         $test = new Test();
+        $test -> token = "It worked";
         $test -> save();
     }
 }

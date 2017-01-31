@@ -8,6 +8,7 @@
 
 namespace App\Services;
 
+use App\Models\Test;
 use JWTAuth;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -46,15 +47,17 @@ class VSTSService
                     'client_assertion' => env( 'VSTS_APP_SECRET' ),
                     'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
                     'assertion' => $input[ 'code' ],
-                    'redirect_uri' => env( 'VSTS_REDIRECT_URL' )
+                    'redirect_uri' => 'https://innoflow.herokuapp.com/api/vsts/token'
                 ]
 
             ]);
         }
         catch ( ClientException $e )
         {
-            //echo Psr7\str($e->getRequest());
-            //echo Psr7\str($e->getResponse());
+            $test = new Test();
+            $test -> request = Psr7\str( $e->getRequest() );
+            $test -> response = Psr7\str($e->getResponse() );
+            $test -> save();
         }
 
         //'redirect_uri' => 'https://innoflow.herokuapp.com/api/vsts/token/' . $input[ "state" ]

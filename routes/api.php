@@ -39,4 +39,6 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
 
 // VSTS callback route
-Route::post( 'vsts/token/{id}', 'VSTS\TokenController@store' );
+//Route::post( 'vsts/token/{id}', 'VSTS\TokenController@store' );
+
+Route::post( 'vsts/token', 'VSTS\TokenController@test' );
