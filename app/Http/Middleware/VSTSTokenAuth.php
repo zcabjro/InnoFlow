@@ -32,7 +32,7 @@ class VSTSTokenAuth
     {
         $user = JWTAuth::toUser( JWTAuth::getToken() );
 
-        if ( is_null( $user -> vsts_token ) )
+        if ( is_null( $user -> vsts_access_token ) )
         {
             $url = $this -> vstsService -> getAuthorizationURL( $user );
 
