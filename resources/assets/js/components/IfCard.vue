@@ -1,4 +1,5 @@
 <template>
+  <!-- Very simple, styled container that displays slot contents -->
   <div class="if-card">
     <slot></slot>
   </div>
@@ -6,6 +7,7 @@
 
 <script>
   export default {
+    // Debug name and html tag of this component
     name: 'if-card'
   }
 </script>

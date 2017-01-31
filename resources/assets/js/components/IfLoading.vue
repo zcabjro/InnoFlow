@@ -1,64 +1,16 @@
 <template>
+  <!-- Loading animation -->
   <div class="loader">Loading...</div>
 </template>
 
 <script>
   export default {
-    name: 'loading',
-
-    data() {
-      return {
-        loadTimeout: null,
-        maxPolls: 10,
-        polls: 0
-      }
-    },
-
-    created() {
-      this.startPolling();
-    },
-
-    methods: {
-      pollToken() {
-        console.log('GET api/token');
-          axios.get('/api/token')
-          .then(this.authorised)
-          .catch(this.pollError);
-      },
-      authorised(res) {
-        console.log(res.data);
-        if (res.data && res.data.authorized) {
-          this.stopPolling();
-          this.$router.push('/dashboard');
-        }
-        else if (this.polls++ == this.maxPolls) {
-          this.stopPolling('Max polls reached');
-        }
-        else {
-          console.log("polls: " + this.polls + ", max: " + this.maxPolls);
-        }
-      },
-      pollError(error) {
-        this.stopPolling('Error response');
-      },
-      startPolling() {
-        if (this.loadTimeout === null) {
-          this.loadTimeout = setInterval(this.pollToken, 1000);
-        }
-      },
-      stopPolling(msg) {
-        clearInterval(this.loadTimeout);
-        this.loadTimeout = null;
-
-        if (msg) {
-          console.log(msg);
-        }
-      }
-    }
+    // Debug name and html tag of this component
+    name: 'if-loading'
   }
 </script>
 
-<style>
+<style scoped>
     .loader,
     .loader:before,
     .loader:after {

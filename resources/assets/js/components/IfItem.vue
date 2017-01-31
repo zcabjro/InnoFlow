@@ -1,6 +1,9 @@
 <template>
+  <!-- List item -->
   <li>
+    <!-- Item name -->
     <a class="item-name" v-on:click="toggle" href="#">{{active ? name : alt}}</a>
+    <!-- Item children -->
     <ul class="child-list" v-show="active && open">
       <li class="child" v-for="child in children"><a href="#" v-on:click="load(child, $event)">{{child}}</a></li>
     </ul>
@@ -9,21 +12,31 @@
 
 <script>
   export default {
-    name: 'item',
+    // Debug name and html tag of this component
+    name: 'if-item',
+
+    // Initialise item data with defaults
     data() {
       return {
         open: true
       }
     },
     
+    // Properties supplied by parent component
     props: [
+      // Item name
       'name',
+      // Alternative name used when inactive
       'alt',
+      // Whether or not item is active
       'active',
+      // Item children
       'children'
     ],
     
+    // Item component methods
     methods: {
+      // Toggles children on/off
       toggle(e) {
         e.preventDefault();
         if (this.active) {
@@ -31,6 +44,7 @@
         }
       },
       
+      // TODO: Load the selected child
       load(project, e) {
         e.preventDefault();
         alert("Loading " + project);
@@ -40,8 +54,7 @@
   
 </script>
 
-<style scoped>
-  
+<style scoped>  
   .item-name {
     height: 65px;
     font-size: 18px;
@@ -50,6 +63,5 @@
   
   .child-list {
     list-style-type: none;
-  }
-  
+  }  
 </style>

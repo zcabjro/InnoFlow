@@ -1,21 +1,24 @@
 <template>
+  <!-- Dashboard wrapper -->
   <div v-show="ready" id="wrapper">
+
     <!-- Sidebar -->
     <div v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
       <ul class="sidebar-nav">
-        <item :name="menu.projects.name" :alt="menu.projects.alt" :children="menu.projects.children" :active="menuOpen"></item>
-        <item :name="menu.classes.name" :alt="menu.classes.alt" :children="menu.classes.children" :active="menuOpen"></item>
+        <if-item :name="menu.projects.name" :alt="menu.projects.alt" :children="menu.projects.children" :active="menuOpen"></if-item>
+        <if-item :name="menu.classes.name" :alt="menu.classes.alt" :children="menu.classes.children" :active="menuOpen"></if-item>
       </ul>
     </div>
 
+    <!-- Empty blanket space for closing menu -->
     <div v-if="menuOpen" v-on:mousedown="toggleMenu" id="blanket"></div>
 
-    <!-- Page Content -->
+    <!-- Nested route -->
     <div id="page-content-wrapper">
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-12">
-            <h1>Hello World</h1>
+            <h1>Dashboard</h1>
             <router-view></router-view>
           </div>
         </div>
@@ -25,12 +28,15 @@
 </template>
 
 <script>
-  import Item from './Item.vue'
-  import bus from '../bus.js'
+  import IfItem from './IfItem.vue' // Item component used for listing projects and classes
+  import bus from '../bus.js' // Global event bus
 
-  function defaultDashboard() {
+  // Helper for resetting dashboard data
+  function defaultDashboardData() {
     return {
+      // Whether the menu is toggled on or not
       menuOpen: $('#wrapper').hasClass('toggled'),
+      // Menu data
       menu: {
         projects: {
           name: 'Projects',
@@ -43,32 +49,46 @@
           children: []
         }
       },
+      // Whether the dashboard is ready for display
       ready: false
     };
   }
 
   export default {
-    name: 'dashboard',
+    // Debug name and html tag of this component
+    name: 'if-dashboard',
 
+    // Components used by this component
     components: {
-      Item
+      IfItem
     },
 
+    // Initialise dashboard data with defaults
     data() {
-      return defaultDashboard();
+      return defaultDashboardData();
     },
 
+    // Called when the component is first created (note: not on navigation)
     created() {
-      bus.$on('logout', this.resetDashboard);
+      // Listen for the logout event for updating the dashboard contents
+      bus.$on('logout', this.resetDashboardData);
     },
 
+    // Request the dashboard contents each time we navigate to this route
     beforeRouteEnter(to, from, next) {
-      next(vm => {
-        vm.loadDashboard();
+      next(dashboardComponent => {
+        dashboardComponent.loadDashboard();
       });
     },
 
+    // Dashboard component methods
     methods: {
+      // Resets the dashboard contents
+      resetDashboardData() {
+        Object.assign(this.$data, defaultDashboardData());
+      },
+
+      // Toggles the sidebar menu
       toggleMenu(caller) {
         if (caller !== 'sidebar' || !this.menuOpen) {
           this.menuOpen = !this.menuOpen;
@@ -76,48 +96,55 @@
         }
       },
 
+      // Helper for redirecting the user
       redirect(url, external) {
         if (external) {
           window.location.replace(url);
         }
         else {
-          this.resetDashboard();
+          this.resetDashboardData();
           this.$router.replace('/login');
         }
       },
 
-      resetDashboard() {
-        Object.assign(this.$data, defaultDashboard());
-      },
-
+      // Request dashboard contents
       loadDashboard() {
         this.loadProjects();
         this.loadClasses();
         this.loadCommits(); // TEMP: testing VSTS redirect
         this.loadInnovations(); // TODO: display this in the dashboard
+        
+        // TODO: Set this when all contents has been received
         this.ready = true;
       },
 
+      // Request projects
       loadProjects() {
         axios.get('/api/projects')
           .then(function (res) {
+            // Update project list
             this.projects.children = res.body['projects'] ? res.body['projects'] : [];
           })
           .catch(function (error) {
+            // Log failure
             console.log("Load projects failed");
           });
       },
 
+      // Request classes
       loadClasses() {
         axios.get('/api/classes')
           .then(function (res) {
+            // Update class list
             this.classes.children = res.body['classes'] ? res.body['classes'] : [];
           })
           .catch(function (error) {
+            // Log failure
             console.log("Load classes failed");
           });
       },
 
+      // Request commits (temporary for testing VSTS redirect)
       loadCommits() {
         axios.post('/api/commits')
           .then(function (res) {
@@ -142,10 +169,11 @@
           });
       },
 
+      // Request innovations
       loadInnovations() {
         axios.get('/api/innovation')
-          .then((res) => console.log('Received innovations'))
-          .catch((error) => console.log('Error loading innovations'));
+          .then(function(res) { console.log('Received innovations'); })
+          .catch(function(error) { console.log('Error loading innovations'); });
       }
     }
   }
