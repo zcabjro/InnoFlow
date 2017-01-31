@@ -26,6 +26,6 @@ class HomeController extends Controller
     {
         $service -> requestToken( $request -> all() );
 
-        return redirect() -> route( 'index' ) -> with( [ 'waitForToken' => true ] );
+        return redirect() -> route( 'index', [ '#dashboard' ] ) -> with( [ 'waitForToken' => true ] );
     }
 }
