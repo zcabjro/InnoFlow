@@ -2,12 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // Components
-import App from './components/App.vue'
-import Landing from './components/Landing.vue'
-import Register from './components/Register.vue'
-import Login from './components/Login.vue'
-import Dashboard from './components/Dashboard.vue'
-import CreateClass from './components/CreateClass.vue'
+import IfApp from './components/IfApp.vue'
+import IfLanding from './components/IfLanding.vue'
+import IfRegister from './components/IfRegister.vue'
+import IfLogin from './components/IfLogin.vue'
+import IfDashboard from './components/IfDashboard.vue'
+import IfCreateClass from './components/IfCreateClass.vue'
 
 Vue.use(VueRouter)
 
@@ -15,34 +15,34 @@ const routes = [{
 
   // Root
   path: '/',
-  component: App,
+  component: IfApp,
 
   // Nested routes
   children: [{
 
     // Landing page
     path: '',
-    component: Landing
+    component: IfLanding
   }, {
 
     // Registration
     path: 'register',
-    component: Register
+    component: IfRegister
   }, {
     
     // Login
     path: 'login',
-    component: Login
+    component: IfLogin
   }, {
     
     // Dashboard
     path: 'dashboard',
-    component: Dashboard
+    component: IfDashboard
   }, {
 
     // Create class
     path: 'create',
-    component: CreateClass
+    component: IfCreateClass
   }]
 }, {
   // Redirect fallback

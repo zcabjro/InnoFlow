@@ -3,7 +3,7 @@
   <div id="login" class="container">
     
     <!-- UserForm component -->
-    <user-form :legend="legend" :fields="[email, password]"></user-form>
+    <if-user-form :legend="legend" :fields="[email, password]"></if-user-form>
 
     <div class="form-group">
       <!-- Login button -->
@@ -24,25 +24,28 @@
 </template>
 
 <script>
-  import UserForm from './UserForm.vue' // Form used for supplying login info
+  import IfUserForm from './IfUserForm.vue' // Form used for supplying login info
   import bus from '../bus.js' // Global event bus
 
   // Helper for resetting login data
   function defaultLoginData() {
     return {
+      // Title of the form
       legend: 'Login',
+      // Email field
       email: { label: 'Email', type: 'text', placeholder: 'mail@example.com', value: '' },
+      // Password field
       password: { label: 'Password', type: 'password', placeholder: 'password', value: '' }
     }
   }
 
   export default {
     // Debug name and html tag of this component
-    name: 'login',
+    name: 'if-login',
 
-    // Components used by the login component
+    // Components used by this component
     components: {
-      UserForm
+      IfUserForm
     },
 
     // Initialise login data with defaults

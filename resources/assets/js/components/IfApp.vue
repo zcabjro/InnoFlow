@@ -1,23 +1,35 @@
 <template>
+  <!-- App container -->
   <div class="container-fluid">
+
     <!-- Nav bar -->
     <div id="appNav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
+
         <div class="navbar-header">
+          <!-- InnoFlow brand -->
           <router-link to="/" class="navbar-brand">InnoFlow</router-link>
+          
+          <!-- Collapse button used on small devices -->
           <button id="collapseBtn" type="button" class="navbar-toggle" data-toggle="collapse" data-target="#appNavCollapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="glyphicon glyphicon-user"></span>
                 <span class="caret"></span>
-              </button>
+          </button>
         </div>
+
+        <!-- Navbar items (collapsed on small devices) -->
         <div id="appNavCollapse" class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown hidden-xs">
+
+              <!-- User icon -->
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="glyphicon glyphicon-user"></span>
                 <span class="caret"></span>
               </a>
+
+              <!-- Authorised dropdown items -->
               <ul v-if="auth" class="dropdown-menu">
                 <li>
                   <router-link to="dashboard">Dashboard</router-link>
@@ -26,6 +38,7 @@
                   <a v-on:click="logout" href="#">Sign out</a>
                 </li>
               </ul>
+              <!-- Unauthorised dropdown items -->
               <ul v-else class="dropdown-menu">
                 <li>
                   <router-link to="login">Login</router-link>
@@ -35,15 +48,20 @@
                 </li>
               </ul>
             </li>
+
+            <!-- Authorised dropdown item (small devices) -->
             <li v-if="auth" class="visible-xs" v-on:click="collapse">
               <router-link to="dashboard">Dashboard</router-link>
             </li>
+            <!-- Unauthorised dropdown item (small devices) -->
             <li v-else class="visible-xs" v-on:click="collapse">
               <router-link to="login">Login</router-link>
             </li>
+            <!-- Authorised dropdown item (small devices) -->
             <li v-if="auth" class="visible-xs" v-on:click="collapse">
               <a v-on:click="logout" href="#">Sign out</a>
             </li>
+            <!-- Unauthorised dropdown item (small devices) -->
             <li v-else class="visible-xs" v-on:click="collapse">
               <router-link to="register">Register</router-link>
             </li>
@@ -52,10 +70,12 @@
       </div>
     </div>
 
+    <!-- Message component -->
     <if-message :animated="messageAnimated" :active="messageActive">
       <p>Hello world!</p>
     </if-message>
 
+    <!-- Nested route -->
     <div id="child">
       <transition class="animated" appear name="fadeDown" mode="out-in">
         <keep-alive>
@@ -66,55 +86,66 @@
   </div>
 </template>
 
-<script>
-  import bus from '../bus.js'
-  import IfMessage from './IfMessage.vue'
+<script>  
+  import IfMessage from './IfMessage.vue' // Message component used for displaying messages to the user
+  import bus from '../bus.js' // Global event bus
 
   export default {
-    name: 'app',
+    // Debug name and html tag of this component
+    name: 'if-app',
 
+    // Components used by this component
     components: {
       IfMessage
     },
 
+    // Initialise app data with defaults
     data() {
-      setTimeout(() => { this.messageAnimated = true; this.messageActive = true }, 3000);
-      setTimeout(() => this.messageActive = false, 6000);
       return {
+        // Whether the user has been authorised or not
         auth: false,
+        // Whether the message has been animated or not
         messageAnimated: false,
-        messageActive: false        
+        // Whether the message is active and displaying or not
+        messageActive: false
       }
     },
 
+    // Called when the component is first created (note: not on navigation)
     created() {
+      // Listen for the login event for updating the auth state
       bus.$on('login', this.isAuthorised);
+      // Check the auth state in case we are already logged in
       this.checkAuth();
     },
 
+    // App component methods
     methods: {
+      // Collapses the navbar dropdown on small devices
       collapse(e) {
         $('.collapse').collapse('hide');
       },
 
+      // TODO: Perform this check in a nicer way
+      // Checks user auth state by contacting trying to access a restricted route
       checkAuth() {
-        // TEMP: using token route to establish whether or not user is logged in
         axios.get('/api/token')
           .then(this.isAuthorised)
           .catch(this.isNotAuthorised);
       },
 
+      // Updates the auth state to be logged in
       isAuthorised() {
         this.auth = true;
-        console.log('isAuth');
       },
 
+      // Updates the auth state to be logged out and tries to ensure we are at the landing page
       isNotAuthorised() {
         this.auth = false;
-        this.$router.push('/');
-        console.log('isNotAuth');
+        this.$router.replace('/');
       },
 
+      // Send GET request to logout API after confirmation
       logout(e) {
         e.preventDefault();
         if (confirm('Do you wish to sign out?')) {
@@ -124,15 +155,16 @@
         }
       },
 
+      // On success, emit the logout event and trigger auth update
       logoutSuccess(res) {
-        this.auth = false;
-        this.$router.replace('/');
+        console.log("Logout success");                
         bus.$emit('logout');
-        console.log('logged out');
+        this.isNotAuthorised();
       },
 
+      // On failure, log the failure
       logoutFailure(error) {
-        console.log('Failed to logout!');
+        console.log('Logout failure');
       }
     }
   }
