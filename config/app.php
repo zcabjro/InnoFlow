@@ -185,6 +185,8 @@ return [
         // JWT
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
 
+        // Searchy
+        TomLingham\Searchy\SearchyServiceProvider::class,
     ],
 
     /*
@@ -233,7 +235,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
-
+        'Helper' => App\Services\Helper::class,
+        'Searchy' => TomLingham\Searchy\Facades\Searchy::class,
     ],
 
 ];

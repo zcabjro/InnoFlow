@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Commit extends Model
 {
-    protected $primaryKey = 'commitId';
+    protected $primaryKey = 'commit_id';
 }

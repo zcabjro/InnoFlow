@@ -32,7 +32,7 @@ class JWTTokenAuth
         try
         {
             // Get token from http only cookie
-            $token = $request -> cookie( 'token' );
+            $token = $request -> cookie( config( 'custom.cookie.name' ) );
             JWTAuth::setToken( $token );
 
             // User cannot be found
@@ -78,7 +78,7 @@ class JWTTokenAuth
         // Token was refreshed, hence update http only cookie
         if ( !is_null( $newToken ) )
         {
-            $response -> cookie( 'token', $newToken, config( 'cookie.ttl' ) );
+            $response -> cookie( config( 'custom.cookie.name' ), $newToken, config( 'custom.cookie.ttl' ) );
         }
 
         return $response;

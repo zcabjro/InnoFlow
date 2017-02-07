@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInnovationsTable extends Migration
+class CreateModulesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,22 @@ class CreateInnovationsTable extends Migration
      */
     public function up()
     {
-        Schema::create( 'innovations', function ( Blueprint $table ) {
-            $table -> increments( 'innovation_id' );
-            $table -> text( 'code' );
-            $table -> integer( 'user_id' ) -> unsigned();
+        Schema::create( 'modules', function ( Blueprint $table ) {
+            $table -> increments( 'module_id' );
+            $table -> string( 'name' );
+            $table -> string( 'description' );
+            $table -> string( 'code' );
+            $table -> string( 'key' );
+            $table -> integer( 'user_id' ) -> unsigned() -> nullable();
             $table -> timestamps();
         });
 
-        Schema::table( 'innovations', function( Blueprint $table ) {
+        Schema::table( 'modules', function( Blueprint $table ) {
             $table -> foreign( 'user_id' )
                 -> references( 'user_id' )
                 -> on( 'users' )
                 -> onUpdate( 'cascade' )
-                -> onDelete( 'cascade' );
+                -> onDelete( 'set null' );
         });
     }
 
@@ -36,6 +39,6 @@ class CreateInnovationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists( 'innovations' );
+        Schema::dropIfExists('modules');
     }
 }

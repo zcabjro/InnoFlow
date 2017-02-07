@@ -14,26 +14,33 @@
 
 
 // Auth routes
-Route::post( 'login', 'Auth\AuthController@loginUser' );
-Route::post( 'register', 'Auth\AuthController@registerUser' );
+Route::post( 'login', 'AuthController@loginUser' );
+Route::post( 'register', 'AuthController@registerUser' );
 
 
 // InnoFlow extension routes
-Route::post( 'innovation', 'IdeExtension\InnovationController@store' );
+Route::post( 'innovations', 'InnovationController@store' );
 
 
 // JWT token protected routes
 Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
-    Route::get( 'logout', 'Auth\AuthController@logoutUser' );
-    Route::get( 'token', 'Auth\AuthController@isAuthorized' );
+    Route::get( 'logout', 'AuthController@logoutUser' );
+    Route::get( 'token', 'AuthController@isAuthorized' );
 
     // VSTS token protected routes
     Route::group( [ 'middleware' => 'vsts-auth' ], function () {
 
-        Route::post( 'commits', 'Commit\CommitController@create' );
-        Route::get( 'projects', 'Project\ProjectController@index' );
-        Route::get( 'classes', 'Module\ModuleController@index' );
+        Route::get( 'innovations', 'InnovationController@index' );
+
+        Route::post( 'commits', 'CommitController@create' );
+
+        Route::get( 'projects', 'ProjectController@index' );
+
+        Route::get( 'classes', 'ModuleController@index' );
+        Route::post( 'classes', 'ModuleController@store' );
+
+        Route::get( 'users/search', 'UserController@search' );
 
     });
 

@@ -6,9 +6,7 @@
  * Time: 20:40
  */
 
-namespace App\Http\Controllers\Project;
-
-use App\Http\Controllers\Controller;
+namespace App\Http\Controllers;
 
 
 class ProjectController extends Controller

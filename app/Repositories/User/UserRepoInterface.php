@@ -16,6 +16,8 @@ use App\Models\User;
 interface UserRepoInterface
 {
     /**
+     * Logs in a user.
+     *
      * @param array $input
      * @return string
      */
@@ -23,28 +25,30 @@ interface UserRepoInterface
 
 
     /**
-     * @return void
-     */
-    public function logout();
-
-
-    /**
-     * @return User $user
-     */
-    public function loggedIn();
-
-
-    /**
+     * Create a new user.
+     *
      * @param array $input
-     * @return void
+     * @return User
      */
     public function create( array $input );
 
 
     /**
+     * Update a user's information.
+     *
      * @param $id
      * @param array $input
      * @return void
      */
     public function update( $id, array $input );
+
+
+    /**
+     * Finds a user based on a given email and password.
+     *
+     * @param $email
+     * @param $password
+     * @return boolean
+     */
+    public function findByCredentials( $email, $password );
 }

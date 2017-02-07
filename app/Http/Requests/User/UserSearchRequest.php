@@ -2,16 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: andreas
- * Date: 26/01/2017
- * Time: 23:53
+ * Date: 01/02/2017
+ * Time: 23:41
  */
 
-namespace App\Http\Requests\IdeExtension;
+
+namespace App\Http\Requests\User;
 
 use App\Http\Requests\ApiRequest;
 
 
-class InnovationRequest extends ApiRequest
+class UserSearchRequest extends ApiRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -32,9 +33,7 @@ class InnovationRequest extends ApiRequest
     {
         return [
 
-            'email' => 'required',
-            'password' => 'required',
-            'code' => 'required|string'
+            'string' => 'required|string|min:2',
 
         ];
     }

@@ -7,11 +7,10 @@
  */
 
 
-namespace App\Http\Controllers\Web;
+namespace App\Http\Controllers;
 
 use App\Http\Requests\VSTS\VSTSAuthRequest;
 use App\Services\VSTSService;
-use App\Http\Controllers\Controller;
 
 
 class WebController extends Controller

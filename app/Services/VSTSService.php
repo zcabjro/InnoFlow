@@ -27,7 +27,7 @@ class VSTSService
     }
 
 
-    public function getAuthorizationURL( $user )
+    public function getAuthorizationURL( User $user )
     {
         $url = 'https://app.vssps.visualstudio.com/oauth2/authorize';
 
@@ -35,7 +35,7 @@ class VSTSService
 
             'client_id' => env( 'VSTS_APP_ID' ),
             'response_type' => 'Assertion',
-            'state' => $user -> userId,
+            'state' => $user -> user_id,
             'scope' => env( 'VSTS_APP_SCOPE' ),
             'redirect_uri' => env( 'VSTS_REDIRECT_URL' )
 

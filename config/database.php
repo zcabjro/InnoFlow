@@ -21,7 +21,7 @@ return [
     | you may use many connections at once using the Database library.
     |
     */
-    'default' => env('DB_CONNECTION', 'heroku'),
+    'default' => env('DB_CONNECTION', 'mysql'),
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -53,7 +53,7 @@ return [
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
-            'strict' => true,
+            'strict' => false,
             'engine' => null,
         ],
         'pgsql' => [
@@ -68,7 +68,7 @@ return [
             'schema' => 'public',
             'sslmode' => 'prefer',
         ],
-        'heroku' => [
+        /*'heroku' => [
             'driver'   => 'pgsql',
             'host'     => parse_url(getenv("DATABASE_URL"))["host"],
             'database' => substr(parse_url(getenv("DATABASE_URL"))["path"], 1),
@@ -77,7 +77,7 @@ return [
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'public',
-        ],
+        ],*/
     ],
     /*
     |--------------------------------------------------------------------------

@@ -97,7 +97,9 @@ return [
     |
     */
 
-    'user' => "The :attribute must be a valid user id.",
+    'user' => 'The :attribute must be a valid user id.',
+    'int_list' => 'The :attribute must be a list of integers.',
+    'base64_encoded' => 'The :attribute must be base_64 encoded',
 
     'custom' => [
         'attribute-name' => [

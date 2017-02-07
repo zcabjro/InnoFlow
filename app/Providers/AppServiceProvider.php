@@ -28,6 +28,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $models = array(
+            'User',
+            'Module',
+            'Innovation'
+        );
+
+        foreach( $models as $model )
+        {
+            $this -> app -> bind( "App\\Repositories\\{$model}\\{$model}RepoInterface", "App\\Repositories\\{$model}\\{$model}Repo" );
+        }
     }
 }

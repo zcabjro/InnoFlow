@@ -161,12 +161,12 @@ class AuthTest extends TestCase
      */
     private function createUser( array $data )
     {
-        $vstsToken = array_key_exists( "vsts_token", $data ) ? $data[ "vsts_token" ] : null;
+        $token = array_key_exists( "vsts_access_token", $data ) ? $data[ "vsts_access_token" ] : null;
 
         $user = new User();
         $user -> email = $data[ "email" ];
         $user -> password = bcrypt( $data[ "password" ] );
-        $user -> vsts_token = $vstsToken;
+        $user -> vsts_access_token = $token;
         $user -> save();
     }
 }

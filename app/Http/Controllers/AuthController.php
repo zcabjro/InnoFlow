@@ -6,14 +6,15 @@
  * Time: 11:42
  */
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Repositories\User\UserRepo;
+use App\Repositories\User\UserRepoInterface;
 use App\Traits\JsonResponseTrait;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cookie;
+use JWTAuth;
+use Helper;
 
 
 class AuthController extends Controller
@@ -21,10 +22,10 @@ class AuthController extends Controller
     use JsonResponseTrait;
 
 
-    protected $userRepo;
+    private $userRepo;
 
 
-    public function __construct( UserRepo $userRepo )
+    public function __construct( UserRepoInterface $userRepo )
     {
         $this -> userRepo = $userRepo;
     }
@@ -39,14 +40,14 @@ class AuthController extends Controller
             return $this -> respondUnauthorized( "Login details are incorrect." );
         }
 
-        return response() -> json() -> cookie( 'token', $token, config( 'cookie.ttl' ) );
+        return response() -> json() -> cookie( config( 'custom.cookie.name' ), $token, config( 'custom.cookie.ttl' ) );
     }
 
 
     public function logoutUser()
     {
-        $this -> userRepo -> logout();
-        return response() -> json() -> withCookie( Cookie::forget( 'token' ) );
+        JWTAuth::invalidate( JWTAuth::getToken() );
+        return response() -> json() -> withCookie( Cookie::forget( config( 'custom.cookie.name' ) ) );
     }
 
 
@@ -58,8 +59,7 @@ class AuthController extends Controller
 
     public function isAuthorized()
     {
-        $user = $this -> userRepo -> loggedIn();
-        $authorized = !is_null( $user -> vsts_access_token );
+        $authorized = !is_null( Helper::currentUser() -> vsts_access_token );
         return response() -> json( [ 'authorized' => $authorized ] );
     }
 }

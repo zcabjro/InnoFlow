@@ -9,6 +9,7 @@
 return [
 
     'cookie' => [
-        'ttl' => 60 * 60 * 24,
+        'name' => 'InnoFlowToken',
+        'ttl'  => ( 60 * 60 * 24 ),
     ]
 ];

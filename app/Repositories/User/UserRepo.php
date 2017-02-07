@@ -9,6 +9,7 @@
 namespace App\Repositories\User;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 
 
@@ -31,21 +32,9 @@ class UserRepo implements UserRepoInterface
     }
 
 
-    public function logout()
-    {
-        JWTAuth::invalidate( JWTAuth::getToken() );
-    }
-
-
-    public function loggedIn()
-    {
-        return JWTAuth::toUser( JWTAuth::getToken() );
-    }
-
-
     public function create( array $input )
     {
-        $this -> model -> create([
+        return $this -> model -> create([
             'email' => $input[ "email" ],
             'password' => bcrypt( $input[ "password" ] ),
         ]);
@@ -55,5 +44,21 @@ class UserRepo implements UserRepoInterface
     public function update( $id, array $data )
     {
         $this -> model -> where( $this -> model -> getKeyName(), '=', $id ) -> update( $data );
+    }
+
+
+    public function findByCredentials( $email, $password )
+    {
+        if ( is_null( $user = $this -> model-> where( 'email', $email ) -> first() ) )
+        {
+            return null;
+        }
+
+        if ( !Hash::check( $password, $user -> password ) )
+        {
+            return null;
+        }
+
+        return $user;
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInnovationsTable extends Migration
+class CreateAdminsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,24 @@ class CreateInnovationsTable extends Migration
      */
     public function up()
     {
-        Schema::create( 'innovations', function ( Blueprint $table ) {
-            $table -> increments( 'innovation_id' );
-            $table -> text( 'code' );
+        Schema::create( 'admins', function( Blueprint $table ) {
             $table -> integer( 'user_id' ) -> unsigned();
-            $table -> timestamps();
+            $table -> integer( 'module_id' ) -> unsigned();
         });
 
-        Schema::table( 'innovations', function( Blueprint $table ) {
+        Schema::table( 'admins', function( Blueprint $table ) {
+
+            $table -> primary( array( 'user_id', 'module_id' ) );
+
             $table -> foreign( 'user_id' )
                 -> references( 'user_id' )
                 -> on( 'users' )
+                -> onUpdate( 'cascade' )
+                -> onDelete( 'cascade' );
+
+            $table -> foreign( 'module_id' )
+                -> references( 'module_id' )
+                -> on( 'modules' )
                 -> onUpdate( 'cascade' )
                 -> onDelete( 'cascade' );
         });
@@ -36,6 +43,6 @@ class CreateInnovationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists( 'innovations' );
+        Schema::dropIfExists( 'admins' );
     }
 }

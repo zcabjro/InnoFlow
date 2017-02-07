@@ -15,7 +15,7 @@ class CreateCommitsTable extends Migration
     {
         Schema::create('commits', function (Blueprint $table)
         {
-            $table->increments('commitId');
+            $table->increments('commit_id');
             $table->timestamps();
         });
     }

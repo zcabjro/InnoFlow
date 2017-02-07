@@ -6,6 +6,7 @@ use App\Services\VSTSService;
 use App\Traits\JsonResponseTrait;
 use Closure;
 use JWTAuth;
+use Helper;
 
 
 class VSTSTokenAuth
@@ -30,7 +31,7 @@ class VSTSTokenAuth
      */
     public function handle( $request, Closure $next )
     {
-        $user = JWTAuth::toUser( JWTAuth::getToken() );
+        $user = Helper::currentUser();
 
         if ( is_null( $user -> vsts_access_token ) )
         {

@@ -6,11 +6,10 @@
  * Time: 12:12
  */
 
-namespace App\Http\Controllers\Commit;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Commit;
-use App\Http\Controllers\Controller;
 
 class CommitController extends Controller
 {

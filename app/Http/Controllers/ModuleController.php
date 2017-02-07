@@ -6,13 +6,23 @@
  * Time: 20:43
  */
 
-namespace App\Http\Controllers\Module;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Module\NewModuleRequest;
+use App\Repositories\Module\ModuleRepoInterface;
 
 
 class ModuleController extends Controller
 {
+    private $moduleRepo;
+
+
+    public function __construct( ModuleRepoInterface $moduleRepo )
+    {
+        $this -> moduleRepo = $moduleRepo;
+    }
+
+
     public function index()
     {
         $modules = [];
@@ -22,5 +32,16 @@ class ModuleController extends Controller
         $modules[] = ['id' => 4, 'code' => 'COMP3035', 'name' => 'Networked Systems'];
 
         return $modules;
+    }
+
+
+    public function store( NewModuleRequest $request )
+    {
+        $module = $this -> moduleRepo -> create( $request -> except( 'admins' ) );
+
+        if ( count( $admins = $request[ 'admins' ] ) )
+        {
+            $module -> users() -> attach( $admins );
+        }
     }
 }
