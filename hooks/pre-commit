@@ -10,7 +10,7 @@ import subprocess
 
 print "Running karma tests, brb"
 
-output = subprocess.check_output("karma start", shell=True)
+output = subprocess.check_output("python test.py", shell=True)
 
 # redirect stdin to an open file handle
 sys.stdin = open('/dev/tty')
