@@ -16,5 +16,12 @@ class Helper
     {
         return JWTAuth::toUser( JWTAuth::getToken() );
     }
+
+    public static function uniqueRandomNumbersWithinRange( $min, $max, $quantity )
+    {
+        $numbers = range( $min, $max );
+        shuffle( $numbers );
+        return array_slice( $numbers, 0, $quantity );
+    }
 }
 

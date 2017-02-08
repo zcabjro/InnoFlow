@@ -1,0 +1,11 @@
+```cpp
+
+void read_jump(environment &env){
+    infinite X, Y;
+    infinite p = env.CP + 2;
+    cba2n(env, p, X, Y);
+    env.CP += (env.tape[env.DP] == env.tape[env.CP+1]) ? X : Y;
+}
+```
+
+write your comments here

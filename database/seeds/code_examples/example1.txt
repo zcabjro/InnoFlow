@@ -1,0 +1,10 @@
+```cpp
+
+void print_byte(byte b)
+{
+    (b=='\n') ? cout << '\n' : (isprint(b)) ? cout << b : cout << "0x" << hex << (int)b << dec;
+}
+```
+
+# Heading 1
+This code works great haha

@@ -1,0 +1,13 @@
+```cpp
+
+    string s(env.tape.begin()+p,env.tape.end());
+    regex r((env.tape[p] == 'b') ? "(b)([+-][01]+)[*]([+-][01]+)[*]" : "(h)([+-][0-9a-fA-F]+)[*]([+-][0-9a-fA-F]+)[*]" , regex_constants::ECMAScript | regex_constants::icase);
+    smatch m;
+    if (!regex_search(s, m, r)){
+        cerr << "Incorrect J syntax" << endl;
+        exit(1);
+    }
+```
+
+Linked logo: [![alt text](https://i2.wp.com/s.wordpress.org/about/images/wpmini-grey.png)]
+(http://wordpress.com/ "Title")

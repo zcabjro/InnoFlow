@@ -1,0 +1,15 @@
+```java
+AbstractLinkFileListener linkfile = null;
+    if (parser.getOptionValue("linkfile") != null) {
+      String fname = parser.getOptionValue("linkfile");
+      if (fname.endsWith(".ntriples"))
+        linkfile = new NTriplesLinkFileListener(fname, config.getIdentityProperties());
+      else
+        linkfile = new LinkFileListener(fname, config.getIdentityProperties(),
+                                        interactive,
+                                        parser.getOptionValue("testfile"));
+      processor.addMatchListener(linkfile);
+    }
+```
+
+write your comments here

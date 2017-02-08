@@ -1,0 +1,10 @@
+```java
+boolean matchall = true;
+    if (parser.getOptionState("singlematch")) {
+      if (config.isDeduplicationMode())
+        throw new DukeConfigException("--singlematch only works in record linkage mode");
+      matchall = false;
+    }
+```
+
+write your comments here

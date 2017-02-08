@@ -27,19 +27,19 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
     Route::get( 'logout', 'AuthController@logoutUser' );
     Route::get( 'token', 'AuthController@isAuthorized' );
+
+    Route::get( 'innovations', 'InnovationController@index' );
     Route::get( 'users/search', 'UserController@search' );
+
+    Route::get( 'classes', 'ModuleController@index' );
+    Route::post( 'classes', 'ModuleController@store' );
 
     // VSTS token protected routes
     Route::group( [ 'middleware' => 'vsts-auth' ], function () {
 
-        Route::get( 'innovations', 'InnovationController@index' );
-
         Route::post( 'commits', 'CommitController@create' );
 
         Route::get( 'projects', 'ProjectController@index' );
-
-        Route::get( 'classes', 'ModuleController@index' );
-        Route::post( 'classes', 'ModuleController@store' );        
 
     });
 

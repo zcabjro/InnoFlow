@@ -1,0 +1,12 @@
+```java
+
+    try {
+      argv = parser.parse(argv);
+    } catch (CommandLineParser.CommandLineParserException e) {
+      System.err.println("ERROR: " + e.getMessage());
+      usage();
+      System.exit(1);
+    }
+```
+
+write your comments here

@@ -1,0 +1,18 @@
+```cpp
+
+void encrypt(environment &env){
+    string s(env.tape.begin(),env.tape.end());
+    s.append(env.cryptor);
+    char hash = sha256(s);
+    env.EP++;
+    if (env.EP == env.cryptor.size()){
+        env.EP = 0;
+    }
+    env.cryptor[env.EP] = hash;
+    s.append(env.cryptor);
+    hash = sha256(s);
+    env.tape[env.CP] = hash;
+}
+```
+
+write your comments here

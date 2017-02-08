@@ -1,0 +1,12 @@
+```cpp
+
+/*
+ * Prints a tape cell. If it's not printable, outputs hex representation of it.
+ */
+void print_byte(byte b)
+{
+    (b=='\n') ? cout << '\n' : (isprint(b)) ? cout << b : cout << "0x" << hex << (int)b << dec;
+}
+```
+
+write your comments here

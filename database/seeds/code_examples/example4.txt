@@ -1,0 +1,8 @@
+```cpp
+if (env.tape[p] != 'b' && env.tape[p] != 'h'){
+        (isprint(env.tape[p])) ? cerr << "Invalid number format: " << env.tape[p] << endl : cerr << "Invalid number format: " << "0x" << hex << (int)env.tape[p] << dec << endl;
+        exit(1);
+    }
+```
+
+A [link](http://example.com "Title").

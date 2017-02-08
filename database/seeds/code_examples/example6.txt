@@ -1,0 +1,80 @@
+```cpp
+
+void interpret(environment &env)
+{
+    string s(env.tape.begin(),env.tape.begin()+8);
+    if (s=="wimpmode"){
+        cout << "EXPORT GRADE ENABLED!\n";
+        wimpmode = 1;
+        env.CP+=8;
+        env.DP+=8;
+    }
+
+    while( true )
+    {
+
+        /* bookkeeping */
+        if(env.DP >= TAPE_MAX_SIZE || env.CP >= TAPE_MAX_SIZE) {
+            cerr << "Reached tape limit"<<endl;
+            exit(1);
+        }
+        if(env.DP < 0){
+            env.DP = 0;
+        }
+        if(env.CP < 0){
+            env.CP = 0;
+        }
+        while(env.CP >= env.tape.size()-8 || env.DP >= env.tape.size()-8) {
+            env.tape.push_back(BLANK_SYMBOL);
+        }
+
+        /* encryption */
+        if (!wimpmode){
+            encrypt(env);
+        }
+
+        switch(env.tape[env.CP])
+        {
+        /** Single character instructions */
+        case '>':
+            env.DP++;
+            env.CP++;
+            break;
+        case '<':
+            env.DP--;
+            env.CP++;
+            break;
+        case 'p':
+            print_byte(env.tape[env.DP]);
+            env.CP++;
+            break;
+        case 'i':
+            env.tape[env.DP] = cin.get();
+            env.CP++;
+            break;
+        case 'H':
+            cout << endl;
+            exit(0);
+        /** Double character instructions */
+        case 's':
+            env.tape[env.DP] = env.tape[env.CP+1];
+            env.CP+=2;
+            break;
+        /** Variable length instructions */
+        case 'J':
+            read_jump(env);
+            break;
+        default:
+            if(wimpmode){
+                cerr << "Invalid instruction: "; print_byte(env.tape[env.CP]); cerr << endl;
+                exit(1);
+            }
+            encrypt(env);
+            break;
+        }
+    }
+
+}
+```
+
+write your comments here

@@ -1,0 +1,20 @@
+```java
+// needs to be before the link file handler, in case the link file
+    // is the same as the test file
+    TestFileListener testfile = null;
+    if (parser.getOptionValue("testfile") != null) {
+      testfile = new TestFileListener(parser.getOptionValue("testfile"),
+                                      config,
+                                      parser.getOptionState("testdebug"),
+                                      processor,
+                                      showmatches,
+                                      pretty);
+      testfile.setPessimistic(true);
+      processor.addMatchListener(testfile);
+
+      if (testfile.isEmpty())
+        System.out.println("WARN: Test file is empty. Did you mean --linkfile?");
+    }
+```
+
+write your comments here

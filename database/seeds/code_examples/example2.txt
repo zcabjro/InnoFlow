@@ -1,0 +1,24 @@
+```cpp
+
+int main(int argc, char** argv)
+{
+    environment env = environment();
+
+    if ( argc < 2 ) {
+        cerr << "Usage: " << argv[0] << " <file_name>" << endl;
+        exit(1);
+    }
+
+    read_file(env,argv[1]);
+
+    interpret(env);
+
+    return 0;
+}
+```
+
+1. Item
+2. Item
+   * Mixed
+   * Mixed
+3. Item
