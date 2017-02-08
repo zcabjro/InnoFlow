@@ -1,7 +1,7 @@
 <template>  
   <div class="btn-group open">
     
-    <input v-model="search" class="form-control input-md">
+    <input v-model="search" v-on:blur="resetOptions" class="form-control input-md">
     <ul id="optionList" v-show="search && !dirty && options && options.length > 0" class="dropdown-menu scrollable-menu open" role="menu">
         <li v-for="option in options"><a v-on:click="select(option)" href="javascript:void(0)">{{getName(option)}}</a></li>
     </ul>
@@ -72,6 +72,13 @@ export default {
       if (this.onSelect) {
         this.onSelect(option);
       }
+    },
+
+    resetOptions() {
+      setTimeout(() => {
+        this.search = "";
+        this.options = null;
+      }, 200);
     }
   }
 }

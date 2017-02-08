@@ -25,14 +25,16 @@
       // Placeholder value
       'placeholder',
       // Input value
-      'value'
+      'value',
+      // Format field input
+      'format'
     ],
-    
+        
     // Form field component methods
     methods: {
       // Update the value of the field
       updateValue(val) {
-        var formattedValue = val.trim();
+        let formattedValue = this.format ? this.format(val) : val;
         
         if (formattedValue !== val) {
           this.$refs.input.value = formattedValue;
