@@ -13,6 +13,7 @@
     <!-- Styles -->
     <link href="/css/app.css" rel="stylesheet">
     <link href="/css/animate.css" rel="stylesheet">
+    <link href="/css/prism.css" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -31,5 +32,6 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    <script src="/js/prism.js"></script>
 </body>
 </html>

@@ -10,26 +10,32 @@
       </ul>
     </div>
 
-    <!-- Empty blanket space for closing menu -->
-    <div v-if="menuOpen" v-on:mousedown="toggleMenu" id="blanket"></div>
-
-    <!-- Nested route -->
+    <!-- Nested route -->    
     <div id="page-content-wrapper">
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-12">
-            <h1>Dashboard</h1>
+            <h1>Innovations</h1>
+              <div v-for="i in innovations">
+                <p>{{i.created}}</p>
+                <vue-markdown :source="i.code"></vue-markdown>
+              </div>
             <router-view></router-view>
           </div>
         </div>
       </div>
     </div>
+    
+    <!-- Empty blanket space for closing menu -->
+    <div v-if="menuOpen" v-on:mousedown="toggleMenu" id="blanket"></div>
+
   </div>
 </template>
 
 <script>
   import IfItem from './IfItem.vue' // Item component used for listing projects and classes
   import bus from '../bus.js' // Global event bus
+  import VueMarkdown from 'vue-markdown'
 
   // Helper for resetting dashboard data
   function defaultDashboardData() {
@@ -49,6 +55,7 @@
           children: []
         }
       },
+      innovations: [],
       // Whether the dashboard is ready for display
       ready: false
     };
@@ -60,7 +67,8 @@
 
     // Components used by this component
     components: {
-      IfItem
+      IfItem,
+      VueMarkdown
     },
 
     // Initialise dashboard data with defaults
@@ -72,6 +80,10 @@
     created() {
       // Listen for the logout event for updating the dashboard contents
       bus.$on('logout', this.resetDashboardData);
+    },
+
+    mounted() {
+      window.Prism.highlightAll();
     },
 
     // Request the dashboard contents each time we navigate to this route
@@ -112,7 +124,7 @@
         this.loadProjects();
         this.loadClasses();
         this.loadCommits(); // TEMP: testing VSTS redirect
-        this.loadInnovations(); // TODO: display this in the dashboard
+        this.loadInnovations();
         
         // TODO: Set this when all contents has been received
         this.ready = true;
@@ -171,9 +183,13 @@
 
       // Request innovations
       loadInnovations() {
-        axios.get('/api/innovation')
-          .then(function(res) { console.log('Received innovations'); })
+        axios.get('/api/innovations')
+          .then((res) => { this.innovations = res.data; })
           .catch(function(error) { console.log('Error loading innovations'); });
+      },
+
+      rendered(e) {
+        alert(e.target);
       }
     }
   }

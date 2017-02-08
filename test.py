@@ -1,9 +1,11 @@
 import os
+import os.path
 import subprocess
 import sys
 
 RUN_KARMA_TESTS = "karma start"
 WEBPACK_FILE = "webpack.config.js"
+WEBPACK_FILE_BACKUP = "webpack.config.js.backup"
 WEBPACK_CONFIG = """module.exports = {
   module: {
     loaders: [
@@ -25,7 +27,12 @@ WEBPACK_CONFIG = """module.exports = {
   }
 }"""
 
-with open(WEBPACK_FILE, "w+") as fo:
+backup = os.path.isfile(WEBPACK_FILE)
+
+if backup:
+  os.rename(WEBPACK_FILE, WEBPACK_FILE_BACKUP)
+
+with open(WEBPACK_FILE, "w") as fo:
     fo.write(WEBPACK_CONFIG)
 output = ""
 try:
@@ -34,3 +41,6 @@ except subprocess.CalledProcessError as e:
     output = e.output
 print output
 os.remove(WEBPACK_FILE)
+
+if backup:
+  os.rename(WEBPACK_FILE_BACKUP, WEBPACK_FILE)

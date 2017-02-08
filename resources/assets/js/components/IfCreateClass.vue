@@ -7,16 +7,19 @@
 
     <div class="form-group">
 			<div class="col-md-4 col-md-offset-4">
+				<!-- Tags -->
+				<if-tag v-for="tag in tags" :label="tag.username" :onRemove="onRemove"></if-tag>
+			</div>
+			
+			<div class="col-md-4 col-md-offset-4">
 				<!-- Dropdown component -->
-				<if-dropdown :options="options"></if-dropdown>
+				<if-dropdown :url="userSearchUrl" :getOptions="getOptions" :getName="getName" :onSelect="onSelect"></if-dropdown>
 			</div>
 
 			<!-- Create button -->
       <div class="col-md-4 col-md-offset-4">
         <button v-on:click="create" type="button" class="btn">Create</button>
-      </div>      
-
-			<if-tag :label="'jack'"></if-tag>
+      </div>			
 			
     </div>
   </div>
@@ -34,7 +37,8 @@ function defaultClassCreationData() {
 		className: { label: 'Class name', type: 'text', placeholder: 'COMPGS02', value: '' },
 		classCode: { label: 'Code', type: 'password', placeholder: 'Open, Sesame', value: '' },
 		classDescription: { label: 'Description', type: 'textarea', placeholder: '', value: ''},
-		options: [{name: 'A'}, {name: 'B'}]
+		userSearchUrl: '/api/users/search?string=',
+		tags: {}
 	}
 }
 
@@ -92,6 +96,22 @@ export default {
 		// On failure, log the failure
 		createFailure(error) {
 			console.log('Create class failure');
+		},
+
+		getOptions(data) {
+			return data;
+		},
+
+		getName(option) {
+			return option.username + ', ' + option.email;
+		},
+
+		onSelect(option) {
+			this.$set(this.tags, option.username, option);
+		},
+
+		onRemove(label) {
+			this.$delete(this.tags, label);
 		}
 	}
 }
