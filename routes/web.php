@@ -13,8 +13,8 @@
 
 
 // Index route
-Route::get( '/', 'Web\WebController@getIndex' ) -> name( 'index' );
+Route::get( '/', 'WebController@getIndex' ) -> name( 'index' );
 
 
 // VSTS callback route
-Route::get( 'vsts/authorize', 'Web\WebController@getAuthorizeIndex' );
+Route::get( 'vsts/authorize', 'WebController@getAuthorizeIndex' );

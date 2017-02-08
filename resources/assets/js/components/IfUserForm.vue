@@ -6,7 +6,7 @@
       <legend>{{legend}}</legend>
       <!-- FormField components -->
       <if-form-field v-for="(field, index) in fields" v-model="field.value" :label="field.label" :type="field.type" :placeholder="field.placeholder"></if-form-field>
-    </fieldset>
+    </fieldset>    
   </form>
 </template>
 

@@ -6,7 +6,7 @@
     <!-- Input area -->
     <div class="col-md-4">
       <input v-if="type !== 'textarea'" ref="input" v-bind:value="value" v-on:input="updateValue($event.target.value)" :type="type" :placeholder="placeholder" class="form-control input-md" required>
-      <textarea v-else rows="10" cols="50" v-bind:value="value" v-on:input="updateValue($event.target.value)">{{placeholder}}</textarea>
+      <textarea v-else rows="10" cols="50" v-bind:value="value" v-on:input="updateValue($event.target.value)" class="form-control input-md">{{placeholder}}</textarea>
     </div>
   </div>
 </template>

@@ -3,26 +3,38 @@
 	<div id="createClass" class="container">
 
 		<!-- UserForm component -->
-    <if-user-form :legend="legend" :fields="[className, classCode]"></if-user-form>
+    <if-user-form :legend="legend" :fields="[className, classCode, classDescription]"></if-user-form>				
 
     <div class="form-group">
+			<div class="col-md-4 col-md-offset-4">
+				<!-- Dropdown component -->
+				<if-dropdown :options="options"></if-dropdown>
+			</div>
+
 			<!-- Create button -->
       <div class="col-md-4 col-md-offset-4">
         <button v-on:click="create" type="button" class="btn">Create</button>
       </div>      
+
+			<if-tag :label="'jack'"></if-tag>
+			
     </div>
   </div>
 </template>
 
 <script>
 import IfUserForm from './IfUserForm.vue' // Form used for supplying class creation fields
+import IfDropdown from './IfDropdown.vue' // Dropdown component
+import IfTag from './IfTag.vue' // Tag component
 
 // Helper for resetting class creation data
 function defaultClassCreationData() {
 	return {
 		legend: 'Create class',
 		className: { label: 'Class name', type: 'text', placeholder: 'COMPGS02', value: '' },
-		classCode: { label: 'Code', type: 'password', placeholder: 'Open, Sesame', value: '' }
+		classCode: { label: 'Code', type: 'password', placeholder: 'Open, Sesame', value: '' },
+		classDescription: { label: 'Description', type: 'textarea', placeholder: '', value: ''},
+		options: [{name: 'A'}, {name: 'B'}]
 	}
 }
 
@@ -32,7 +44,9 @@ export default {
 
 	// Components used by this component
 	components: {
-		IfUserForm
+		IfUserForm,
+		IfDropdown,
+		IfTag
 	},
 	
 	// Initialise class creation data with defaults
