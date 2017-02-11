@@ -6,7 +6,7 @@
  * Time: 23:53
  */
 
-namespace App\Http\Requests\IdeExtension;
+namespace App\Http\Requests\Innovation;
 
 use App\Http\Requests\ApiRequest;
 use App\Repositories\User\UserRepoInterface;

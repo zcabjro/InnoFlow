@@ -9,7 +9,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Requests\IdeExtension\InnovationRequest;
+use App\Http\Requests\Innovation\InnovationRequest;
 use App\Repositories\Innovation\InnovationRepoInterface;
 use App\Services\Helper;
 use App\Transformers\InnovationTransformer;
