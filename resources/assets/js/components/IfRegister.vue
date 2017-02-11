@@ -39,11 +39,11 @@
       // Form title
       legend: 'Register',
       // Email field
-      email: { label: 'Email', type: 'text', placeholder: 'mail@example.com', value: '' },
+      email: { label: 'Email', type: 'text', placeholder: 'mail@example.com', value: '', format: function(val) { return val.trim(); } },
       // Password field
-      password: { label: 'Password', type: 'password', placeholder: 'password', value: '' },
+      password: { label: 'Password', type: 'password', placeholder: 'password', value: '', format: function(val) { return val.trim(); } },
       // Confirm password field
-      confirmPassword: { label: 'Confirm Password', type: 'password', placeholder: 'password', value: '' }
+      confirmPassword: { label: 'Confirm Password', type: 'password', placeholder: 'password', value: '', format: function(val) { return val.trim(); } }
     }
   }
 
