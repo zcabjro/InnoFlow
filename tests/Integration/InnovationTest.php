@@ -4,12 +4,14 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Test\Support\IntegrationTrait;
+use Test\Support\UserTrait;
 use app\Models\User;
 
 class InnovationTest extends TestCase
 {
     use DatabaseTransactions;
     use IntegrationTrait;
+    use UserTrait;
 
     private $userCredentials = [
         'email' => 'abc@email.com',

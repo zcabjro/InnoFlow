@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Test\Support\IntegrationTrait;
+use Test\Support\UserTrait;
 use App\Models\User;
 
 
@@ -10,6 +11,7 @@ class AuthTest extends TestCase
 {
     use DatabaseTransactions;
     use IntegrationTrait;
+    use UserTrait;
 
 
 
