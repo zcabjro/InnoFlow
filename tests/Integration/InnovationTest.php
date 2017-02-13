@@ -117,7 +117,7 @@ class InnovationTest extends TestCase
         
         // Create user
         $this -> createUser($this -> userCredentials);
-        $user = User::first();
+        $user = User::last();
         $token = JWTAuth::fromUser($user);
         JWTAuth::setToken($token);
 
