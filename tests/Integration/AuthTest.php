@@ -13,8 +13,6 @@ class AuthTest extends TestCase
     use IntegrationTrait;
     use UserTrait;
 
-
-
     /**
      * Represents valid credentials.
      *
