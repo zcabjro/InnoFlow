@@ -124,13 +124,14 @@ export default {
 
 		// On success, navigate to the dashboard
 		createSuccess(res) {
+		    console.log(res.response);
 			console.log("Create class success");
 			this.$router.push('/dashboard');
 		},
 
 		// On failure, log the failure
 		createFailure(error) {
-			console.log(error);
+			console.log(error.response);
 			console.log('Create class failure');
 		},
 

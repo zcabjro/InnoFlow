@@ -44,17 +44,13 @@ class ModuleController extends Controller
 
     public function store( NewModuleRequest $request )
     {
-        $user = Helper::currentUser();
-
         $input = $request -> except( 'admins' );
-        $input[ 'key' ] = bcrypt( $input[ 'key' ] );
-        $input[ 'user_id' ] = $user -> user_id;
         $module = $this -> moduleRepo -> create( $input );
 
-        if ( count( $admins = $request[ 'admins' ] ) )
+        if ( count( $admins = $request -> admins ) )
         {
             $module -> admins() -> attach( $admins, [ 'is_owner' => false ] );
-            $module -> admins() -> attach( $user, [ 'is_owner' => true ] );
+            $module -> admins() -> attach( $request -> user_id, [ 'is_owner' => true ] );
         }
     }
 }
