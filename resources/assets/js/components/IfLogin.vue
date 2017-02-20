@@ -3,7 +3,7 @@
   <div id="login" class="container">
     
     <!-- UserForm component -->
-    <if-user-form :legend="legend" :fields="[email, password]"></if-user-form>
+    <if-user-form :legend="legend" :fields="fields"></if-user-form>
 
     <div class="form-group">
       <!-- Login button -->
@@ -58,6 +58,12 @@
       next(loginComponent => {
         loginComponent.resetLoginData();
       });
+    },
+
+    computed: {
+      fields() {
+        return [ this.email, this.password ];
+      }     
     },
 
     // Login component methods

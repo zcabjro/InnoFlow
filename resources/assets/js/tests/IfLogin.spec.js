@@ -1,46 +1,29 @@
 import Vue from 'vue'
-import IfCreateClass from '../components/IfCreateClass.vue'
+import IfLogin from '../components/IfLogin.vue'
 
-describe('IfCreateClass', () => {
+describe('IfLogin', () => {
   
   // Asserting default data
   it('sets default data', () => {
-    expect(IfCreateClass.data).toBeDefined()
-    expect(typeof IfCreateClass.data).toBe('function')  
+    expect(IfLogin.data).toBeDefined()
+    expect(typeof IfLogin.data).toBe('function')  
   })
 
-  const data = IfCreateClass.data()
-  
+  const data = IfLogin.data()
   describe('legend', () => {
     it('should be a valid string', () => {
-      expect(data.legend).toBeDefined()
       expect(typeof data.legend).toBe('string')
-      expect(data.legend).toBeTruthy()
-    })
-  })
-
-  describe('user search url', () => {
-    it('should be a valid string', () => {
-      expect(data.userSearchUrl).toBeDefined()
-      expect(typeof data.userSearchUrl).toBe('string')
-      expect(data.userSearchUrl).toBeTruthy()
-    })
-  })
-
-  describe('tags', () => {
-    it('should be an object', () => {
-      expect(data.tags).toBeDefined()
-      expect(typeof data.tags).toBe('object')
+      expect(data.legend).toBeTruthy()      
     })
   })
 
   // Asserting computed properties
   it('has a fields property', () => {
-    expect(IfCreateClass.computed.fields).toBeDefined()
-    expect(typeof IfCreateClass.computed.fields).toBe('function')
+    expect(IfLogin.computed.fields).toBeDefined()
+    expect(typeof IfLogin.computed.fields).toBe('function')
   })
 
-  const vm = new Vue(IfCreateClass).$mount() 
+  const vm = new Vue(IfLogin).$mount() 
   const fields = vm.fields
   describe('fields', () => {    
     for (let i = 0; i < fields.length; i++) {
