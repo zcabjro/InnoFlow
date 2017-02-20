@@ -3,7 +3,7 @@
 	<div id="createClass" class="container">
 
 		<!-- UserForm component -->
-    <if-user-form :legend="legend" :fields="[className, classCode, classDescription, classKey]"></if-user-form>				
+    <if-user-form :legend="legend" :fields="fields"></if-user-form>				
 
 		<!-- Form extension (admin tags, admin search) -->
     <div class="form-horizontal">
@@ -71,14 +71,18 @@ export default {
 	},
 
 	// Reset the class creation data each time we navigate to this route
-	beforeRouteEnter(to, from, next) {
-		next(createClassComponent => {
+	beforeRouteEnter(to, from, next) {		
+		next(createClassComponent => {			
 			createClassComponent.resetClassCreationData();
 		});
 	},
 
 	// Computed properties
 	computed: {
+		fields() {			
+			return [ this.className, this.classCode, this.classDescription, this.classKey ];
+		},
+
 		// Whether input fields are valid or not
 		validFields() {
 			return this.className.value && this.classCode.value && this.classKey.value;
