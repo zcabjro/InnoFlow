@@ -38,7 +38,7 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
     Route::get( 'projects/{vstsProject}', 'ProjectController@show' );
     Route::post( 'projects/{vstsProject}/enrol', 'ProjectController@enrol' );
 
-    // VstsAccount token protected routes
+    // Vsts token protected routes
     Route::group( [ 'middleware' => 'vsts-auth' ], function () {
 
         Route::post( 'commits', 'CommitController@create' );

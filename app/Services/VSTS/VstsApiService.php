@@ -14,7 +14,6 @@ use App\Repositories\VstsAccount\VstsAccountRepo;
 use App\Repositories\VstsProject\VstsProjectRepoInterface;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\DB;
