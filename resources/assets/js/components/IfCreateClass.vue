@@ -92,7 +92,7 @@ export default {
 					admins.push(this.tags[tag].userId);
 				}
 			}
-			return admins;
+			return admins.join();
 		}
 	},
 
@@ -114,6 +114,8 @@ export default {
 					admins: this.admins
 				};
 
+				console.log(classData);
+
 				axios.post('/api/classes', classData)
 					.then(this.createSuccess)
 					.catch(this.createFailure);
@@ -128,6 +130,7 @@ export default {
 
 		// On failure, log the failure
 		createFailure(error) {
+			console.log(error);
 			console.log('Create class failure');
 		},
 

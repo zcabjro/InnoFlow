@@ -14,8 +14,8 @@
     <div id="page-content-wrapper">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-lg-12">
-            <h1>Innovations</h1>
+          <div v-show="highlighted" class="col-lg-12">
+            <h1>Innovations</h1>              
               <div v-for="i in innovations">
                 <p>{{i.created}}</p>
                 <vue-markdown :source="i.code"></vue-markdown>
@@ -57,7 +57,8 @@
       },
       innovations: [],
       // Whether the dashboard is ready for display
-      ready: false
+      ready: false,
+      highlighted: false
     };
   }
 
@@ -82,14 +83,10 @@
       bus.$on('logout', this.resetDashboardData);
     },
 
-    mounted() {
-      window.Prism.highlightAll();
-    },
-
     // Request the dashboard contents each time we navigate to this route
     beforeRouteEnter(to, from, next) {
       next(dashboardComponent => {
-        dashboardComponent.loadDashboard();
+        dashboardComponent.loadDashboard();        
       });
     },
 
@@ -185,12 +182,15 @@
       // Request innovations
       loadInnovations() {
         axios.get('/api/innovations')
-          .then((res) => { this.innovations = res.data; })
+          .then((res) => {
+            this.highlighted = false;
+            this.innovations = res.data;  
+            setTimeout(() => {
+              window.Prism.highlightAll();
+              this.highlighted = true;
+            }, 300);         
+          })
           .catch(function(error) { console.log('Error loading innovations'); });
-      },
-
-      rendered(e) {
-        alert(e.target);
       }
     }
   }
