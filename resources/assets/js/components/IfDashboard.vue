@@ -133,9 +133,9 @@
       // Request projects
       loadProjects() {
         axios.get('/api/projects')
-          .then(function (res) {
+          .then((res) => {
             // Update project list
-            this.projects.children = res.body['projects'] ? res.body['projects'] : [];
+            this.menu.projects.children = res.data['projects'] ? res.data['projects'] : [];
           })
           .catch(function (error) {
             // Log failure
@@ -146,12 +146,13 @@
       // Request classes
       loadClasses() {
         axios.get('/api/classes')
-          .then(function (res) {
+          .then((res) => {
             // Update class list
-            this.classes.children = res.body['classes'] ? res.body['classes'] : [];
+            this.menu.classes.children = res.data ? res.data : [];
           })
           .catch(function (error) {
-            // Log failure
+            // Log failure     
+            console.log(error);
             console.log("Load classes failed");
           });
       },

@@ -5,7 +5,7 @@
     <a class="item-name" v-on:click="toggle" href="#">{{active ? name : alt}}</a>
     <!-- Item children -->
     <ul class="child-list" v-show="active && open">
-      <li class="child" v-for="child in children"><a href="#" v-on:click="load(child, $event)">{{child}}</a></li>
+      <li class="child" v-for="child in children"><a href="#" v-on:click="load(child, $event)">{{child.code}}</a></li>
     </ul>
   </li>
 </template>
