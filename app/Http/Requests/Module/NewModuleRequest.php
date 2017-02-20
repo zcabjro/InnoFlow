@@ -40,7 +40,7 @@ class NewModuleRequest extends ApiRequest
             'description' => 'required|string',
             'code' => 'required|string|unique:modules,code|min:5|max:100',
             'key' => 'required|string|min:10|max:100',
-            'admins' => 'int_list'
+            'admins' => 'string|int_list'
 
         ];
     }
@@ -71,10 +71,12 @@ class NewModuleRequest extends ApiRequest
                 }
             }
 
-            $this -> replace( array(
-                'admins' => $filtered,
-            ));
+            $all = $this -> all();
+            $all[ 'admins' ] = $filtered;
+            $all[ 'key' ] = bcrypt( $this -> key );
+            $all[ 'user_id' ] = $user -> user_id;
 
+            $this -> replace( $all);
         });
 
         return $validator;
