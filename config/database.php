@@ -1,4 +1,13 @@
 <?php
+
+$url = parse_url(getenv("DATABASE_URL"));
+
+$host = isset( $url[ "host" ] ) ? $url[ "host" ] : null;
+$username = isset( $url[ "user" ] ) ? $url[ "user" ] : null;
+$password = isset( $url[ "pass" ] ) ? $url[ "pass" ] : null;
+$database = isset( $url["path"] ) ? substr($url["path"], 1) : null;
+
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -58,26 +67,15 @@ return [
         ],
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => $host,
+            'database' => $database,
+            'username' => $username,
+            'password' => $password,
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
             'sslmode' => 'prefer',
-        ],
-        'heroku' => [
-            'driver'   => 'pgsql',
-            'host'     => parse_url(getenv("DATABASE_URL"))["host"],
-            'database' => substr(parse_url(getenv("DATABASE_URL"))["path"], 1),
-            'username' => parse_url(getenv("DATABASE_URL"))["user"],
-            'password' => parse_url(getenv("DATABASE_URL"))["pass"],
-            'charset'  => 'utf8',
-            'prefix'   => '',
-            'schema'   => 'public',
-        ],
+        ]
     ],
     /*
     |--------------------------------------------------------------------------
