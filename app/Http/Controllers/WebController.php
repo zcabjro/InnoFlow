@@ -10,7 +10,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\VSTS\VSTSAuthRequest;
-use App\Services\VSTSService;
+use App\Services\VSTS\VstsApiService;
+use Tymon\JWTAuth\Providers\User\UserInterface;
 
 
 class WebController extends Controller
@@ -21,9 +22,16 @@ class WebController extends Controller
     }
 
 
-    public function getAuthorizeIndex( VSTSService $service, VSTSAuthRequest $request )
+    public function getAuthorizeIndex( VSTSAuthRequest $request, VstsApiService $vstsService, UserInterface $userRepo )
     {
-        $service -> requestToken( $request -> all() );
+        $user = $userRepo -> find( $request[ 'state' ] );
+        $code = $request[ 'code' ];
+
+        if ( !is_null( $user ) && !is_null( $code ) )
+        {
+            $vstsService -> storeToken( $user, $code );
+            $vstsService -> storeProfile( $user );
+        }
 
         return redirect() -> route( 'index', [ '#dashboard' ] ) -> with( [ 'waitForToken' => true ] );
     }

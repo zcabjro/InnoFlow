@@ -6,7 +6,7 @@
  * Time: 21:24
  */
 
-namespace App\Services;
+namespace App\Services\Common;
 
 use JWTAuth;
 

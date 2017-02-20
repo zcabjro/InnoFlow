@@ -11,7 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Innovation\InnovationRequest;
 use App\Repositories\Innovation\InnovationRepoInterface;
-use App\Services\Helper;
+use App\Services\Common\Helper;
 use App\Transformers\InnovationTransformer;
 
 

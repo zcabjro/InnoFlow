@@ -12,7 +12,7 @@ namespace App\Repositories\Module;
 
 use App\Models\Module;
 use App\Repositories\User\UserRepoInterface;
-use Helper;
+use Illuminate\Support\Facades\Hash;
 
 
 class ModuleRepo implements ModuleRepoInterface
@@ -30,7 +30,22 @@ class ModuleRepo implements ModuleRepoInterface
 
     public function create( array $input )
     {
-        $input[ 'user_id' ] = Helper::currentUser() -> user_id;
         return $this -> model -> create( $input );
+    }
+
+
+    public function findByCredentials( $code, $key )
+    {
+        if ( is_null( $module = $this -> model-> where( 'code', $code ) -> first() ) )
+        {
+            return null;
+        }
+
+        if ( !Hash::check( $key, $module -> key ) )
+        {
+            return null;
+        }
+
+        return $module;
     }
 }

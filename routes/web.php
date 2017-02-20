@@ -16,5 +16,5 @@
 Route::get( '/', 'WebController@getIndex' ) -> name( 'index' );
 
 
-// VSTS callback route
+// VstsAccount callback route
 Route::get( 'vsts/authorize', 'WebController@getAuthorizeIndex' );

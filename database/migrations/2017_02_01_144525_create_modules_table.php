@@ -15,15 +15,13 @@ class CreateModulesTable extends Migration
     {
         Schema::create( 'modules', function ( Blueprint $table ) {
             $table -> increments( 'module_id' );
+            $table -> integer( 'user_id' ) -> unsigned() -> nullable();
             $table -> string( 'name' );
             $table -> string( 'description' );
             $table -> string( 'code' );
             $table -> string( 'key' );
-            $table -> integer( 'user_id' ) -> unsigned() -> nullable();
             $table -> timestamps();
-        });
 
-        Schema::table( 'modules', function( Blueprint $table ) {
             $table -> foreign( 'user_id' )
                 -> references( 'user_id' )
                 -> on( 'users' )

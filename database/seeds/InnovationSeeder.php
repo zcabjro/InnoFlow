@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Innovation;
-use App\Services\Helper;
+use App\Services\Common\Helper;
 
 class InnovationSeeder extends Seeder
 {

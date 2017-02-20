@@ -2,12 +2,16 @@
 
 namespace App\Exceptions;
 
+use App\Traits\JsonResponseTrait;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
+    use JsonResponseTrait;
+
     /**
      * A list of the exception types that should not be reported.
      *

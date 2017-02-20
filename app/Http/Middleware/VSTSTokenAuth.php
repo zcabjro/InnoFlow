@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\VSTSService;
+use App\Services\VSTS\VstsApiService;
+use App\Services\Common\Helper;
 use App\Traits\JsonResponseTrait;
 use Closure;
 use JWTAuth;
-use Helper;
 
 
 class VSTSTokenAuth
@@ -16,7 +16,7 @@ class VSTSTokenAuth
     private $vstsService;
 
 
-    public function __construct( VSTSService $vstsService )
+    public function __construct( VstsApiService $vstsService )
     {
         $this -> vstsService = $vstsService;
     }

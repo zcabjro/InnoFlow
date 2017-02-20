@@ -9,7 +9,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Module\NewModuleRequest;
+use App\Models\Module;
 use App\Repositories\Module\ModuleRepoInterface;
+use App\Services\Common\Helper;
+use App\Transformers\ModuleTransformer;
 
 
 class ModuleController extends Controller
@@ -17,7 +20,7 @@ class ModuleController extends Controller
     private $moduleRepo;
 
 
-    public function __construct( ModuleRepoInterface $moduleRepo )
+    function __construct( ModuleRepoInterface $moduleRepo )
     {
         $this -> moduleRepo = $moduleRepo;
     }
@@ -25,23 +28,33 @@ class ModuleController extends Controller
 
     public function index()
     {
-        $modules = [];
-        $modules[] = ['id' => 1, 'code' => 'COMPGS02', 'name' => 'Software Abstractions and Systems Integration'];
-        $modules[] = ['id' => 2, 'code' => 'COMP3013', 'name' => 'Database and Information Management Systems'];
-        $modules[] = ['id' => 3, 'code' => 'COMP3080', 'name' => 'Computer Graphics'];
-        $modules[] = ['id' => 4, 'code' => 'COMP3035', 'name' => 'Networked Systems'];
+        $user = Helper::currentUser();
 
-        return $modules;
+        $modules = $user -> modules;
+
+        return fractal() -> collection( $modules, new ModuleTransformer );
+    }
+
+
+    public function show( Module $module )
+    {
+        return fractal() -> parseIncludes( [ 'admins', 'projects' ] ) -> item( $module, new ModuleTransformer );
     }
 
 
     public function store( NewModuleRequest $request )
     {
-        $module = $this -> moduleRepo -> create( $request -> except( 'admins' ) );
+        $user = Helper::currentUser();
+
+        $input = $request -> except( 'admins' );
+        $input[ 'key' ] = bcrypt( $input[ 'key' ] );
+        $input[ 'user_id' ] = $user -> user_id;
+        $module = $this -> moduleRepo -> create( $input );
 
         if ( count( $admins = $request[ 'admins' ] ) )
         {
-            $module -> users() -> attach( $admins );
+            $module -> admins() -> attach( $admins, [ 'is_owner' => false ] );
+            $module -> admins() -> attach( $user, [ 'is_owner' => true ] );
         }
     }
 }

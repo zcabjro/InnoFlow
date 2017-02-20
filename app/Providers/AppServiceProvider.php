@@ -31,7 +31,9 @@ class AppServiceProvider extends ServiceProvider
         $models = array(
             'User',
             'Module',
-            'Innovation'
+            'Innovation',
+            'VstsAccount',
+            'VstsProject'
         );
 
         foreach( $models as $model )

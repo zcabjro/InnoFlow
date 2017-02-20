@@ -20,7 +20,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'password'
+        'email',
+        'password',
+        'vsts_last_account_update',
+        'vsts_last_project_update'
     ];
 
 
@@ -30,23 +33,45 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'vsts_access_token', 'vsts_refresh_token',
+        'password',
+        'vsts_access_token',
+        'vsts_refresh_token'
     ];
 
 
     /**
-     * Get the modules the user is admin for.
+     * Gets all the modules the user is admin for.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function modules()
     {
-        return $this -> belongsToMany( 'App\Models\Module', 'admins', 'user_id', 'module_id' );
+        return $this
+            -> belongsToMany( 'App\Models\Module', 'admins', 'user_id', 'module_id' )
+            -> withPivot( 'is_owner' );
     }
 
+
     /**
-     * Get the innovations the user has contributed.
+     * Gets all the innovations the user has contributed.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function innovations()
     {
         return $this -> hasMany( 'App\Models\Innovation', 'user_id' );
+    }
+
+
+    /**
+     * Gets all the accounts the user has access to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function accounts()
+    {
+        return $this
+            -> belongsToMany( 'App\Models\VstsAccount', 'vsts_account_users', 'user_id', 'account_id' )
+            -> withPivot( 'is_owner' );
     }
 }
