@@ -30,7 +30,6 @@ class WebController extends Controller
         if ( !is_null( $user ) && !is_null( $code ) )
         {
             $vstsService -> storeToken( $user, $code );
-            $vstsService -> storeProfile( $user );
         }
 
         return redirect() -> route( 'index', [ '#dashboard' ] ) -> with( [ 'waitForToken' => true ] );
