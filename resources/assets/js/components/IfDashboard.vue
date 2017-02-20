@@ -5,8 +5,8 @@
     <!-- Sidebar -->
     <div v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
       <ul class="sidebar-nav">
-        <if-item :name="menu.projects.name" :alt="menu.projects.alt" :children="menu.projects.children" :active="menuOpen"></if-item>
-        <if-item :name="menu.classes.name" :alt="menu.classes.alt" :children="menu.classes.children" :active="menuOpen"></if-item>
+        <if-item :name="menu.projects.name" :alt="menu.projects.alt" :children="menu.projects.children" :active="menuOpen" addUrl="/create"></if-item>
+        <if-item :name="menu.classes.name" :alt="menu.classes.alt" :children="menu.classes.children" :active="menuOpen" addUrl="/create"></if-item>
       </ul>
     </div>
 

@@ -6,6 +6,7 @@
     <!-- Item children -->
     <ul class="child-list" v-show="active && open">
       <li class="child" v-for="child in children"><a href="#" v-on:click="load(child, $event)">{{child.code}}</a></li>
+      <li class="child"><router-link to="addUrl">[+] Add</router-link></li>
     </ul>
   </li>
 </template>
@@ -31,7 +32,9 @@
       // Whether or not item is active
       'active',
       // Item children
-      'children'
+      'children',
+      // Link to add page
+      'addUrl'
     ],
     
     // Item component methods
