@@ -28,6 +28,7 @@ class ModuleTransformer extends TransformerAbstract
     {
         return [
 
+            'id' => $module -> module_id,
             'name' => $module -> name,
             'description' => $module -> description,
             'code' => $module -> code
