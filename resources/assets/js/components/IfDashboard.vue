@@ -132,6 +132,7 @@
         axios.get('/api/projects')
           .then((res) => {
             // Update project list
+            console.log(res.data);
             this.menu.projects.children = res.data['projects'] ? res.data['projects'] : [];
           })
           .catch(function (error) {
