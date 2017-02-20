@@ -10,8 +10,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\VSTS\VSTSAuthRequest;
+use App\Repositories\User\UserRepoInterface;
 use App\Services\VSTS\VstsApiService;
-use Tymon\JWTAuth\Providers\User\UserInterface;
 
 
 class WebController extends Controller
@@ -22,7 +22,7 @@ class WebController extends Controller
     }
 
 
-    public function getAuthorizeIndex( VSTSAuthRequest $request, VstsApiService $vstsService, UserInterface $userRepo )
+    public function getAuthorizeIndex( VSTSAuthRequest $request, VstsApiService $vstsService, UserRepoInterface $userRepo )
     {
         $user = $userRepo -> find( $request[ 'state' ] );
         $code = $request[ 'code' ];
