@@ -16,9 +16,7 @@ class CreateAdminsTable extends Migration
         Schema::create( 'admins', function( Blueprint $table ) {
             $table -> integer( 'user_id' ) -> unsigned();
             $table -> integer( 'module_id' ) -> unsigned();
-        });
-
-        Schema::table( 'admins', function( Blueprint $table ) {
+            $table -> boolean( 'is_owner' );
 
             $table -> primary( array( 'user_id', 'module_id' ) );
 

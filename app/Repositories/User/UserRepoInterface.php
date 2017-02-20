@@ -21,7 +21,7 @@ interface UserRepoInterface
      * @param array $input
      * @return string
      */
-    public function login( $input );
+    public function login( $data );
 
 
     /**
@@ -30,8 +30,15 @@ interface UserRepoInterface
      * @param array $input
      * @return User
      */
-    public function create( array $input );
+    public function create( array $data );
 
+    /**
+     * Finds a user by id.
+     *
+     * @param $id
+     * @return User
+     */
+    public function find( $id );
 
     /**
      * Update a user's information.
@@ -40,7 +47,7 @@ interface UserRepoInterface
      * @param array $input
      * @return void
      */
-    public function update( $id, array $input );
+    public function update( $id, array $data );
 
 
     /**

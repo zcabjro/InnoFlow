@@ -11,7 +11,7 @@ namespace App\Http\Requests\Module;
 use App\Http\Requests\ApiRequest;
 use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
-use Helper;
+use App\Services\Common\Helper;
 
 
 class NewModuleRequest extends ApiRequest
@@ -41,6 +41,7 @@ class NewModuleRequest extends ApiRequest
             'code' => 'required|string|unique:modules,code|min:5|max:100',
             'key' => 'required|string|min:10|max:100',
             'admins' => 'int_list'
+
         ];
     }
 

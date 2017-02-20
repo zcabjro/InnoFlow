@@ -20,4 +20,14 @@ interface ModuleRepoInterface
      * @return Module
      */
     public function create( array $input );
+
+
+    /**
+     * Find a module by its credentials.
+     *
+     * @param $code
+     * @param $key
+     * @return mixed
+     */
+    public function findByCredentials( $code, $key );
 }

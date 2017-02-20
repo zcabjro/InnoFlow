@@ -18,9 +18,7 @@ class CreateInnovationsTable extends Migration
             $table -> text( 'code' );
             $table -> integer( 'user_id' ) -> unsigned();
             $table -> timestamps();
-        });
 
-        Schema::table( 'innovations', function( Blueprint $table ) {
             $table -> foreign( 'user_id' )
                 -> references( 'user_id' )
                 -> on( 'users' )

@@ -33,8 +33,12 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
     Route::get( 'classes', 'ModuleController@index' );
     Route::post( 'classes', 'ModuleController@store' );
+    Route::get( 'classes/{module}', 'ModuleController@show' );
 
-    // VSTS token protected routes
+    Route::get( 'projects/{vstsProject}', 'ProjectController@show' );
+    Route::post( 'projects/{vstsProject}/enrol', 'ProjectController@enrol' );
+
+    // VstsAccount token protected routes
     Route::group( [ 'middleware' => 'vsts-auth' ], function () {
 
         Route::post( 'commits', 'CommitController@create' );

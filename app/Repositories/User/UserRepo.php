@@ -25,19 +25,21 @@ class UserRepo implements UserRepoInterface
     }
 
 
-    public function login( $input )
+    public function login( $data )
     {
-        $credentials = [ "email" => $input[ "email" ], "password" => $input[ "password" ] ];
-        return JWTAuth::attempt( $credentials );
+        return JWTAuth::attempt( $data );
     }
 
 
-    public function create( array $input )
+    public function create( array $data )
     {
-        return $this -> model -> create([
-            'email' => $input[ "email" ],
-            'password' => bcrypt( $input[ "password" ] ),
-        ]);
+        return $this -> model -> create( $data );
+    }
+
+
+    public function find( $id )
+    {
+        return $this -> model -> find( $id );
     }
 
 

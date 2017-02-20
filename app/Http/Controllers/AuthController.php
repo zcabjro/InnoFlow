@@ -13,8 +13,8 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Repositories\User\UserRepoInterface;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Support\Facades\Cookie;
+use App\Services\Common\Helper;
 use JWTAuth;
-use Helper;
 
 
 class AuthController extends Controller
@@ -33,7 +33,10 @@ class AuthController extends Controller
 
     public function loginUser( LoginRequest $request )
     {
-        $token = $this -> userRepo -> login( $request -> all() );
+        $token = $this -> userRepo -> login( [
+            'email' => $request[ 'email' ],
+            'password' => $request[ 'password' ]
+        ] );
 
         if ( !$token )
         {
@@ -53,7 +56,10 @@ class AuthController extends Controller
 
     public function registerUser( RegisterRequest $request )
     {
-        $this -> userRepo -> create( $request -> all() );
+        $this -> userRepo -> create( [
+            'email' => $request[ 'email' ],
+            'password' => bcrypt( $request[ 'password' ] ),
+        ]);
     }
 
 

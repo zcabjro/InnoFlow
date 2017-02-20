@@ -20,10 +20,23 @@ class Module extends Model
 
 
     /**
-     * Get the users (i.e. the admins) for the module.
+     * Gets all the admins of a module.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function users()
+    public function admins()
     {
         return $this -> belongsToMany( 'App\Models\User', 'admins', 'module_id', 'user_id' );
+    }
+
+
+    /**
+     * Gets all the projects of a module.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projects()
+    {
+        return $this -> hasMany( 'App\Models\VstsProject', 'module_id', 'module_id' );
     }
 }
