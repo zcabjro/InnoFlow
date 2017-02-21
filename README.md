@@ -388,6 +388,7 @@ Includes both classes created as well as those where user was assinged as admin.
 
 `GET` api/projects
 > This is a JWT token protected route
+
 > This is a VSTS token protected route
 
  **Response Codes**
