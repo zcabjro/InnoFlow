@@ -5,8 +5,8 @@
     <!-- Sidebar -->
     <div v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
       <ul class="sidebar-nav">
-        <if-item :name="menu.projects.name" :alt="menu.projects.alt" :children="menu.projects.children" :active="menuOpen" addUrl="/create"></if-item>
-        <if-item :name="menu.classes.name" :alt="menu.classes.alt" :children="menu.classes.children" :active="menuOpen" addUrl="/create"></if-item>
+        <if-item :options="menu.projects" :active="menuOpen"></if-item>
+        <if-item :options="menu.classes" :active="menuOpen"></if-item>
       </ul>
     </div>
 
@@ -47,12 +47,22 @@
         projects: {
           name: 'Projects',
           alt: 'P',
-          children: []
+          children: [],
+          addText: '[+] Enrol',
+          addUrl: '/enrol',
+          getName(p) {
+            return p.name;
+          }
         },
         classes: {
           name: 'Classes',
           alt: 'C',
-          children: []
+          children: [],
+          addText: '[+] Add',
+          addUrl: '/create',
+          getName(c) {
+            return c.code;
+          }
         }
       },
       innovations: [],
@@ -137,6 +147,7 @@
           })
           .catch(function (error) {
             // Log failure
+            console.log(error.response);
             console.log("Load projects failed");
           });
       },
@@ -182,11 +193,14 @@
 
       // Request innovations
       loadInnovations() {
+        alert('req innos');
         axios.get('/api/innovations')
           .then((res) => {
+            alert(res.data.length);
             this.highlighted = false;
             this.innovations = res.data;  
             setTimeout(() => {
+              alert('highlightAll');
               window.Prism.highlightAll();
               this.highlighted = true;
             }, 300);         

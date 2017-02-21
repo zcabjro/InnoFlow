@@ -2,11 +2,11 @@
   <!-- List item -->
   <li>
     <!-- Item name -->
-    <a class="item-name" v-on:click="toggle" href="#">{{active ? name : alt}}</a>
+    <a class="item-name">{{active ? options.name : options.alt}}</a>
     <!-- Item children -->
-    <ul class="child-list" v-show="active && open">
-      <li class="child" v-for="child in children"><a href="#" v-on:click="load(child, $event)">{{child.code}}</a></li>
-      <li class="child"><router-link to="addUrl">[+] Add</router-link></li>
+    <ul class="child-list" v-show="active">
+      <li class="child" v-for="child in options.children"><a href="#" v-on:click="load(child, $event)">{{getChildName(child)}}</a></li>
+      <li class="child"><a href="#" v-on:click="add($event)">{{options.addText}}</router-link></li>
     </ul>
   </li>
 </template>
@@ -19,38 +19,35 @@
     // Initialise item data with defaults
     data() {
       return {
-        open: true
+        
       }
     },
-    
+
     // Properties supplied by parent component
     props: [
-      // Item name
-      'name',
-      // Alternative name used when inactive
-      'alt',
+      // { name, alt, children, addText, addUrl, getName }
+      'options',
       // Whether or not item is active
-      'active',
-      // Item children
-      'children',
-      // Link to add page
-      'addUrl'
+      'active'
     ],
     
     // Item component methods
-    methods: {
-      // Toggles children on/off
-      toggle(e) {
-        e.preventDefault();
-        if (this.active) {
-          //this.open = !this.open;
-        }
-      },
-      
+    methods: {      
       // TODO: Load the selected child
       load(project, e) {
         e.preventDefault();
         alert("Loading " + project);
+      },
+
+      add(e) {
+        e.preventDefault();
+        this.$router.push(this.options.addUrl);
+      },
+
+      getChildName(child) {
+        return this.options && this.options.getName
+          ? this.options.getName(child)
+          : child;
       }
     }
   }
