@@ -92,6 +92,7 @@
 **Sample Request**
 
 `GET` http://innoflow.app/api/logout
+
 <br>
 
 
@@ -161,7 +162,7 @@
 
 
 
-### Get all innovations of a user:
+### Get inovations:
 
 **Route**
 
@@ -237,7 +238,7 @@
 
 
 
-### Get a list classes:
+### Get classes:
 
 Includes both classes created as well as those where user was assinged as admin.
 
@@ -285,7 +286,7 @@ Includes both classes created as well as those where user was assinged as admin.
 
 | Parameter   | Type         | Notes     |
 | ------------|--------------|-----------|
-| classId     | Int          | A valid class id |
+| classId     | int          | A valid class id |
 
  **Response Codes**
  
@@ -345,5 +346,112 @@ Includes both classes created as well as those where user was assinged as admin.
       "username": "jared.hauck"
   }
 ]
+```
+<br>
+
+
+
+## 4. Projects
+
+### Get projects:
+
+**Route**
+
+`GET` api/projects
+> This is a JWT token protected route
+> This is a VSTS token protected route
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful fetch |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/projects
+
+```json
+[
+  {
+      "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
+      "name": "MyFirstProject",
+      "isOwner": true
+  },
+  {
+      "id": "fa856987-4cf7-4ad4-bdba-5fbd1374865d",
+      "name": "Innoflow",
+      "description": "A university project",
+      "isOwner": true
+  },
+]
+```
+<br>
+
+
+
+### Get a project:
+
+**Route**
+
+`GET` api/projects/{projectId}
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| projectId   | string       | A valid project id |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful fetch |
+| 404 | Invalid project id |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61
+
+```json
+{
+    "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
+    "name": "MyFirstProject",
+    "isOwner": true
+}
+```
+<br>
+
+
+
+### Enrol project into class:
+
+**Route**
+
+`POST` api/projects/{projectId}/enrol
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| projectId   | string       | A valid project id |
+| code        | string       | A class code |
+| key         | string       | The enrolment key of the class |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful enrolment |
+| 400 | <ul><li>The project is already enrolled </li><li>The user is not the owner of the project</li></ul> |
+| 401 | code or key are incorrect and do not match any registered class |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/enrol
+
+```json
+{
+	    "code" : "COMPGS02",
+	    "key" : "AwesomeClass2017"
+}
 ```
 <br>
