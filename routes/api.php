@@ -30,10 +30,10 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
     Route::get( 'innovations', 'InnovationController@index' );
 
-    Route::get( 'classes', 'ModuleController@index' );
     Route::post( 'classes', 'ModuleController@store' );
+    Route::get( 'classes', 'ModuleController@index' );
     Route::get( 'classes/{module}', 'ModuleController@show' );
-    Route::get( 'users/search', 'UserController@search' );
+    Route::get( 'classes/admins/search', 'ModuleController@searchAdmin' );
 
     Route::get( 'projects/{vstsProject}', 'ProjectController@show' );
     Route::post( 'projects/{vstsProject}/enrol', 'ProjectController@enrol' );

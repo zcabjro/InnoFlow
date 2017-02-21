@@ -7,12 +7,12 @@
  */
 
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Module;
 
 use App\Http\Requests\ApiRequest;
 
 
-class UserSearchRequest extends ApiRequest
+class AdminSearchRequest extends ApiRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -27,11 +27,6 @@ class InnovationRequest extends ApiRequest
      */
     public function authorize()
     {
-        if ( is_null( $this -> email ) || is_null( $this -> password ) || is_null( $this -> code ) )
-        {
-            return true;
-        }
-
         $user = App::call( [ $this, 'findUser' ] );
         if ( is_null( $user ) )
         {
