@@ -16,6 +16,7 @@ use App\Services\VSTS\VstsApiService;
 use App\Services\Common\Helper;
 use App\Traits\JsonResponseTrait;
 use App\Transformers\VstsProjectTransformer;
+use GuzzleHttp\Exception\ClientException;
 
 
 class ProjectController extends Controller
@@ -36,7 +37,16 @@ class ProjectController extends Controller
     public function index()
     {
         $user = Helper::currentUser();
-        $this -> vstsService -> updateUser( $user );
+
+        try
+        {
+            $this -> vstsService -> updateUser( $user );
+        }
+        catch( ClientException $e )
+        {
+            $user -> resetVsts();
+            return $this -> respondUnauthorized( 'Token cannot be refresh. Authorize with VSTS again.' );
+        }
 
         $projects = [];
 
