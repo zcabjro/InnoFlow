@@ -27,7 +27,7 @@
 | Code | Notes |
 | -----|-------|
 | 200 | Successful registration |
-| 422 | <ul><li>Email or password parameter are missing</li><li>Email or password parameter have incorrect format</li><li>Email is already taken</li></ul> |
+| 422 | <ul><li>email or password parameter are missing</li><li>email or password parameter have incorrect format</li><li>email is already taken</li></ul> |
 
 **Sample Request**
 
@@ -39,6 +39,7 @@
     "password" : "1234567890"
 }
 ```
+<br>
 
 
 
@@ -58,8 +59,8 @@
 | Code | Notes |
 | -----|-------|
 | 200 | Successful Login |
-| 401 | Email or password parameter are incorrect and do not match with any registered user |
-| 422 | <ul><li>Email or password parameter are missing</li><li>Email or password parameter have incorrect format</li></ul> |
+| 401 | email or password parameter are incorrect and do not match with any registered user |
+| 422 | <ul><li>email or password parameter are missing</li><li>email or password parameter have incorrect format</li></ul> |
 
 **Sample Request**
 
@@ -71,6 +72,7 @@
     "password" : "1234567890"
 }
 ```
+<br>
 
 
 
@@ -90,7 +92,7 @@
 **Sample Request**
 
 `GET` http://innoflow.app/api/logout
-<br><br><br>
+<br>
 
 
 
@@ -139,9 +141,9 @@
  
 | Code | Notes |
 | -----|-------|
-| 200 | Successful storage |
-| 401 | Email or password parameter are incorrect and do not match with any registered user |
-| 422 | <ul><li>Email, password or code parameter paramter are missing</li><li>Code parameter is not properly encoded</li></ul> |
+| 200 | Successful creation |
+| 401 | email or password parameter are incorrect and do not match with any registered user |
+| 422 | <ul><li>email, password or code parameter paramter are missing</li><li>code parameter is not properly encoded</li></ul> |
 
 
 **Sample Request**
@@ -155,6 +157,7 @@
     "code" : "ICAgIC8qKg0KICAgICAqIFJldHVybnMgYSBwZXJtaXNzaW9uIGRlbmllZCByZXNwb25zZSBpbiBjYXNlIGF1dGhvcml6ZSgpIHJldHVybnMgZmFsc2UuDQogICAgICoNCiAgICAgKiBAcmV0dXJuIFxJbGx1bWluYXRlXEh0dHBcSnNvblJlc3BvbnNlDQogICAgICovDQogICAgcHVibGljIGZ1bmN0aW9uIGZvcmJpZGRlblJlc3BvbnNlKCkNCiAgICB7DQogICAgICAgIHJldHVybiAkdGhpcyAtPiByZXNwb25kVW5hdXRob3JpemVkKCAnUGVybWlzc2lvbiBkZW5pZWQuIEludmFsaWQgdXNlciBjcmVkZW50aWFscy4nICk7DQogICAgfQ=="
 }
 ```
+<br>
 
 
 
@@ -189,4 +192,45 @@
     }
 ]
 ```
+<br><br><br>
+
+
+
+## 3. Classes
+
+### Store a class:
+
+**Route**
+
+`POST` api/classes
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| name        | string       | The name of the class (min 5 characters, max 100 characters) |
+| description | text         | A short description of what the class is about (min 20 characters, max 1000 characters) |
+| code        | string       | The class code (min 5 characters, max 100 characters) |
+| key         | string       | The enrolment key students can use to enrol their projects into a class (min 10 characters, max 100 characters) |
+| admins      | int list     | OPTIONAL A list of user ids, each representing an admin of the class (the creator of the class is automatically an admin) |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful creation |
+| 422 | <ul><li>name, description, code or key parameter paramter are missing</li><li>name, description, code, key or admins parameter  have incorrect formats</li><li>code paramter is already taken</li></ul> |
+
+**Sample Request**
+
+`POST` http://innoflow.app/api/classes
+
+```json
+{
+    	"name" : "Software Abstractions and Systems Integration",
+	    "description" : "This is a 4th year software engineering class",
+	    "code" : "COMPGS02",
+	    "key": "AwesomeClass2017",
+	    "admins" : "12,52,73"
+}
+```
+<br>
 
