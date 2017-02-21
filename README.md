@@ -29,9 +29,16 @@
 | 200 | Successful registration |
 | 422 | <ul><li>Email or password parameter are missing</li><li>Email or password parameter have incorrect format</li><li>Email is already taken</li></ul> |
 
-**Example Request**
+**Sample Request**
 
-http://innoflow.app/api/register?email=andreas@gmail.com&password=123456789Hello!
+http://innoflow.app/api/register
+
+```json
+{
+    "email" : "andreas@gmail.com",
+    "password" : "1234567890"
+}
+```
 <br><br>
 
 
@@ -54,9 +61,16 @@ http://innoflow.app/api/register?email=andreas@gmail.com&password=123456789Hello
 | 401 | Email or password parameter are incorrect and do not match with any registered user |
 | 422 | <ul><li>Email or password parameter are missing</li><li>Email or password parameter have incorrect format</li></ul> |
 
-**Example Request**
+**Sample Request**
 
-http://innoflow.app/api/login?email=andreas@gmail.com&password=123456789Hello!
+http://innoflow.app/api/login
+
+```json
+{
+    "email" : "andreas@gmail.com",
+    "password" : "1234567890"
+}
+```
 <br><br>
 
 
@@ -74,7 +88,7 @@ http://innoflow.app/api/login?email=andreas@gmail.com&password=123456789Hello!
 | 200 | Successful Logout |
 | 404 | Cookie token is missing. No user was logged in to begin with. |
 
-**Example Request**
+**Sample Request**
 
 http://innoflow.app/api/logout
 <br><br>
@@ -104,7 +118,15 @@ http://innoflow.app/api/logout
 | 422 | <ul><li>Email, password or code parameter paramter are missing</li><li>Code parameter is not properly encoded</li></ul> |
 
 
-**Example Request**
+**Sample Request**
 
-http://innoflow.app/api/logout
+http://innoflow.app/api/innovations
+
+```json
+{
+    "email" : "andreas@gmail.com",
+    "password" : "1234567890",
+    "code" : "ICAgIC8qKg0KICAgICAqIFJldHVybnMgYSBwZXJtaXNzaW9uIGRlbmllZCByZXNwb25zZSBpbiBjYXNlIGF1dGhvcml6ZSgpIHJldHVybnMgZmFsc2UuDQogICAgICoNCiAgICAgKiBAcmV0dXJuIFxJbGx1bWluYXRlXEh0dHBcSnNvblJlc3BvbnNlDQogICAgICovDQogICAgcHVibGljIGZ1bmN0aW9uIGZvcmJpZGRlblJlc3BvbnNlKCkNCiAgICB7DQogICAgICAgIHJldHVybiAkdGhpcyAtPiByZXNwb25kVW5hdXRob3JpemVkKCAnUGVybWlzc2lvbiBkZW5pZWQuIEludmFsaWQgdXNlciBjcmVkZW50aWFscy4nICk7DQogICAgfQ=="
+}
+```
 <br><br>
