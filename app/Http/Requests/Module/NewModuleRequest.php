@@ -76,7 +76,7 @@ class NewModuleRequest extends ApiRequest
             $all[ 'key' ] = bcrypt( $this -> key );
             $all[ 'user_id' ] = $user -> user_id;
 
-            $this -> replace( $all);
+            $this -> replace( $all );
         });
 
         return $validator;

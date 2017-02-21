@@ -40,6 +40,19 @@ class User extends Authenticatable
 
 
     /**
+     * Resets a user's vsts details.
+     */
+    public function resetVsts()
+    {
+        $this -> vsts_access_token = null;
+        $this -> vsts_refresh_token = null;
+        $this -> vsts_last_update = null;
+        $this -> vsts_profile_id = null;
+        $this -> save();
+    }
+
+
+    /**
      * Gets all the modules the user is admin for.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
