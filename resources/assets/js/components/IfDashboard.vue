@@ -142,8 +142,7 @@
         axios.get('/api/projects')
           .then((res) => {
             // Update project list
-            console.log(res.data);
-            this.menu.projects.children = res.data['projects'] ? res.data['projects'] : [];
+            this.menu.projects.children = res.data ? res.data : [];
           })
           .catch(function (error) {
             // Log failure
@@ -161,7 +160,7 @@
           })
           .catch(function (error) {
             // Log failure     
-            console.log(error);
+            console.log(error.response);
             console.log("Load classes failed");
           });
       },
