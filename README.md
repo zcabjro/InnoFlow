@@ -35,8 +35,8 @@
 
 ```json
 {
-    "email" : "andreas@gmail.com",
-    "password" : "1234567890"
+  "email" : "andreas@gmail.com",
+  "password" : "1234567890"
 }
 ```
 <br>
@@ -68,8 +68,8 @@
 
 ```json
 {
-    "email" : "andreas@gmail.com",
-    "password" : "1234567890"
+  "email" : "andreas@gmail.com",
+  "password" : "1234567890"
 }
 ```
 <br>
@@ -117,7 +117,7 @@
 **Sample Response**
 ```json
 {
-    "is_authorized": false
+  "is_authorized": false
 }
 ```
 <br><br><br>
@@ -153,9 +153,9 @@
 
 ```json
 {
-    "email" : "andreas@gmail.com",
-    "password" : "1234567890",
-    "code" : "ICAgIC8qKg0KICAgICAqIFJldHVybnMgYSBwZXJtaXNzaW9uIGRlbmllZCByZXNwb25zZSBpbiBjYXNlIGF1dGhvcml6ZSgpIHJldHVybnMgZmFsc2UuDQogICAgICoNCiAgICAgKiBAcmV0dXJuIFxJbGx1bWluYXRlXEh0dHBcSnNvblJlc3BvbnNlDQogICAgICovDQogICAgcHVibGljIGZ1bmN0aW9uIGZvcmJpZGRlblJlc3BvbnNlKCkNCiAgICB7DQogICAgICAgIHJldHVybiAkdGhpcyAtPiByZXNwb25kVW5hdXRob3JpemVkKCAnUGVybWlzc2lvbiBkZW5pZWQuIEludmFsaWQgdXNlciBjcmVkZW50aWFscy4nICk7DQogICAgfQ=="
+  "email" : "andreas@gmail.com",
+  "password" : "1234567890",
+  "code" : "ICAgIC8qKg0KICAgICAqIFJldHVybnMgYSBwZXJtaXNzaW9uIGRlbmllZCByZXNwb25zZSBpbiBjYXNlIGF1dGhvcml6ZSgpIHJldHVybnMgZmFsc2UuDQogICAgICoNCiAgICAgKiBAcmV0dXJuIFxJbGx1bWluYXRlXEh0dHBcSnNvblJlc3BvbnNlDQogICAgICovDQogICAgcHVibGljIGZ1bmN0aW9uIGZvcmJpZGRlblJlc3BvbnNlKCkNCiAgICB7DQogICAgICAgIHJldHVybiAkdGhpcyAtPiByZXNwb25kVW5hdXRob3JpemVkKCAnUGVybWlzc2lvbiBkZW5pZWQuIEludmFsaWQgdXNlciBjcmVkZW50aWFscy4nICk7DQogICAgfQ=="
 }
 ```
 <br>
@@ -184,12 +184,12 @@
 ```json
 [
     {
-        "code": "public static function uniqueRandomNumbersWithinRange( $min, $max, $quantity ){$numbers = range( $min, $max );shuffle( $numbers );return array_slice( $numbers, 0, $quantity );}",
-        "created": "2017-02-21 15:35:19"
+      "code": "public static function uniqueRandomNumbersWithinRange( $min, $max, $quantity ){$numbers = range( $min, $max );shuffle( $numbers );return array_slice( $numbers, 0, $quantity );}",
+      "created": "2017-02-21 15:35:19"
     }
     {
-        "code": "void read_jump(environment &env){infinite X, Y;infinite p = env.CP + 2;cba2n(env, p, X, Y);env.CP += (env.tape[env.DP] ==env.tape[env.CP+1]) ? X : Y;}",
-        "created": "2017-02-21 15:34:56"
+      "code": "void read_jump(environment &env){infinite X, Y;infinite p = env.CP + 2;cba2n(env, p, X, Y);env.CP += (env.tape[env.DP] ==env.tape[env.CP+1]) ? X : Y;}",
+      "created": "2017-02-21 15:34:56"
     }
 ]
 ```
@@ -227,11 +227,11 @@
 
 ```json
 {
-     "name" : "Software Abstractions and Systems Integration",
-     "description" : "This is a MEng software engineering class",
-     "code" : "COMPGS02",
-     "key": "AwesomeClass2017",
-     "admins" : "12,52,73"
+   "name" : "Software Abstractions and Systems Integration",
+   "description" : "This is a MEng software engineering class",
+   "code" : "COMPGS02",
+   "key": "AwesomeClass2017",
+   "admins" : "12,52,73"
 }
 ```
 <br>
@@ -260,16 +260,16 @@ Includes both classes created as well as those where user was assinged as admin.
 ```json
 [
   {
-      "id": 1,
-      "name": "Software Abstractions and Systems Integration",
-      "description": "This is a MEng software engineering class",
-      "code": "COMPGS02"
+    "id": 1,
+    "name": "Software Abstractions and Systems Integration",
+    "description": "This is a MEng software engineering class",
+    "code": "COMPGS02"
   },
   {
-      "id": 2,
-      "name": "Computer Security 1",
-      "description": "This is a MEng year security engineering class",
-      "code": "COMPGA01"
+    "id": 2,
+    "name": "Computer Security 1",
+    "description": "This is a MEng year security engineering class",
+    "code": "COMPGA01"
   }
 ]
 ```
@@ -301,10 +301,39 @@ Includes both classes created as well as those where user was assinged as admin.
 
 ```json
 {
-    "id": 1,
-    "name": "Software Abstractions and Systems Integration",
-    "description": "This is a MEng software engineering class",
-    "code": "COMPGS02"
+  "id": 1,
+  "name": "Software Abstractions and Systems Integration",
+  "description": "This is a MEng software engineering class",
+  "code": "COMPGS02",
+  "admins": [
+    {
+      "userId": 12,
+      "email": "davis.hilton@yahoo.com",
+      "username": "tobin.roob"
+    },
+    {
+      "userId": 52,
+      "email": "otho.turcotte@abbott.com",
+      "username": "juston45"
+    },
+    {
+      "userId": 73,
+      "email": "gpaucek@nicolas.com",
+      "username": "dennis36"
+    },
+    {
+      "userId": 101,
+      "email": "jack@gmail.com",
+      "username": "Crocodile Killer"
+    }
+  ],
+  "projects": [
+    {
+      "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
+      "name": "MyFirstProject",
+      "classId": 1
+    }
+  ]
 }
 ```
 <br>
@@ -336,14 +365,14 @@ Includes both classes created as well as those where user was assinged as admin.
 ```json
 [
   {
-      "userId": 101,
-      "email": "jack@gmail.com",
-      "username": "Crocodile Killer"
+    "userId": 101,
+    "email": "jack@gmail.com",
+    "username": "Crocodile Killer"
   },
   {
-      "userId": 79,
-      "email": "demetris.damore@kuhn.info",
-      "username": "jared.hauck"
+    "userId": 79,
+    "email": "demetris.damore@kuhn.info",
+    "username": "jared.hauck"
   }
 ]
 ```
@@ -374,15 +403,15 @@ Includes both classes created as well as those where user was assinged as admin.
 ```json
 [
   {
-      "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
-      "name": "MyFirstProject",
-      "isOwner": true
+    "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
+    "name": "MyFirstProject",
+    "isOwner": true
   },
   {
-      "id": "fa856987-4cf7-4ad4-bdba-5fbd1374865d",
-      "name": "Innoflow",
-      "description": "A university project",
-      "isOwner": true
+    "id": "fa856987-4cf7-4ad4-bdba-5fbd1374865d",
+    "name": "Innoflow",
+    "description": "A university project",
+    "isOwner": true
   },
 ]
 ```
@@ -414,9 +443,16 @@ Includes both classes created as well as those where user was assinged as admin.
 
 ```json
 {
-    "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
-    "name": "MyFirstProject",
-    "isOwner": true
+  "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
+  "name": "MyFirstProject",
+  "classId": 1,
+  "members": [
+    {
+      "userId": 101,
+      "email": "jack@gmail.com",
+      "username": "Crocodile Killer"
+    }
+  ]
 }
 ```
 <br>
@@ -450,8 +486,8 @@ Includes both classes created as well as those where user was assinged as admin.
 
 ```json
 {
-	    "code" : "COMPGS02",
-	    "key" : "AwesomeClass2017"
+  "code" : "COMPGS02",
+  "key" : "AwesomeClass2017"
 }
 ```
 <br>
