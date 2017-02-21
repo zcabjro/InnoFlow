@@ -22,7 +22,7 @@ class InnovationSeeder extends Seeder
 
         foreach ( $users as $user )
         {
-            $randomTotal = rand ( 0, $total );
+            $randomTotal = rand ( 1, $total );
             $randomIndices = Helper::uniqueRandomNumbersWithinRange( 1, $total, $randomTotal );
 
             foreach ( $randomIndices as $index )
