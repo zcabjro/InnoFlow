@@ -20,7 +20,7 @@
 | Parameter   | Type      | Notes     |
 | ------------|-----------|-----------|
 | email       | string    | Must be a valid email address |
-| password    | string    | Must be string consisting of at least 10 characters |
+| password    | string    | A strong password (min 10 characters) |
 
  **Response Codes**
  
@@ -203,6 +203,7 @@
 **Route**
 
 `POST` api/classes
+> This is a JWT token protected route
 
 | Parameter   | Type         | Notes     |
 | ------------|--------------|-----------|
@@ -225,12 +226,124 @@
 
 ```json
 {
-    	"name" : "Software Abstractions and Systems Integration",
-	    "description" : "This is a 4th year software engineering class",
-	    "code" : "COMPGS02",
-	    "key": "AwesomeClass2017",
-	    "admins" : "12,52,73"
+     "name" : "Software Abstractions and Systems Integration",
+     "description" : "This is a MEng software engineering class",
+     "code" : "COMPGS02",
+     "key": "AwesomeClass2017",
+     "admins" : "12,52,73"
 }
 ```
 <br>
 
+
+
+### Get a list classes:
+
+Includes both classes created as well as those where user was assinged as admin.
+
+**Route**
+
+`GET` api/classes
+> This is a JWT token protected route
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful fetch |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/classes
+
+```json
+[
+  {
+      "id": 1,
+      "name": "Software Abstractions and Systems Integration",
+      "description": "This is a MEng software engineering class",
+      "code": "COMPGS02"
+  },
+  {
+      "id": 2,
+      "name": "Computer Security 1",
+      "description": "This is a MEng year security engineering class",
+      "code": "COMPGA01"
+  }
+]
+```
+<br>
+
+
+
+### Get a class:
+
+**Route**
+
+`GET` api/classes/{classId}
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| classId     | Int          | A valid class id |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200  | Successful fetch |
+| 404  | Invalid class id |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/classes/1
+
+```json
+{
+    "id": 1,
+    "name": "Software Abstractions and Systems Integration",
+    "description": "This is a MEng software engineering class",
+    "code": "COMPGS02"
+}
+```
+<br>
+
+
+
+### Search for an admin:
+
+**Route**
+
+`GET` api/classes/admins/search
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| string      | string       | A search string (min 2 characters) |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200  | Successful fetch |
+| 422  | <ul><li>string parameter is missing</li><li>string parameter has incorrect format</li></ul> |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/classes/admins/search?string=And
+
+```json
+[
+  {
+      "userId": 101,
+      "email": "jack@gmail.com",
+      "username": "Crocodile Killer"
+  },
+  {
+      "userId": 79,
+      "email": "demetris.damore@kuhn.info",
+      "username": "jared.hauck"
+  }
+]
+```
+<br>
