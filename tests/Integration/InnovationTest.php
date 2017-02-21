@@ -18,12 +18,9 @@ class InnovationTest extends TestCase
         'password' => '1234567890'
     ];
 
-    private $credentials = [
-
-        'email' => 'YWJjQGVtYWlsLmNvbQ==',
-        'password' => 'MTIzNDU2Nzg5MA==',
-        'code' => 'c29tZSBjb2Rl'
-
+    private $codeCredentials = [
+        'code' => 'some code',
+        'encoded_code' => 'c29tZSBjb2Rl'
     ];
     
     private $userCredentials2 = [
@@ -31,12 +28,9 @@ class InnovationTest extends TestCase
         'password' => '0987654321'
     ];
 
-    private $credentials2 = [
-
-        'email' => 'ZGVmQGVtYWlsLmNvbQ==',
-        'password' => 'MDk4NzY1NDMyMQ==',
-        'code' => 'd2hhdGV2ZXIgc3RyaW5n'
-
+    private $codeCredentials2 = [
+        'code' => 'whatever string',
+        'encoded_code' => 'd2hhdGV2ZXIgc3RyaW5n'
     ];
 
     /**
@@ -49,8 +43,8 @@ class InnovationTest extends TestCase
         // Create user
         $this -> createUser($this -> userCredentials);
 
-        $this -> call('POST','api/innovations',$this -> credentials);
-        $this -> seeInDataBase('innovations',['code' => $this -> credentials["code"]]);
+        $this -> call('POST','api/innovations',['email' => $this -> userCredentials['email'],'password' => $this -> userCredentials['password'], 'code' => $this -> codeCredentials["encoded_code"]]);
+        $this -> seeInDataBase('innovations',['code' => $this -> codeCredentials["code"]]);
     }
 
     /**
@@ -64,19 +58,19 @@ class InnovationTest extends TestCase
          $this -> createUser($this -> userCredentials);
          
          // No user credentials
-         $this -> call('POST','api/innovations',['code' => $this -> credentials["code"]]);
+         $this -> call('POST','api/innovations',['code' => $this -> codeCredentials["encoded_code"]]);
          $this -> seeJsonEquals([
              'error' => 'Permission denied. Invalid user credentials.'
          ]);
 
          // Incorrect email
-         $this -> call('POST','api/innovations',['email' => 'YWJjZEBlbWFpbC5jb20=','password' => $this -> credentials["password"],'code' => $this -> credentials["code"]]);
+         $this -> call('POST','api/innovations',['email' => 'abd@email.com','password' => $this -> userCredentials["password"],'code' => $this -> codeCredentials["encoded_code"]]);
          $this -> seeJsonEquals([
              'error' => 'Permission denied. Invalid user credentials.'
          ]);
 
          // Incorrect password
-         $this -> call('POST','api/innovations',['email' => $this -> credentials["email"],'password' => 'MTMyNDU2Nzg5MA==','code' => $this -> credentials["code"]]);
+         $this -> call('POST','api/innovations',['email' => $this -> userCredentials["email"],'password' => '1234567800','code' => $this -> codeCredentials["encoded_code"]]);
          $this -> seeJsonEquals([
              'error' => 'Permission denied. Invalid user credentials.'
          ]);
@@ -93,13 +87,13 @@ class InnovationTest extends TestCase
          $this -> createUser($this -> userCredentials);
 
          // Empty code field
-         $this -> call('POST','api/innovations',['email' => $this -> credentials["email"],'password' => $this -> credentials["password"]]);
+         $this -> call('POST','api/innovations',['email' => $this -> userCredentials["email"],'password' => $this -> userCredentials["password"]]);
          $this -> seeJsonEquals([
              'code' => ['The code field is required.']
          ]);
 
          // Code field is not Base64 encoded
-         $this -> call('POST','api/innovations',['email' => $this -> credentials["email"],'password' => $this -> credentials["password"],'code' => '12345']);
+         $this -> call('POST','api/innovations',['email' => $this -> userCredentials["email"],'password' => $this -> userCredentials["password"],'code' => '12345']);
          $this -> seeJsonEquals([
              'code' => ['The code must be base_64 encoded']
          ]);
@@ -122,18 +116,18 @@ class InnovationTest extends TestCase
         JWTAuth::setToken($token);
 
         // Create data that user stored
-        $this -> call('POST','api/innovations',$this -> credentials);
+        $this -> call('POST','api/innovations',['email' => $this -> userCredentials['email'],'password' => $this -> userCredentials['password'],'code' => $this -> codeCredentials['encoded_code']]);
 
         // Create another user and stored another set of date_add
         $this -> createUser($this -> userCredentials2);
-        $this -> call('POST','api/innovations',$this -> credentials2);
+        $this -> call('POST','api/innovations',['email' => $this -> userCredentials2['email'],'password' => $this -> userCredentials2['password'],'code' => $this -> codeCredentials2['encoded_code']]);
     
         $this -> call('GET','api/innovations');
         $this -> seeJson([
-            'code' => $this -> credentials["code"]
+            'code' => $this -> codeCredentials["code"]
         ]);
         $this -> dontSeeJson([
-            'code' => $this -> credentials2["code"]
+            'code' => $this -> codeCredentials2["code"]
         ]);
         
      }

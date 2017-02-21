@@ -18,9 +18,19 @@ class ClassesTest extends TestCase
         'password' => '1234567890'
     ];
 
+    private $userCredentials2 = [
+        'email' => 'abdcef@email.com',
+        'password' => '1234567890'
+    ];
+
+    private $userCredentials3 = [
+        'email' => 'adef@email.com',
+        'password' => '1234567890'
+    ];
+
     private $classSetting = [
         'name' => 'Testing',
-        'description' => 'For testing purpose',
+        'description' => 'For testing purpose 1',
         'code' => 'TEST001',
         'key' => 'TESTKEY001'
     ];
@@ -43,13 +53,17 @@ class ClassesTest extends TestCase
 
         // Create user
         $this -> createUser($this -> userCredentials);
-        $user = User::first();
+        $user = User::where('email',$this -> userCredentials)->first();
         $token = JWTAuth::fromUser($user);
         JWTAuth::setToken($token);
 
         $this -> call('POST','api/classes',$this -> classSetting);
 
-        $this -> seeInDataBase('modules',$this -> classSetting);
+        $this -> seeInDataBase('modules',[
+            'name' => $this -> classSetting["name"],
+            'description' => $this -> classSetting["description"],
+            'code' => $this -> classSetting["code"]
+        ]);
     }
 
     /**
@@ -179,5 +193,53 @@ class ClassesTest extends TestCase
          $this -> seeJsonEquals([
              'error' => 'Token does not exist anymore. Login again.'
          ]);
+     }
+
+     /**
+     * Successful show users related to search request.
+     *
+     * @return void
+     */
+    public function testShowRequestResultSuccessful()
+    {
+        $this->withoutMiddleware();
+
+        // Create users
+        $this -> createUser($this -> userCredentials);
+        $this -> createUser($this -> userCredentials2);
+        $this -> createUser($this -> userCredentials3);
+
+        $user = User::where('email',$this -> userCredentials)->first();
+        $token = JWTAuth::fromUser($user);
+        JWTAuth::setToken($token);
+
+        // Search for users that exists
+        $this -> call('GET','api/classes/admins/search',['string' => $this -> userCredentials["email"]]);
+        $this -> seeJson([
+            'email' => $this ->userCredentials["email"]
+        ]);
+        $this -> seeJson([
+            'email' => $this ->userCredentials2["email"]
+        ]);
+        $this -> dontSeeJson([
+            'email' => $this ->userCredentials3["email"]
+        ]);
+
+        // Search for user that does not exists
+        $this -> call('GET','api/classes/admins/search',['string' => 'xyz@email.com']);
+        $this -> seeJson([]);
+    }
+
+    /**
+     * Failed to search for user(s) due to expired token/haven't log in
+     *
+     * @return void
+     */
+     public function testSearchWithoutToken()
+     {
+        $this -> call('GET','api/classes/admins/search',['string' => $this -> userCredentials["email"]]);
+        $this -> seeJsonEquals([
+            'error' => 'Token does not exist anymore. Login again.'
+        ]);
      }
 }
