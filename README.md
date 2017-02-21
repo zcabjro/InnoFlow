@@ -162,7 +162,7 @@
 
 
 
-### Get inovations:
+### Get innovations:
 
 **Route**
 
@@ -199,7 +199,7 @@
 
 ## 3. Classes
 
-### Store a class:
+### Create a class:
 
 **Route**
 
@@ -340,7 +340,7 @@ Includes both classes created as well as those where user was assinged as admin.
 
 
 
-### Search for an admin:
+### Search for a user to add as admin:
 
 **Route**
 
@@ -420,7 +420,7 @@ Includes both classes created as well as those where user was assinged as admin.
 
 
 
-### Get a project:
+### Get project details:
 
 **Route**
 
@@ -460,7 +460,7 @@ Includes both classes created as well as those where user was assinged as admin.
 
 
 
-### Enrol project into class:
+### Enroll project into class:
 
 **Route**
 
