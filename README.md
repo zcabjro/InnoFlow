@@ -31,7 +31,7 @@
 
 **Sample Request**
 
-http://innoflow.app/api/register
+`POST` http://innoflow.app/api/register
 
 ```json
 {
@@ -39,7 +39,7 @@ http://innoflow.app/api/register
     "password" : "1234567890"
 }
 ```
-<br><br>
+
 
 
 ### Login User:
@@ -63,7 +63,7 @@ http://innoflow.app/api/register
 
 **Sample Request**
 
-http://innoflow.app/api/login
+`POST` http://innoflow.app/api/login
 
 ```json
 {
@@ -71,7 +71,6 @@ http://innoflow.app/api/login
     "password" : "1234567890"
 }
 ```
-<br><br>
 
 
 
@@ -80,18 +79,45 @@ http://innoflow.app/api/login
 **Route**
 
 `GET` api/logout
+> This is a JWT token protected route
 
  **Response Codes**
  
 | Code | Notes |
 | -----|-------|
 | 200 | Successful Logout |
-| 404 | Cookie token is missing. No user was logged in to begin with. |
 
 **Sample Request**
 
-http://innoflow.app/api/logout
-<br><br>
+`GET` http://innoflow.app/api/logout
+<br><br><br>
+
+
+
+### Check if user has authorized with VSTS:
+
+**Route**
+
+`GET` api/vsts
+> This is a JWT token protected route
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful fetch |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/vsts
+
+**Sample Response**
+```json
+{
+    "is_authorized": false
+}
+```
+<br><br><br>
 
 
 
@@ -120,7 +146,7 @@ http://innoflow.app/api/logout
 
 **Sample Request**
 
-http://innoflow.app/api/innovations
+`POST` http://innoflow.app/api/innovations
 
 ```json
 {
@@ -129,4 +155,38 @@ http://innoflow.app/api/innovations
     "code" : "ICAgIC8qKg0KICAgICAqIFJldHVybnMgYSBwZXJtaXNzaW9uIGRlbmllZCByZXNwb25zZSBpbiBjYXNlIGF1dGhvcml6ZSgpIHJldHVybnMgZmFsc2UuDQogICAgICoNCiAgICAgKiBAcmV0dXJuIFxJbGx1bWluYXRlXEh0dHBcSnNvblJlc3BvbnNlDQogICAgICovDQogICAgcHVibGljIGZ1bmN0aW9uIGZvcmJpZGRlblJlc3BvbnNlKCkNCiAgICB7DQogICAgICAgIHJldHVybiAkdGhpcyAtPiByZXNwb25kVW5hdXRob3JpemVkKCAnUGVybWlzc2lvbiBkZW5pZWQuIEludmFsaWQgdXNlciBjcmVkZW50aWFscy4nICk7DQogICAgfQ=="
 }
 ```
-<br><br>
+
+
+
+### Get all innovations of a user:
+
+**Route**
+
+`GET` api/innovations
+
+> This is a JWT token protected route
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200  | Successful fetch |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/innovations
+
+**Sample Response**
+```json
+[
+    {
+        "code": "public static function uniqueRandomNumbersWithinRange( $min, $max, $quantity ){$numbers = range( $min, $max );shuffle( $numbers );return array_slice( $numbers, 0, $quantity );}",
+        "created": "2017-02-21 15:35:19"
+    }
+    {
+        "code": "void read_jump(environment &env){infinite X, Y;infinite p = env.CP + 2;cba2n(env, p, X, Y);env.CP += (env.tape[env.DP] ==env.tape[env.CP+1]) ? X : Y;}",
+        "created": "2017-02-21 15:34:56"
+    }
+]
+```
+
