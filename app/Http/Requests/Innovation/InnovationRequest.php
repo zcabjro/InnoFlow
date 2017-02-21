@@ -71,6 +71,8 @@ class InnovationRequest extends ApiRequest
 
         $validator -> after( function() use ( $validator )
         {
+            $data = $this->all();
+
             if( isset( $data[ 'code' ] ) )
             {
                 $data = $this->all();
