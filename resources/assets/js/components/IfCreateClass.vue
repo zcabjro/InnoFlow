@@ -49,7 +49,7 @@ function defaultClassCreationData() {
 		classCode: { label: 'Code', type: 'text', placeholder: 'COMPGS02', value: '', format: function(val) { return val.trim(); } },
 		classDescription: { label: 'Description', type: 'textarea', placeholder: '', value: ''},
 		classKey: { label: 'Enrolment key', type: 'password', placeholder: '', value: '', format: function(val) { return val.trim(); } },
-		userSearchUrl: '/api/users/search?string=',
+		userSearchUrl: '/api/classes/admins/search?string=',
 		tags: {}
 	}
 }

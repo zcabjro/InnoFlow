@@ -129,7 +129,7 @@
       // TODO: Perform this check in a nicer way
       // Checks user auth state by contacting trying to access a restricted route
       checkAuth() {
-        axios.get('/api/token')
+        axios.get('/api/vsts')
           .then(this.isAuthorised)
           .catch(this.isNotAuthorised);
       },
