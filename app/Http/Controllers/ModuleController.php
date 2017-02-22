@@ -16,8 +16,7 @@ use App\Repositories\Module\ModuleRepoInterface;
 use App\Services\Common\Helper;
 use App\Transformers\ModuleTransformer;
 use App\Transformers\UserTransformer;
-use TomLingham\Searchy\Facades\Searchy;
-
+use Searchy;
 
 class ModuleController extends Controller
 {
