@@ -37,7 +37,7 @@ class NewModuleRequest extends ApiRequest
         return [
 
             'name' => 'required|string|min:5|max:100',
-            'description' => 'required|string',
+            'description' => 'required|string|min:20|max:1000',
             'code' => 'required|string|unique:modules,code|min:5|max:100',
             'key' => 'required|string|min:10|max:100',
             'admins' => 'string|int_list'

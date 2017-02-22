@@ -47,8 +47,8 @@ class InnovationRequest extends ApiRequest
     {
         return [
 
-            'email' => 'required',
-            'password' => 'required',
+            'email' => 'required|string',
+            'password' => 'required|string',
             'code' => 'required|base64_encoded'
 
         ];
@@ -62,25 +62,13 @@ class InnovationRequest extends ApiRequest
      */
     protected function getValidatorInstance()
     {
-        $data = $this -> all();
-
-        if( isset( $data[ 'email' ] ) )
-        {
-            $data[ 'email' ] = base64_decode( $data[ 'email' ] );
-        }
-
-        if( isset( $data[ 'password' ] ) )
-        {
-            $data[ 'password' ] = base64_decode( $data[ 'password' ] );
-        }
-
-        $this -> replace( $data );
-
         $validator = parent::getValidatorInstance();
 
         $validator -> after( function() use ( $validator )
         {
-            if( isset( $data[ 'password' ] ) )
+            $data = $this->all();
+
+            if( isset( $data[ 'code' ] ) )
             {
                 $data = $this->all();
                 $data['code'] = base64_decode($data['code']);
@@ -99,7 +87,7 @@ class InnovationRequest extends ApiRequest
      */
     public function forbiddenResponse()
     {
-        return $this -> respondForbidden( 'Permission denied. Invalid user credentials.' );
+        return $this -> respondUnauthorized( 'Permission denied. Invalid user credentials.' );
     }
 
 

@@ -72,7 +72,7 @@ class User extends Authenticatable
      */
     public function innovations()
     {
-        return $this -> hasMany( 'App\Models\Innovation', 'user_id' );
+        return $this -> hasMany( 'App\Models\Innovation', 'user_id' ) -> orderBy( 'created_at', 'DESC' );
     }
 
 

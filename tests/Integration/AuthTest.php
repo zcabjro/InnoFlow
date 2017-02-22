@@ -101,7 +101,71 @@ class AuthTest extends TestCase
         $this -> missingParameters( array( $this, 'callLogin'), $this -> credentials );
     }
 
+    /**
+     * Successful logout.
+     *
+     * @return void
+     */
+     public function testLogoutSuccessful()
+     {
+        $this->withoutMiddleware();
 
+        // Create user and login
+        $this -> createUser($this -> credentials);
+        $user = User::where('email',$this -> credentials)->first();
+        $token = JWTAuth::fromUser($user);
+        JWTAuth::setToken($token);
+
+        $response = $this -> call('GET','api/logout');
+        $this -> assertEquals(200, $response -> status());
+     }
+
+     /**
+     * Unsuccessful logout due to expired token/haven't login.
+     *
+     * @return void
+     */
+     public function testLogoutWithoutToken()
+     {
+        $this -> call('GET','api/logout');
+        $this -> seeJsonEquals( [
+            'error' => 'Token does not exist anymore. Login again.'
+        ] );
+     }
+
+     /**
+     * User is not authorized
+     *
+     * @return void
+     */
+     public function testTokenNotAuthorized()
+     {
+         $this->withoutMiddleware();
+
+        // Create user and login
+        $this -> createUser($this -> credentials);
+        $user = User::where('email',$this -> credentials)->first();
+        $token = JWTAuth::fromUser($user);
+        JWTAuth::setToken($token);
+
+        $this -> call('GET','api/vsts');
+        $this -> seeJsonEquals( [
+            'is_authorized' => false
+        ] );
+     }
+
+     /**
+     * Can not check authorization because token expired/haven't login
+     *
+     * @return void
+     */
+     public function testTokenNotExists()
+     {
+         $this -> call('GET','api/vsts');
+        $this -> seeJsonEquals( [
+            'error' => 'Token does not exist anymore. Login again.'
+        ] );
+     }
 
     /**
      * Make a post request trying to register a user.

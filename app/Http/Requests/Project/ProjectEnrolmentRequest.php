@@ -55,7 +55,9 @@ class ProjectEnrolmentRequest extends ApiRequest
             return false;
         }
 
-        $this -> request -> add( [ 'module_id' => $module -> module_id ] );
+        $data = $this -> all();
+        $data[ 'module_id' ] = $module -> module_id;
+        $this -> replace( $data );
 
         return true;
     }
