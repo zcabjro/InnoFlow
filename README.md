@@ -467,6 +467,8 @@ Includes both classes created as well as those where user was assinged as admin.
 `POST` api/projects/{projectId}/enrol
 > This is a JWT token protected route
 
+> This is a VSTS token protected route
+
 | Parameter   | Type         | Notes     |
 | ------------|--------------|-----------|
 | projectId   | string       | A valid project id |
