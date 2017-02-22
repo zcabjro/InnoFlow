@@ -192,14 +192,11 @@
 
       // Request innovations
       loadInnovations() {
-        alert('req innos');
         axios.get('/api/innovations')
           .then((res) => {
-            alert(res.data.length);
             this.highlighted = false;
             this.innovations = res.data;  
             setTimeout(() => {
-              alert('highlightAll');
               window.Prism.highlightAll();
               this.highlighted = true;
             }, 300);         
