@@ -60,10 +60,7 @@ class ModuleController extends Controller
 
     public function searchAdmin( AdminSearchRequest $request )
     {
-        //$users = User::hydrate( Searchy::users( [ 'email', 'username' ] ) -> query( $request[ 'string' ] ) -> getQuery() -> limit( 10 ) -> get() -> toArray() );
-
-        $users = User::where( 'email', 'like', '%' . $request -> string . '%' )
-            -> orWhere( 'username', 'like', '%' . $request -> string . '%' ) -> get();
+        $users = User::hydrate( Searchy::users( [ 'email', 'username' ] ) -> query( $request[ 'string' ] ) -> getQuery() -> limit( 10 ) -> get() -> toArray() );
         return fractal() -> collection( $users, new UserTransformer );
     }
 }
