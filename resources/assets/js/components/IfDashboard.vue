@@ -1,6 +1,6 @@
 <template>
   <!-- Dashboard wrapper -->
-  <div v-show="ready" id="wrapper">
+  <div v-show="display" id="wrapper">
 
     <!-- Sidebar -->
     <div v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
@@ -48,7 +48,7 @@
           name: 'Projects',
           alt: 'P',
           children: [],
-          addText: '[+] Enrol',
+          addText: '[+] Enroll',
           addUrl: '/enrol',
           getName(p) {
             return p.name;
@@ -65,9 +65,12 @@
           }
         }
       },
+      
+      // Innovation markup snippets
       innovations: [],
+      
       // Whether the dashboard is ready for display
-      ready: false,
+      display: false,
       highlighted: false
     };
   }
@@ -95,7 +98,7 @@
 
     // Request the dashboard contents each time we navigate to this route
     beforeRouteEnter(to, from, next) {
-      next(dashboardComponent => {
+      next(dashboardComponent => {        
         dashboardComponent.loadDashboard();        
       });
     },
@@ -122,19 +125,34 @@
         }
         else {
           this.resetDashboardData();
-          this.$router.replace('/login');
+          this.$router.replace(url);
         }
       },
 
       // Request dashboard contents
       loadDashboard() {
-        this.loadProjects();
-        this.loadClasses();
-        this.loadCommits(); // TEMP: testing VSTS redirect
-        this.loadInnovations();
-        
-        // TODO: Set this when all contents has been received
-        this.ready = true;
+        this.checkVSTSAuth((isAuthorised, redirectUrl) => {
+          if (isAuthorised) {
+            this.loadProjects();
+            this.loadCommits(); // TEMP: testing VSTS redirect                    
+          }
+          this.loadClasses();
+          this.loadInnovations();
+          
+          // TODO: Set this when all content has been received
+          this.display = true;
+        });        
+      },
+
+      // Check VSTS auth state
+      checkVSTSAuth(callback) {
+        axios.get('/api/vsts')
+          .then((res) => {
+            callback(res.data.is_authorized);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       },
 
       // Request projects
@@ -165,7 +183,8 @@
           });
       },
 
-      // Request commits (temporary for testing VSTS redirect)
+      // Request commits
+      // TODO: Perform redirect elsewhere
       loadCommits() {
         axios.post('/api/commits')
           .then(function (res) {
