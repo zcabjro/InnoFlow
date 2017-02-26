@@ -133,8 +133,12 @@
       loadDashboard() {
         this.checkVSTSAuth((isAuthorised, redirectUrl) => {
           if (isAuthorised) {
+            console.log("VSTS Authorised!");
             this.loadProjects();
             this.loadCommits(); // TEMP: testing VSTS redirect                    
+          }
+          else {
+            console.log("Not VSTS Authorised!");
           }
           this.loadClasses();
           this.loadInnovations();
