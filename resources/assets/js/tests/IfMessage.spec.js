@@ -7,18 +7,21 @@ describe('IfMessage', () => {
   it('should set correct default data', function () {
     expect(typeof IfMessage.data).toBe('function')
     var defaultData = IfMessage.data()
-    expect(defaultData.defaultClass).toBe('if-message hidden-load')
+    expect(defaultData.classList).toBe('if-message hidden-load')
+    expect(defaultData.content).toBe('')
+    expect(defaultData.timeout).toBe(null)
   })
 
   // asserting rendered result by actually rendering the component
   it('should render correct message', function () {
     let message = "Hello, World!"
     var vm = new Vue({
-      template: '<div><if-message id="test">' + message + '</if-message></div>',
+      template: '<div><if-message ref="message"></if-message></div>',
       components: {
         IfMessage
       }
     }).$mount()
-    expect(vm.$el.querySelector('#test').textContent).toBe(message)
+    vm.$refs.message.display(message)
+    expect(vm.$refs.message.content).toBe(message)
   })
 })
