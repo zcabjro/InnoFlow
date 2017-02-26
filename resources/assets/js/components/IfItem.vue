@@ -34,9 +34,14 @@
     // Item component methods
     methods: {      
       // TODO: Load the selected child
-      load(project, e) {
+      load(item, e) {
         e.preventDefault();
-        alert("Loading " + project);
+        if (this.options.selectUrl) {
+          let id = item.id ? item.id : '';
+          let url = this.options.selectUrl.endsWith('/') ? this.options.selectUrl : this.options.selectUrl + '/';
+          console.log('link to: ' + url + id);
+          this.$router.push(url + id);
+        }        
       },
 
       add(e) {

@@ -5,6 +5,7 @@
     <!-- Sidebar -->
     <div v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
       <ul class="sidebar-nav">
+        <if-item :options="menu.innovations" :active="menuOpen"></if-item>
         <if-item :options="menu.projects" :active="menuOpen"></if-item>
         <if-item :options="menu.classes" :active="menuOpen"></if-item>
       </ul>
@@ -14,14 +15,7 @@
     <div id="page-content-wrapper">
       <div class="container-fluid">
         <div class="row">
-          <div v-show="highlighted" class="col-lg-12">
-            <h1>Innovations</h1>              
-              <div v-for="i in innovations">
-                <p>{{i.created}}</p>
-                <vue-markdown :source="i.code"></vue-markdown>
-              </div>
-            <router-view></router-view>
-          </div>
+          <router-view></router-view>          
         </div>
       </div>
     </div>
@@ -40,14 +34,30 @@
   // Helper for resetting dashboard data
   function defaultDashboardData() {
     return {
-      // Whether the menu is toggled on or not
+      // Whether or not side-bar is open
       menuOpen: $('#wrapper').hasClass('toggled'),
+
       // Menu data
       menu: {
+        innovations: {
+          name: 'Home',
+          alt: 'H',
+          children: [{
+            name: 'Innovations'
+          }],
+          selectUrl: '/dashboard/innovations',
+          addText: '[?] About',
+          addUrl: '/vscodeExtension',
+          getName(p) {
+            return p.name;
+          }
+        },
+
         projects: {
           name: 'Projects',
           alt: 'P',
           children: [],
+          selectUrl: '/dashboard/projects',
           addText: '[+] Enroll',
           addUrl: '/enrol',
           getName(p) {
@@ -58,6 +68,7 @@
           name: 'Classes',
           alt: 'C',
           children: [],
+          selectUrl: '/dashboard/classes',
           addText: '[+] Add',
           addUrl: '/create',
           getName(c) {
@@ -66,12 +77,8 @@
         }
       },
       
-      // Innovation markup snippets
-      innovations: [],
-      
       // Whether the dashboard is ready for display
-      display: false,
-      highlighted: false
+      display: false
     };
   }
 
@@ -81,8 +88,7 @@
 
     // Components used by this component
     components: {
-      IfItem,
-      VueMarkdown
+      IfItem      
     },
 
     // Initialise dashboard data with defaults
@@ -98,7 +104,12 @@
 
     // Request the dashboard contents each time we navigate to this route
     beforeRouteEnter(to, from, next) {
-      next(dashboardComponent => {        
+      next(dashboardComponent => {
+        // Reset side panel
+        dashboardComponent.menuOpen = false;
+        $('#wrapper').toggleClass('toggled', false);
+
+        // Load dashboard
         dashboardComponent.loadDashboard();        
       });
     },
@@ -106,7 +117,7 @@
     // Dashboard component methods
     methods: {
       // Resets the dashboard contents
-      resetDashboardData() {
+      resetDashboardData() {        
         Object.assign(this.$data, defaultDashboardData());
       },
 
@@ -132,6 +143,8 @@
       // Request dashboard contents
       loadDashboard() {
         this.checkVSTSAuth((isAuthorised, redirectUrl) => {
+          
+          this.loadClasses();
           if (isAuthorised) {
             console.log("VSTS Authorised!");
             this.loadProjects();
@@ -139,13 +152,11 @@
           }
           else {
             console.log("Not VSTS Authorised!");
-          }
-          this.loadClasses();
-          this.loadInnovations();
+          }          
           
           // TODO: Set this when all content has been received
           this.display = true;
-        });        
+        });
       },
 
       // Check VSTS auth state
@@ -211,21 +222,7 @@
               console.log('ERROR: ' + error.message);
             }
           });
-      },
-
-      // Request innovations
-      loadInnovations() {
-        axios.get('/api/innovations')
-          .then((res) => {
-            this.highlighted = false;
-            this.innovations = res.data;  
-            setTimeout(() => {
-              window.Prism.highlightAll();
-              this.highlighted = true;
-            }, 300);         
-          })
-          .catch(function(error) { console.log('Error loading innovations'); });
-      }
+      }      
     }
   }
 </script>

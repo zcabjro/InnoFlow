@@ -8,6 +8,9 @@ import IfRegister from './components/IfRegister.vue'
 import IfLogin from './components/IfLogin.vue'
 import IfDashboard from './components/IfDashboard.vue'
 import IfCreateClass from './components/IfCreateClass.vue'
+import IfInnovations from './components/IfInnovations.vue'
+import IfProject from './components/IfProject.vue'
+import IfClass from './components/IfClass.vue'
 
 Vue.use(VueRouter)
 
@@ -37,17 +40,36 @@ const routes = [{
     
     // Dashboard
     path: 'dashboard',
-    component: IfDashboard
+    redirect: 'dashboard/innovations',
+    component: IfDashboard,    
+    children: [{
+
+      // Innovations page
+      path: 'innovations',
+      component: IfInnovations
+    },{
+
+      // Projects
+      path: 'projects/:id',
+      component: IfProject
+    }, {
+
+      // Classes
+      path: 'classes/:id',
+      component: IfClass
+    }]
   }, {
 
     // Create class
     path: 'create',
     component: IfCreateClass
   }]
+},  {
+  path: '/notFound'
 }, {
   // Redirect fallback
   path: '*',
-  redirect: '/'
+  redirect: '/notFound'
 }]
 
 export var router = new VueRouter({
