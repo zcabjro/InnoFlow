@@ -24,11 +24,11 @@ class UsersTableSeeder extends Seeder
         }
 
         $user = new User();
-        $user -> email = 'jack@gmail.com';
-        $user -> password = bcrypt( '1234567890' );
-        $user -> username =  'Crocodile Killer';
-        $user -> vsts_access_token = '';
-        $user -> vsts_refresh_token = '';
+        $user -> email = getenv( 'EMAIL' );
+        $user -> password = bcrypt( getenv( 'PASSWORD' ) );
+        $user -> username =  getenv( 'USERNAME' );
+        $user -> vsts_access_token = getenv( 'VSTS_ACCESS_TOKEN' );
+        $user -> vsts_refresh_token = getenv( 'VSTS_REFRESH_TOKEN' );
         $user -> save();
     }
 }
