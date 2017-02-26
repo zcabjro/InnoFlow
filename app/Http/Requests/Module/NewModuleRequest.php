@@ -61,6 +61,7 @@ class NewModuleRequest extends ApiRequest
             $admin_ids = explode( ',', $adminList = $this -> get( 'admins' ) );
             $admin_ids = array_diff( $admin_ids, Array( $user -> user_id ) );
             $admin_ids = array_unique( $admin_ids );
+            $admin_ids = array_filter( $admin_ids );
             $filtered = [];
 
             foreach ( $admin_ids as $admin_id )
