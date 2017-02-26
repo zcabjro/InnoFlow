@@ -49,10 +49,10 @@ import IfMessage from './IfMessage.vue' // Message copmonent for displaying erro
 function defaultClassCreationData() {
 	return {
 		legend: 'Create class',
-		className: { label: 'Class name', type: 'text', placeholder: 'Software Abstractions and Systems Integration', value: '' },
-		classCode: { label: 'Code', type: 'text', placeholder: 'COMPGS02', value: '', format: function(val) { return val.trim(); } },
-		classDescription: { label: 'Description', type: 'textarea', placeholder: '', value: ''},
-		classKey: { label: 'Enrolment key', type: 'password', placeholder: '', value: '', format: function(val) { return val.trim(); } },
+		className: { label: 'Class name', type: 'text', placeholder: '5+ characters', value: '' },
+		classCode: { label: 'Code', type: 'text', placeholder: '5+ characters', value: '', format: function(val) { return val.trim(); } },
+		classDescription: { label: 'Description', type: 'textarea', placeholder: '20+ characters', value: ''},
+		classKey: { label: 'Enrolment key', type: 'password', placeholder: '10+ characters', value: '', format: function(val) { return val.trim(); } },
 		userSearchUrl: '/api/classes/admins/search?string=',
 		tags: {}
 	}
@@ -88,11 +88,6 @@ export default {
 			return [ this.className, this.classCode, this.classDescription, this.classKey ];
 		},
 
-		// Whether input fields are valid or not
-		validFields() {
-			return this.className.value && this.classCode.value && this.classKey.value;
-		},
-
 		// Get users that are selected as admins
 		admins() {
 			let admins = [];
@@ -114,7 +109,7 @@ export default {
 
 		// Send a POST request to the class creation API, supplying field inputs
 		create() {
-			if (this.validFields) {				
+			if (this.validFields()) {				
 				let classData = {
 					name: this.className.value,
 					code: this.classCode.value,
@@ -131,6 +126,27 @@ export default {
 				}			
 		},
 
+		// Checks if fields are valid, displaying message if not
+		validFields() {
+			if (!this.className.value || this.className.value.length < 5) {
+				this.$refs.message.display('Name must be at least 5 characters.');
+				return false;
+			}
+			if (!this.classCode.value || this.classCode.value.length < 5) {
+				this.$refs.message.display('Code must be at least 5 characters.');
+				return false;
+			}
+			if (!this.classDescription.value || this.classDescription.value.length < 20) {
+				this.$refs.message.display('Description must be at least 20 characters.');
+				return false;
+			}
+			if (!this.classKey.value || this.classKey.value.length < 10) {
+				this.$refs.message.display('Key must be at least 10 characters.');
+				return false;
+			}
+			return true;
+		},
+
 		// On success, navigate to the dashboard
 		createSuccess(res) {
 		  console.log(res.response);
@@ -141,7 +157,7 @@ export default {
 		// On failure, log the failure
 		createFailure(error) {
 			console.log(error.response);
-			this.$refs.message.display(error.response.data.description ? error.response.data.description[0] : 'Failed');		
+			this.$refs.message.display(error.response.data ? error.response.data : 'Failed');		
 			console.log('Create class failure');
 		},
 
