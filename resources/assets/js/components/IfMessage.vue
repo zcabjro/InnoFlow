@@ -2,13 +2,15 @@
   <!-- Animated card conatining slot contents -->
   <div v-bind:class="classList">
     <if-card>
-      <slot></slot>
+      <p>{{content}}</p>
     </if-card>
   </div>  
 </template>
 
 <script>
   import IfCard from './IfCard.vue' // Card component for displaying message
+
+  const defaultClassList = 'if-message hidden-load';
 
   export default {
     // Debug name and html tag of this component
@@ -22,28 +24,30 @@
     // Initialise message data with defaults
     data() {
       return {
-        defaultClass: 'if-message hidden-load'
+        classList: defaultClassList,
+        content: '',
+        timeout: null
       }
     },
 
-    // Properties supplied by the parent component
-    props: [
-      // Whether this message has been animated already or not
-      'animated',
-      // Whether this message is active and displaying
-      'active'
-    ],
-
-    // Computed properties
-    computed: {
-      // CSS classes for the message component
-      classList() {
-        return this.defaultClass + (this.animated ? this.animationClasses : '');
+    methods: {
+      display(content, duration) {        
+        if (content) {
+          this.content = content;
+          this.classList = defaultClassList + ' animated bounceInDown';
+          this.setTimer(duration ? duration : 5000);          
+        } 
       },
 
-      // Animation classes for the message component
-      animationClasses() {
-        return ' animated' + (this.active ? ' bounceInDown' : ' bounceOutUp');
+      setTimer(duration) {
+        if (this.timeout !== null) {
+          clearTimeout(this.timeout);
+          this.timeout = null;
+        }
+
+        this.timeout = setTimeout(() => {
+          this.classList = defaultClassList + ' animated bounceOutUp';
+        }, duration);
       }
     }
   }

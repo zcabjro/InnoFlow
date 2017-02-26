@@ -2,6 +2,9 @@
 	<!-- Create class container -->
 	<div id="createClass" class="container">
 
+		<!-- Message component -->
+    <if-message ref="message"></if-message>
+
 		<!-- UserForm component -->
     <if-user-form :legend="legend" :fields="fields"></if-user-form>				
 
@@ -40,6 +43,7 @@
 import IfUserForm from './IfUserForm.vue' // Form used for supplying class creation fields
 import IfDropdown from './IfDropdown.vue' // Dropdown component for searching users
 import IfTag from './IfTag.vue' // Tag component for adding users as class admins
+import IfMessage from './IfMessage.vue' // Message copmonent for displaying errors
 
 // Helper for resetting class creation data
 function defaultClassCreationData() {
@@ -62,7 +66,8 @@ export default {
 	components: {
 		IfUserForm,
 		IfDropdown,
-		IfTag
+		IfTag,
+		IfMessage
 	},
 	
 	// Initialise class creation data with defaults
@@ -128,7 +133,7 @@ export default {
 
 		// On success, navigate to the dashboard
 		createSuccess(res) {
-		    console.log(res.response);
+		  console.log(res.response);
 			console.log("Create class success");
 			this.$router.push('/dashboard');
 		},
@@ -136,6 +141,7 @@ export default {
 		// On failure, log the failure
 		createFailure(error) {
 			console.log(error.response);
+			this.$refs.message.display(error.response.data.description ? error.response.data.description[0] : 'Failed');		
 			console.log('Create class failure');
 		},
 

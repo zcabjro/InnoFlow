@@ -70,11 +70,6 @@
       </div>
     </div>
 
-    <!-- Message component -->
-    <if-message :animated="messageAnimated" :active="messageActive">
-      <p>Hello world!</p>
-    </if-message>
-
     <!-- Nested route -->
     <div id="child">
       <transition class="animated" appear name="fadeDown" mode="out-in">
@@ -86,28 +81,18 @@
   </div>
 </template>
 
-<script>  
-  import IfMessage from './IfMessage.vue' // Message component used for displaying messages to the user
+<script>
   import bus from '../bus.js' // Global event bus
 
   export default {
     // Debug name and html tag of this component
     name: 'if-app',
 
-    // Components used by this component
-    components: {
-      IfMessage
-    },
-
     // Initialise app data with defaults
     data() {
       return {
         // Whether the user has been authorised or not
-        auth: false,
-        // Whether the message has been animated or not
-        messageAnimated: false,
-        // Whether the message is active and displaying or not
-        messageActive: false
+        auth: false
       }
     },
 
