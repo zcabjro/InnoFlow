@@ -124,10 +124,9 @@
         this.auth = true;
       },
 
-      // Updates the auth state to be logged out and tries to ensure we are at the landing page
+      // Updates the auth state to be logged out
       isNotAuthorised() {
         this.auth = false;
-        this.$router.replace('/');
       },
 
       // Send GET request to logout API after confirmation

@@ -2,6 +2,9 @@
   <!-- Login container -->
   <div id="login" class="container">
     
+    <!-- Message component -->
+    <if-message ref="message"></if-message>
+
     <!-- UserForm component -->
     <if-user-form :legend="legend" :fields="fields"></if-user-form>
 
@@ -26,6 +29,7 @@
 <script>
   import IfUserForm from './IfUserForm.vue' // Form used for supplying login info
   import bus from '../bus.js' // Global event bus
+  import IfMessage from './IfMessage.vue' // Message copmonent for displaying errors
 
   // Helper for resetting login data
   function defaultLoginData() {
@@ -45,7 +49,8 @@
 
     // Components used by this component
     components: {
-      IfUserForm
+      IfUserForm,
+      IfMessage
     },
 
     // Initialise login data with defaults
@@ -74,10 +79,26 @@
       },
 
       // Send POST request to login API, supplying email and password
-      login(e) {
-          axios.post('/api/login', { email: this.email.value, password: this.password.value })
-          .then(this.loginSuccess)
-          .catch(this.loginFailure);
+      login(e) {        
+        if (this.validFields()) {
+          let loginDetails = { email: this.email.value, password: this.password.value };
+          axios.post('/api/login', loginDetails)
+            .then(this.loginSuccess)
+            .catch(this.loginFailure);
+        }
+      },
+
+      // Check fields are valid and display message if not
+      validFields() {        
+        if (!this.email.value) {          
+          this.$refs.message.display('Please enter an email address.');
+          return false;
+        }
+        if (!this.password.value) {
+          this.$refs.message.display('Please enter a password.');
+          return false;
+        }
+        return true;
       },
 
       // On succes, emit the login event and navigate to dashboard
@@ -89,6 +110,7 @@
       
       // On failure, log the failure
       loginFailure(error) {
+        this.$refs.message.display(error.response.data);
         console.log("Login failure");
       }      
     }

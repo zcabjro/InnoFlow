@@ -2,6 +2,9 @@
   <!-- Register container -->
   <div id="register" class="container">
 
+    <!-- Message component -->
+    <if-message ref="message"></if-message>
+
     <!-- UserForm component -->
     <if-user-form :legend="legend" :fields="[email, password, confirmPassword]"></if-user-form>
     
@@ -32,6 +35,7 @@
 
 <script>
   import IfUserForm from './IfUserForm.vue' // Form used for supplying registration info
+  import IfMessage from './IfMessage.vue' // Message component for displaying errors
 
   // Helper for resetting register data
   function defaultRegisterData() {
@@ -53,7 +57,8 @@
 
     // Components used by this component
     components: {
-      IfUserForm
+      IfUserForm,
+      IfMessage
     },
 
     // Initialise registration data with defaults
@@ -86,22 +91,40 @@
 
       // Send POST request to register API, supplying email and password
       register(e) {
-        if (!this.passwordMismatch) {
-          axios.post('/api/register', { email: this.email.value, password: this.password.value })
+        if (!this.passwordMismatch && this.validFields()) {
+          let registerDetails = { email: this.email.value, password: this.password.value };
+          axios.post('/api/register', registerDetails)
             .then(this.registerSuccess)
             .catch(this.registerFailure);
         }
       },
 
+      validFields() {
+        if (!this.email.value) {          
+          this.$refs.message.display('Please enter an email address.');
+          return false;
+        }
+        if (!this.password.value || this.password.value.length < 10) {
+          this.$refs.message.display('Password must have at least 10 characters.');
+          return false;
+        }
+        if (!this.confirmPassword.value) {
+          this.$refs.message.display('Please confirm your password.');
+          return false;
+        }
+        return true;
+      },
+
       // On success, navigate to login
       registerSuccess(res) {
-        console.log("Success");
+        console.log("Register success");
         this.$router.push('/login');
       },
 
       // On failure, log the failure
       registerFailure(error) {
-        console.log("Failure");
+        console.log("Register failure");
+        this.$refs.message.display(error.response.data);
       }
     }
   }
