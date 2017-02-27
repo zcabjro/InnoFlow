@@ -47,13 +47,13 @@ class ModuleController extends Controller
 
     public function store( NewModuleRequest $request )
     {
-        $input = $request -> except( 'admins' );
+        $input = $request -> except( 'admins', 'user_id' );
         $module = $this -> moduleRepo -> create( $input );
 
+        $module -> admins() -> attach( $request -> user_id, [ 'is_owner' => true ] );
         if ( count( $admins = $request -> admins ) )
         {
             $module -> admins() -> attach( $admins, [ 'is_owner' => false ] );
-            $module -> admins() -> attach( $request -> user_id, [ 'is_owner' => true ] );
         }
     }
 
