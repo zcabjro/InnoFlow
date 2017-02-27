@@ -63,6 +63,11 @@ const routes = [{
     // Create class
     path: 'create',
     component: IfCreateClass
+  }, {
+
+    // Enroll project
+    path: 'enroll',
+    component: IfCreateClass // TODO: Change to IfEnrolProject once it is created
   }]
 },  {
   path: '/notFound'

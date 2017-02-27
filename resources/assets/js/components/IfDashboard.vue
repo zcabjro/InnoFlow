@@ -1,35 +1,40 @@
 <template>
-  <!-- Dashboard wrapper -->
-  <div v-show="display" id="wrapper">
+  <div>
+    <!-- Message component -->
+    <if-message ref="message"></if-message>
 
-    <!-- Sidebar -->
-    <div v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
-      <ul class="sidebar-nav">
-        <if-item :options="menu.innovations" :active="menuOpen"></if-item>
-        <if-item :options="menu.projects" :active="menuOpen"></if-item>
-        <if-item :options="menu.classes" :active="menuOpen"></if-item>
-      </ul>
-    </div>
+    <!-- Dashboard wrapper -->
+    <div v-show="display" id="wrapper">
 
-    <!-- Nested route -->    
-    <div id="page-content-wrapper">
-      <div class="container-fluid">
-        <div class="row">
-          <router-view></router-view>          
+      <!-- Sidebar -->
+      <div v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+          <if-item :options="menu.innovations" :active="menuOpen"></if-item>
+          <if-item :options="menu.projects" :active="menuOpen"></if-item>
+          <if-item :options="menu.classes" :active="menuOpen"></if-item>
+        </ul>
+      </div>
+
+      <!-- Nested route -->    
+      <div id="page-content-wrapper">
+        <div class="container-fluid">
+          <div class="row">
+            <router-view></router-view>          
+          </div>
         </div>
       </div>
-    </div>
-    
-    <!-- Empty blanket space for closing menu -->
-    <div v-if="menuOpen" v-on:mousedown="toggleMenu" id="blanket"></div>
+      
+      <!-- Empty blanket space for closing menu -->
+      <div v-if="menuOpen" v-on:mousedown="toggleMenu" id="blanket"></div>
 
+    </div>
   </div>
 </template>
 
 <script>
   import IfItem from './IfItem.vue' // Item component used for listing projects and classes
   import bus from '../bus.js' // Global event bus
-  import VueMarkdown from 'vue-markdown'
+  import IfMessage from './IfMessage.vue' // Message component for displaying messages to the user
 
   // Helper for resetting dashboard data
   function defaultDashboardData() {
@@ -59,7 +64,7 @@
           children: [],
           selectUrl: '/dashboard/projects',
           addText: '[+] Enroll',
-          addUrl: '/enrol',
+          addUrl: '/enroll',
           getName(p) {
             return p.name;
           }
@@ -88,7 +93,8 @@
 
     // Components used by this component
     components: {
-      IfItem      
+      IfItem,
+      IfMessage
     },
 
     // Initialise dashboard data with defaults
@@ -151,6 +157,7 @@
             this.loadCommits(); // TEMP: testing VSTS redirect                    
           }
           else {
+            this.$refs.message.display('Missing VSTS Authorisation.');
             console.log("Not VSTS Authorised!");
           }          
           
