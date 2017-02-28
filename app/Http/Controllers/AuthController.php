@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Repositories\User\UserRepoInterface;
+use App\Services\VSTS\VstsApiService;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Support\Facades\Cookie;
 use App\Services\Common\Helper;
@@ -40,7 +41,7 @@ class AuthController extends Controller
 
         if ( !$token )
         {
-            return $this -> respondUnauthorized( "Login details are incorrect." );
+            return $this -> respondUnauthorized( 'Login details are incorrect.' );
         }
 
         return response() -> json() -> cookie( config( 'custom.cookie.name' ), $token, config( 'custom.cookie.ttl' ) );
@@ -63,9 +64,22 @@ class AuthController extends Controller
     }
 
 
-    public function isVstsAuthorized()
+    public function isLoggedIn()
     {
-        $authorized = !is_null( Helper::currentUser() -> vsts_access_token );
-        return response() -> json( [ 'is_authorized' => $authorized ] );
+        $isLoggedIn = !is_null( Helper::currentUser() );
+        return response() -> json( [ 'isLoggedIn' => $isLoggedIn ] );
+    }
+
+
+    public function isVstsAuthorized( VstsApiService $vstsService )
+    {
+        $user = Helper::currentUser();
+        $authorized = !is_null( $user -> vsts_access_token );
+        $url = $vstsService -> getAuthorizationURL( $user );
+
+        return response() -> json( [
+            'isAuthorized' => $authorized,
+            'url' => $url
+        ] );
     }
 }

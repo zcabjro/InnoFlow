@@ -14,7 +14,14 @@ class Helper
 {
     public static function currentUser()
     {
-        return JWTAuth::toUser( JWTAuth::getToken() );
+        $token = JWTAuth::getToken();
+
+        if ( !$token )
+        {
+            return null;
+        }
+
+        return JWTAuth::toUser( $token );
     }
 
     public static function uniqueRandomNumbersWithinRange( $min, $max, $quantity )

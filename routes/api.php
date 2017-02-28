@@ -16,6 +16,7 @@
 // Auth routes
 Route::post( 'login', 'AuthController@loginUser' );
 Route::post( 'register', 'AuthController@registerUser' );
+Route::get( 'innoflow', 'AuthController@isLoggedIn' );
 
 
 // InnoFlow extension routes

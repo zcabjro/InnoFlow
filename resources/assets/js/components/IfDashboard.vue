@@ -170,7 +170,7 @@
       checkVSTSAuth(callback) {
         axios.get('/api/vsts')
           .then((res) => {
-            callback(res.data.is_authorized);
+            callback(res.data.isAuthorized);
           })
           .catch((error) => {
             console.log(error);
