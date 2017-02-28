@@ -32,6 +32,7 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
     Route::post( 'classes', 'ModuleController@store' );
     Route::get( 'classes', 'ModuleController@index' );
+    Route::get( 'classes/search', 'ModuleController@search' );
     Route::get( 'classes/{module}', 'ModuleController@show' );
     Route::get( 'classes/admins/search', 'ModuleController@searchAdmin' );
 
