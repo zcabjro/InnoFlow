@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Test\Support\IntegrationTrait;
 use Test\Support\UserTrait;
 use app\Models\User;
+use app\Models\Module;
 
 class ClassesTest extends TestCase
 {
@@ -40,6 +41,13 @@ class ClassesTest extends TestCase
         'description' => 'For testing purpose 2',
         'code' => 'TEST001',
         'key' => 'TESTKEY002'
+    ];
+
+    private $classSetting3 = [
+        'name' => 'Testing3',
+        'description' => 'For testing purpose 3',
+        'code' => 'TEST003',
+        'key' => 'TESTKEY003'
     ];
 
     /**
@@ -77,7 +85,7 @@ class ClassesTest extends TestCase
 
         // Create user
         $this -> createUser($this -> userCredentials);
-        $user = User::first();
+        $user = User::where('email',$this -> userCredentials)->first();
         $token = JWTAuth::fromUser($user);
         JWTAuth::setToken($token);
 
@@ -165,18 +173,66 @@ class ClassesTest extends TestCase
 
         // Create user
         $this -> createUser($this -> userCredentials);
-        $user = User::first();
+        $user = User::where('email',$this -> userCredentials)->first();
         $token = JWTAuth::fromUser($user);
         JWTAuth::setToken($token);
 
-        // Create data stored by user
-        $this -> call('POST','api/classes',$this -> classSetting);
+        // Create second user as admin
+        $this -> createUser($this -> userCredentials2);
+        $user2 = User::where('email',$this -> userCredentials2)->first();
+        $token2 = JWTAuth::fromUser($user2);
+        $admin_id = $user2 -> user_id;
 
-        $this -> call('GET','api/classes');
-        $this -> seeJson([
+        // Create data stored by first user
+        $this -> call('POST','api/classes',[
             'name' => $this -> classSetting["name"],
-            'code' => $this -> classSetting["code"]
+            'description' => $this -> classSetting["description"],
+            'code' => $this -> classSetting["code"],
+            'key' => $this -> classSetting["key"],
+            'admins' => "$admin_id"
         ]);
+
+        JWTAuth::setToken($token2);
+
+        // Get module id stored by first user
+        $module = Module::where('code',$this -> classSetting["code"])->first();
+        $module_id = $module -> module_id;
+
+        // The second user can see module stored by the first user as he is admin
+        $this -> call('GET','api/classes');
+        $this -> seeJsonEquals([[
+            'id' => $module_id,
+            'name' => $this -> classSetting["name"],
+            'description' => $this -> classSetting["description"],
+            'code' => $this -> classSetting["code"]
+        ]]);
+
+        // Create third user
+        $this -> createUser($this -> userCredentials3);
+        $user3 = User::where('email',$this -> userCredentials3)->first();
+        $token3 = JWTAuth::fromUser($user3);
+        JWTAuth::setToken($token3);
+
+        // Create data stored by third user
+        $this -> call('POST','api/classes',[
+            'name' => $this -> classSetting3["name"],
+            'description' => $this -> classSetting3["description"],
+            'code' => $this -> classSetting3["code"],
+            'key' => $this -> classSetting3["key"]
+        ]);
+
+        // Get module id stored by third user
+        $module = Module::where('code',$this -> classSetting3["code"])->first();
+        $module_id = $module -> module_id;
+
+        // The third user only see module stored by him, can't see module stored by the first user
+        $this -> call('GET','api/classes');
+        $this -> seeJsonEquals([[
+            'id' => $module_id,
+            'name' => $this -> classSetting3["name"],
+            'description' => $this -> classSetting3["description"],
+            'code' => $this -> classSetting3["code"]
+        ]]);
     }
 
     /**
@@ -195,14 +251,182 @@ class ClassesTest extends TestCase
          ]);
      }
 
-     /**
-     * Successful show users related to search request.
+    /**
+     * Successful show details of a selected module
      *
      * @return void
      */
-    public function testShowRequestResultSuccessful()
-    {
+     // Returning empty
+     public function testShowSuccessful()
+     {
         $this->withoutMiddleware();
+
+        // Create user
+        $this -> createUser($this -> userCredentials);
+        $user = User::where('email',$this -> userCredentials)->first();
+        $token = JWTAuth::fromUser($user);
+        JWTAuth::setToken($token);
+
+        // Create data stored by user
+        $this -> call('POST','api/classes',[
+            'name' => $this -> classSetting["name"],
+            'description' => $this -> classSetting["description"],
+            'code' => $this -> classSetting["code"],
+            'key' => $this -> classSetting["key"]
+        ]);
+
+        // Get module id
+        $module = Module::where('code',$this -> classSetting["code"])->first();
+        $module_id = $module -> module_id;
+
+        // Get all module(s)
+        $this -> call('GET','api/classes');
+        $this -> seeJsonEquals([[
+            'id' => $module_id,
+            'name' => $this -> classSetting["name"],
+            'description' => $this -> classSetting["description"],
+            'code' => $this -> classSetting["code"]
+        ]]);
+
+        // Get details of first module
+        $this -> call('GET','api/classes/'.$module_id);
+        $this -> seeJsonEquals([
+            'id' => $module_id,
+            'name' => $this -> classSetting["name"],
+            'description' => $this -> classSetting["description"],
+            'code' => $this -> classSetting["code"]
+        ]);
+     }
+
+    /**
+     * Failed to show details of a selected module due to expired token / haven't login
+     *
+     * @return void
+     */
+     public function testShowWithoutToken()
+     {    
+        $this -> withoutMiddleware();
+
+        // Create user
+        $this -> createUser($this -> userCredentials);
+        $user = User::where('email',$this -> userCredentials)->first();
+        $token = JWTAuth::fromUser($user);
+        JWTAuth::setToken($token);
+
+        // Create data stored by first user
+        $this -> call('POST','api/classes',[
+            'name' => $this -> classSetting["name"],
+            'description' => $this -> classSetting["description"],
+            'code' => $this -> classSetting["code"],
+            'key' => $this -> classSetting["key"]
+        ]);
+
+        $this -> instance('middleware.disable',false);
+
+        // Get module id
+        $module = Module::where('code',$this -> classSetting["code"])->first();
+        $module_id = $module -> module_id;
+        $url = "api/classes/$module_id";
+
+        $this -> call('GET',$url);
+        $this -> seeJsonEquals([
+            'error' => 'Token does not exist anymore. Login again.'
+        ]);
+     }
+
+    /**
+     * Successful search module(s) related to search request.
+     *
+     * @return void
+     */
+     public function testSearchModuleSuccessful()
+     {
+        $this -> withoutMiddleware();
+
+        // Create users
+        $this -> createUser($this -> userCredentials);
+        $user = User::where('email',$this -> userCredentials)->first();
+        $token = JWTAuth::fromUser($user);
+        JWTAuth::setToken($token);
+
+        // Create data stored by first user
+        $this -> call('POST','api/classes',[
+            'name' => $this -> classSetting["name"],
+            'description' => $this -> classSetting["description"],
+            'code' => $this -> classSetting["code"],
+            'key' => $this -> classSetting["key"]
+        ]);
+
+        // Get module id
+        $module = Module::where('code',$this -> classSetting["code"])->first();
+        $module_id = $module -> module_id;
+
+        // Search module by code
+        $this -> call('GET','api/classes/search',['string' => $this -> classSetting["code"]]);
+        $this -> seeJsonEquals([[
+            'id' => $module_id,
+            'name' => $this -> classSetting["name"],
+            'description' => $this -> classSetting["description"],
+            'code' => $this -> classSetting["code"]
+        ]]);
+
+        // Search module by name
+        $this -> call('GET','api/classes/search',['string' => $this -> classSetting["name"]]);
+        $this -> seeJsonEquals([[
+            'id' => $module_id,
+            'name' => $this -> classSetting["name"],
+            'description' => $this -> classSetting["description"],
+            'code' => $this -> classSetting["code"]
+        ]]);
+
+        // Search module doesn't exist
+        $this -> call('GET','api/classes/search',['string' => 'Module does not exist']);
+        $this -> seeJsonEquals([]);
+     }
+
+    /**
+     * Failed to search for module(s) due to invalid search string
+     *
+     * @return void
+     */
+     public function testSearchModuleInvalidString()
+     {
+         $this -> withoutMiddleware();
+
+         // Empty string field
+         $this -> call('GET','api/classes/search',['string' => '']);
+         $this -> seeJsonEquals([
+            'string' => ['The string field is required.']
+         ]);
+
+         // Invalid string field (Less than two characters)
+         $this -> call('GET','api/classes/search',['string' => 'a']);
+         $this -> seeJsonEquals([
+             'string' => ['The string must be at least 2 characters.']
+         ]);
+     }
+
+    /**
+     * Failed to search for user(s) due to expired token/haven't log in
+     *
+     * @return void
+     */
+     public function testSearchModuleWithoutToken()
+     {
+        $this -> call('GET','api/classes/search',['string' => $this -> classSetting["code"]]);
+        $this -> seeJsonEquals([
+            'error' => 'Token does not exist anymore. Login again.'
+        ]);
+     }
+
+    /**
+     * Successful search admin(s) related to search request.
+     *
+     * @return void
+     */
+     public function testSearchAdminsSuccessful()
+     {
+        $this -> withoutMiddleware();
 
         // Create users
         $this -> createUser($this -> userCredentials);
@@ -225,17 +449,39 @@ class ClassesTest extends TestCase
             'email' => $this ->userCredentials3["email"]
         ]);
 
-        // Search for user that does not exists
-        $this -> call('GET','api/classes/admins/search',['string' => 'xyz@email.com']);
+        // Search for user that does not exist
+        $this -> call('GET','api/classes/admins/search',['string' => 'userNotExist@email.com']);
         $this -> seeJson([]);
-    }
+     }
+
+    /**
+     * Failed to search for user(s) due to invalid search string
+     *
+     * @return void
+     */
+     public function testSearchAdminInvalidString()
+     {
+         $this -> withoutMiddleware();
+
+         // Empty string field
+         $this -> call('GET','api/classes/admins/search',['string' => '']);
+         $this -> seeJsonEquals([
+            'string' => ['The string field is required.']
+         ]);
+
+         // Invalid string field (Less than two characters)
+         $this -> call('GET','api/classes/admins/search',['string' => 'a']);
+         $this -> seeJsonEquals([
+             'string' => ['The string must be at least 2 characters.']
+         ]);
+     } 
 
     /**
      * Failed to search for user(s) due to expired token/haven't log in
      *
      * @return void
      */
-     public function testSearchWithoutToken()
+     public function testSearchAdminWithoutToken()
      {
         $this -> call('GET','api/classes/admins/search',['string' => $this -> userCredentials["email"]]);
         $this -> seeJsonEquals([
