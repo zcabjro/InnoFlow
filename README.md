@@ -97,6 +97,32 @@
 
 
 
+### Check if user is logged in:
+
+**Route**
+
+`GET` api/innoflow
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful fetch |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/innoflow
+
+**Sample Response**
+```json
+{
+  "isLoggedIn": false
+}
+```
+<br><br><br>
+
+
+
 ### Check if user has authorized with VSTS:
 
 **Route**
@@ -117,7 +143,14 @@
 **Sample Response**
 ```json
 {
-  "is_authorized": false
+  "isAuthorized": false
+  "url": "https://app.vssps.visualstudio.com/oauth2/authorize?client_id=5AE68C15-26B5-4A46-A272-737ADE6BE888&response_type=Assertion&state=101&scope=vso.code vso.project_manage&redirect_uri=https://innoflow.herokuapp.com/vsts/authorize"
+}
+```
+or
+```json
+{
+  "isAuthorized": true
 }
 ```
 <br><br><br>
