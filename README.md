@@ -143,7 +143,7 @@
 **Sample Response**
 ```json
 {
-  "isAuthorized": false
+  "isAuthorized": false,
   "url": "https://app.vssps.visualstudio.com/oauth2/authorize?client_id=5AE68C15-26B5-4A46-A272-737ADE6BE888&response_type=Assertion&state=101&scope=vso.code vso.project_manage&redirect_uri=https://innoflow.herokuapp.com/vsts/authorize"
 }
 ```
