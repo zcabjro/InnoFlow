@@ -5,7 +5,8 @@
       <p>Name: {{details.name}}</p>
       <p>Code: {{details.code}}</p>
       <p v-if="details.description">Description: {{details.description}}</p>
-      <p>members: {{details.admins}}</p>
+      <p>Admins: {{details.admins}}</p>
+      <p>Projects: {{details.projects}}</p>
     </div>
   </div>
 </template>

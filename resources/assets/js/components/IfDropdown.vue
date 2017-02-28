@@ -16,7 +16,7 @@ export default {
 
   data() {
     return {
-      search: "",
+      search: '',
       dirty: false,
       options: null
     }
@@ -34,7 +34,11 @@ export default {
       if (this.search.length > 1) {
         this.dirty = true;
         this.searchUsers();
-      }      
+      }
+      else {
+        this.options = null;
+        this.dirty = false;
+      }
     }
   },
 
@@ -43,7 +47,7 @@ export default {
       axios.get(this.url + this.search)
         .then(this.onSearchSuccess)
         .catch(this.onSearchFailure);
-    }, 500),
+    }, 300),
 
     onSearchSuccess(res) {
       this.options = this.getDataOptions(res.data);
@@ -76,7 +80,7 @@ export default {
 
     resetOptions() {
       setTimeout(() => {
-        this.search = "";
+        this.search = '';
         this.options = null;
       }, 200);
     }
