@@ -379,6 +379,41 @@ Includes both classes created as well as those where user was assinged as admin.
 <br>
 
 
+### Search for a class:
+
+**Route**
+
+`GET` api/classes/search
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| string      | string       | A search string (min 2 characters) |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200  | Successful fetch |
+| 422  | <ul><li>string parameter is missing</li><li>string parameter has incorrect format</li></ul> |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/classes/admins/search?string=COMPGS
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Software Abstractions and Systems Integration",
+    "description": "This is a MEng software engineering class",
+    "code": "COMPGS02"
+  }
+]
+```
+<br>
+
+
 
 ## 4. Projects
 
