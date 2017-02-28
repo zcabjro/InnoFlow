@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Module\AdminSearchRequest;
 use App\Http\Requests\Module\NewModuleRequest;
+use App\Http\Controllers\Controller;
 use App\Models\Module;
 use App\Models\User;
 use App\Repositories\Module\ModuleRepoInterface;
