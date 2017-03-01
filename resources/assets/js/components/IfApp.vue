@@ -99,7 +99,7 @@
     // Called when the component is first created (note: not on navigation)
     created() {
       // Listen for the login event for updating the auth state
-      bus.$on('login', this.isAuthorised);
+      bus.$on('login', () => this.setAuthorised(true));
       // Check the auth state in case we are already logged in
       this.checkAuth();
     },
@@ -116,12 +116,16 @@
       checkAuth() {
         axios.get('/api/innoflow')
           .then((res) => {
-            this.auth = res.data.isLoggedIn;
+            this.setAuthorised(res.data.isLoggedIn);
           })
           .catch((error) => {
             console.log(error);
-            this.auth = false;
+            this.setAuthorised(false);
           });
+      },
+
+      setAuthorised(authorised) {
+        this.auth = authorised;
       },
 
       // Send GET request to logout API after confirmation
@@ -143,6 +147,7 @@
 
       // On failure, log the failure
       logoutFailure(error) {
+        console.log(error.response ? error.response.data : error.message);
         console.log('Logout failure');
       }
     }
