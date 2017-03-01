@@ -63,8 +63,8 @@
           alt: 'P',
           children: [],
           selectUrl: '/dashboard/projects',
-          addText: '[+] Enroll',
-          addUrl: '/enroll',
+          addText: '[+] Enrol',
+          addUrl: '/enrol',
           getName(p) {
             return p.name;
           }
