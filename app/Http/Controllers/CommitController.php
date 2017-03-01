@@ -16,13 +16,13 @@ class CommitController extends Controller
 {
     public function store( Request $request )
     {
-        /*if ( !$request -> eventType == 'git.push' )
+        if ( !$request -> eventType == 'git.push' )
         {
             return;
         }
-        */
+
         $commit = new Commit();
-        $commit -> commit_id = str_random(20);
+        $commit -> commit_id = $request -> id;
         $commit -> save();
     }
 }
