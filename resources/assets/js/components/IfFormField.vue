@@ -1,10 +1,10 @@
 <template>
   <div class="form-group">
     <!-- Field label -->
-    <label class="col-md-4 control-label">{{label}}</label>
+    <label class="col-md-4 col-md-offset-4">{{label}}</label>
 
     <!-- Input area -->
-    <div class="col-md-4">
+    <div class="col-md-4 col-md-offset-4">
       <input v-if="type !== 'textarea'" ref="input" v-bind:value="value" v-on:input="updateValue($event.target.value)" :type="type" :placeholder="placeholder" class="form-control input-md" required>
       <textarea v-else rows="10" cols="50" v-bind:value="value" v-on:input="updateValue($event.target.value)" :placeholder="placeholder" class="form-control input-md"></textarea>
     </div>
