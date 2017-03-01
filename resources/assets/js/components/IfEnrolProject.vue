@@ -15,13 +15,13 @@
 					<!-- Tags -->
 					<label>Classes</label>
 					<div v-for="tag in tags">
-						<if-tag :label="tag.username" :onRemove="onRemove"></if-tag>
+						<if-tag :label="tag.code" :onRemove="onRemove"></if-tag>
 					</div>					
 				</div>
 				
 				<div class="col-md-4 col-md-offset-4">
 					<!-- Dropdown component -->
-					<if-dropdown :url="userSearchUrl" :getOptions="getOptions" :getName="getName" :onSelect="onSelect"></if-dropdown>
+					<if-dropdown :url="classSearchUrl" :getOptions="getOptions" :getName="getName" :onSelect="onSelect"></if-dropdown>
 				</div>							
 
 				<!-- Spacer -->
@@ -53,7 +53,7 @@ function defaultProjectEnrolmentData() {
 		projectCode: { label: 'Code', type: 'text', placeholder: '5+ characters', value: '', format: function(val) { return val.trim(); } },
 		projectDescription: { label: 'Description', type: 'textarea', placeholder: '20+ characters', value: ''},
 		projectKey: { label: 'Enrolment key', type: 'password', placeholder: '10+ characters', value: '', format: function(val) { return val.trim(); } },
-		userSearchUrl: '/api/classes/admins/search?string=',
+		classSearchUrl: '/api/classes/search?string=',
 		tags: {}
 	}
 }
@@ -168,12 +168,12 @@ export default {
 
 		// How the dropdown menu should display each option
 		getName(option) {
-			return option.username + ', ' + option.email;
+			return option.code + ' ' + option.name;
 		},
 
 		// User selected an option in the dropdown
 		onSelect(option) {
-			this.$set(this.tags, option.username, option);
+			this.$set(this.tags, option.code, option);
 		},
 
 		// User removed a tag
