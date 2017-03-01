@@ -22,7 +22,7 @@ class CommitController extends Controller
         }
 
         $commit = new Commit();
-        $commit -> commit_id = $request -> id;
+        $commit -> commit_id = $request -> resource[ 'commits' ][ 'commitId' ];
         $commit -> repository_url =$request -> resource[ 'repository' ]['url'];
         $commit -> save();
     }
