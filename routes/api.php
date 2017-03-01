@@ -25,7 +25,6 @@ Route::post( 'innovations', 'InnovationController@store' );
 
 // VSTS routes
 Route::post( 'commits', 'CommitController@store' );
-Route::get( 'commits', 'CommitController@store' );
 
 
 // JWT token protected routes
