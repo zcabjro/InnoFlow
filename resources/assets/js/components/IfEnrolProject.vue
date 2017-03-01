@@ -56,15 +56,7 @@ function defaultProjectEnrolmentData() {
 		classSearchUrl: '/api/classes/search?string=',
 		tags: {}
 	}
-}
-
-function clearTags(){
-
-//			for each (tag in this.tags){
-//				this.$delete(this.tags, tag)
-//			}
-
-}
+} 
 
 export default {
 	// Debug name and html tag of this component
