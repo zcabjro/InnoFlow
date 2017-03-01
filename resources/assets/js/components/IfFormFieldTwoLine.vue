@@ -2,8 +2,10 @@
   <div class="form-group">
     <!-- Input area -->
     <div class="col-md-4" >
+    <!-- Field label -->
+    <label>{{label}}</label> 
       <input v-if="type !== 'textarea'" ref="input" v-bind:value="value" v-on:input="updateValue($event.target.value)" :type="type" :placeholder="placeholder" class="form-control input-md" required>
-      <textarea v-else   v-bind:value="value" v-on:input="updateValue($event.target.value)" :placeholder="placeholder" class="form-control input-md" ></textarea>
+      <textarea v-else   v-bind:value="value" v-on:input="updateValue($event.target.value)" :placeholder="placeholder" class="form-control input-md"></textarea>
     </div>
   </div>
 </template>
@@ -44,6 +46,4 @@
   }
 </script>
 
-<style> 
-
-</style>
+<style></style>

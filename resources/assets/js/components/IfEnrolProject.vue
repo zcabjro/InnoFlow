@@ -53,13 +53,12 @@
 
     <!-- Field label -->
 
-				<div class="col-md-4 col-md-offset-4">
-
-					<label>Enrolment Key</label>
-      <if-form-field-two-line v-for="(field, index) in fields" v-model="field.value" :label="field.label" :type="field.type" :placeholder="field.placeholder" :format="field.format" ></if-form-field>
-
+				<div class="col-md-6 col-md-offset-4">
+ 
+      <if-form-field-two-line v-for="(field, index) in fields" v-model="field.value" :label="field.label" :type="field.type" :placeholder="field.placeholder" :format="field.format"></if-form-field>
 
 
+<input type="password" placeholder="10+ characters" required="required" class="form-control input-md" >
 				</div>
 
 
