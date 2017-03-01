@@ -21,7 +21,7 @@
 				
 				<div class="col-md-4 col-md-offset-4">
 					<!-- Dropdown component -->
-					<if-dropdown :url="userSearchUrl" :getOptions="getOptions" :getName="getName" :onSelect="onSelect"></if-dropdown>
+					<if-search-dropdown :onSearch="onSearch" :getOptions="getOptions" :getName="getName" :onSelect="onSelect"></if-search-dropdown>
 				</div>							
 
 				<!-- Spacer -->
@@ -41,7 +41,7 @@
 
 <script>
 import IfUserForm from './IfUserForm.vue' // Form used for supplying class creation fields
-import IfDropdown from './IfDropdown.vue' // Dropdown component for searching users
+import IfSearchDropdown from './IfSearchDropdown.vue' // Dropdown component for searching users
 import IfTag from './IfTag.vue' // Tag component for adding users as class admins
 import IfMessage from './IfMessage.vue' // Message copmonent for displaying errors
 
@@ -65,7 +65,7 @@ export default {
 	// Components used by this component
 	components: {
 		IfUserForm,
-		IfDropdown,
+		IfSearchDropdown,
 		IfTag,
 		IfMessage
 	},
@@ -159,6 +159,16 @@ export default {
 			console.log(error.response);
 			this.$refs.message.display(error.response.data ? error.response.data : 'Failed');		
 			console.log('Create class failure');
+		},
+
+		onSearch(searchInput, resultsCallback) {
+			axios.get(this.userSearchUrl + searchInput)
+        .then((res) => {
+					resultsCallback(res.data);
+				})
+        .catch((error) => {
+					console.log(error);
+				});
 		},
 
 		// How the dropdown menu should retrieve options from the server response data
