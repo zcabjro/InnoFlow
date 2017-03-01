@@ -30,6 +30,7 @@
   import IfUserForm from './IfUserForm.vue' // Form used for supplying login info
   import bus from '../bus.js' // Global event bus
   import IfMessage from './IfMessage.vue' // Message copmonent for displaying errors
+  import HttpErrorHelper from '../httpErrorHelper.js' // Error processor for http requests
 
   // Helper for resetting login data
   function defaultLoginData() {
@@ -109,10 +110,10 @@
       },
       
       // On failure, log the failure
-      loginFailure(error) {
-        this.$refs.message.display(error.response.data);
+      loginFailure(error) {        
+        this.$refs.message.display(HttpErrorHelper(error).payload);
         console.log("Login failure");
-      }      
+      }
     }
   }
 </script>
