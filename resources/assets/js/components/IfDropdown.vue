@@ -1,57 +1,26 @@
-<template>  
-  <div class="btn-group open">
-    
-    <input v-model="searchInput" v-on:blur="resetOptions" class="form-control input-md">
-    <ul id="optionList" v-show="search && !dirty && options && options.length > 0" class="dropdown-menu scrollable-menu open" role="menu">
-        <li v-for="option in options"><a v-on:click="select(option)" href="javascript:void(0)">{{getOptionName(option)}}</a></li>
-    </ul>
-  </div>
+<template>    
+  <ul id="optionList" v-show="options && options.length > 0" class="dropdown-menu scrollable-menu open" role="menu">
+      <li v-for="option in options"><a v-on:click="select(option)" href="javascript:void(0)">{{getOptionName(option)}}</a></li>
+  </ul>
 </template>
 
 <script>
-var _ = require('lodash');
-
 export default {
   name: 'if-dropdown',
 
   data() {
     return {
-      searchInput: '',
-      dirty: false,
-      options: null
     }
   },
 
   props: [
-    'onSearch',
+    'options',
     'getOptions',
     'getName',
     'onSelect'
   ],
 
-  watch: {
-    searchInput: function() {
-      this.search();
-    }
-  },
-
   methods: {
-    search: _.debounce(function() {
-      if (this.onSearch && this.searchInput.length > 1) {
-        this.dirty = true;
-        this.onSearch(this.searchInput, this.resultsCallback);
-      }
-      else {
-        this.options = null;
-        this.dirty = false;
-      }
-    }, 300),    
-
-    resultsCallback(results) {
-      this.options = results;
-      this.dirty = false;
-    },
-
     getDataOptions(data) {
       return this.getOptions
         ? this.getOptions(data)
@@ -72,7 +41,6 @@ export default {
 
     resetOptions() {
       setTimeout(() => {
-        this.searchInput = '';
         this.options = null;
       }, 200);
     }
