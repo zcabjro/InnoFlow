@@ -28,6 +28,7 @@ class CommitController extends Controller
         {
             $commit = new Commit();
             $commit -> commit_id = $metadata[ 'commitId' ];
+            $commit -> comment = $metadata[ 'comment' ];
             $commit -> repository_url = $repository;
             $commit -> save();
         }

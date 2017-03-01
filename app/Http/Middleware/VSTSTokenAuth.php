@@ -33,7 +33,7 @@ class VSTSTokenAuth
     {
         $user = Helper::currentUser();
 
-        if ( is_null( $user -> vsts_access_token ) )
+        if ( is_null( $user ) || is_null( $user -> vsts_access_token ) )
         {
             $url = $this -> vstsService -> getAuthorizationURL( $user );
 
