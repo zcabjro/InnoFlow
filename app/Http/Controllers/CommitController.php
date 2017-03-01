@@ -21,9 +21,16 @@ class CommitController extends Controller
             return;
         }
 
-        $commit = new Commit();
-        $commit -> commit_id = $request -> resource[ 'commits' ][ 'commitId' ];
-        $commit -> repository_url =$request -> resource[ 'repository' ]['url'];
-        $commit -> save();
+        $repository = $request -> resource[ 'repository' ][ 'url' ];
+        $commitsMetadata = $request -> resource[ 'commits' ];
+
+        foreach ( $commitsMetadata as $metadata )
+        {
+            $commit = new Commit();
+            $commit -> commit_id = $metadata[ 'commitId' ];
+            $commit -> repository_url = $repository;
+            $commit -> save();
+        }
+
     }
 }
