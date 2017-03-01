@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+
 class CreateCommitsTable extends Migration
 {
     /**
@@ -16,6 +17,8 @@ class CreateCommitsTable extends Migration
         Schema::create( 'commits', function ( Blueprint $table )
         {
             $table -> string( 'commit_id' );
+            $table -> string( 'comment' );
+            $table -> string( 'repository_url' );
             $table -> timestamps();
 
             $table -> primary( [ 'commit_id' ] );
