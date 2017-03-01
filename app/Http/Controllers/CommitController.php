@@ -11,11 +11,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Commit;
 
+
 class CommitController extends Controller
 {
-    public function create( Request $request )
+    public function store( Request $request )
     {
+        if ( !$request -> eventType == 'git.push' )
+        {
+            return;
+        }
+
         $commit = new Commit();
+        $commit -> commit_id = $request -> id;
         $commit -> save();
     }
 }
