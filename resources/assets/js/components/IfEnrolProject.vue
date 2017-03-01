@@ -4,13 +4,33 @@
 
 		<!-- Message component -->
     <if-message ref="message"></if-message>
-
-		<!-- UserForm component -->
-    <if-user-form :legend="legend" :fields="fields"></if-user-form>				
-
+ 
 		<!-- Form extension (class tags, class search) -->
+ 
+
     <div class="form-horizontal">
 			<div class="form-group">
+
+ 
+      <!--Legend -->
+      <legend>{{legend}}</legend> 
+
+				<div class="col-md-4 col-md-offset-4">
+					<!-- ProjTags -->
+					<label>Project</label>
+					<div v-for="tag in projtags">
+						<if-tag :label="tag.code" :onRemove="onRemove"></if-tag>
+					</div>					
+				</div>
+
+				
+				<div class="col-md-4 col-md-offset-4">
+					<!-- Dropdown component -->
+					<if-dropdown :url="projectSearchUrl" :getOptions="getProjOptions" :getName="getProjName" :onSelect="onProjSelect"></if-dropdown>
+				</div>							
+
+
+
 				<div class="col-md-4 col-md-offset-4">
 					<!-- Tags -->
 					<label>Class</label>
@@ -24,10 +44,41 @@
 					<if-dropdown :url="classSearchUrl" :getOptions="getOptions" :getName="getName" :onSelect="onSelect"></if-dropdown>
 				</div>							
 
+
+
+
+
+
+
+
+    <!-- Field label -->
+
+				<div class="col-md-4 col-md-offset-4">
+
+					<label>Enrolment Key</label>
+      <if-form-field-two-line v-for="(field, index) in fields" v-model="field.value" :label="field.label" :type="field.type" :placeholder="field.placeholder" :format="field.format" ></if-form-field>
+
+
+
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
 				<!-- Spacer -->
 				<div class="col-md-4 col-md-offset-4">
 					<br>
 				</div>
+
+
 
 				<!-- Enrol button -->
 				<div class="col-md-4 col-md-offset-4">
@@ -40,7 +91,7 @@
 </template>
 
 <script>
-import IfUserForm from './IfUserForm.vue' // Form used for supplying class creation fields
+import IfFormFieldTwoLine from './IfFormFieldTwoLine.vue' // Form field component used for this form's fields
 import IfDropdown from './IfDropdown.vue' // Dropdown component for searching users
 import IfTag from './IfTag.vue' // Tag component for adding users as class Classes
 import IfMessage from './IfMessage.vue' // Message copmonent for displaying errors
@@ -48,10 +99,7 @@ import IfMessage from './IfMessage.vue' // Message copmonent for displaying erro
 // Helper for resetting class creation data
 function defaultProjectEnrolmentData() {
 	return {
-		legend: 'Enrol project',
-		projectName: { label: 'Class name', type: 'text', placeholder: '5+ characters', value: '' },
-		projectCode: { label: 'Code', type: 'text', placeholder: '5+ characters', value: '', format: function(val) { return val.trim(); } },
-		projectDescription: { label: 'Description', type: 'textarea', placeholder: '20+ characters', value: ''},
+		legend: 'Enrol project',  
 		projectKey: { label: 'Enrolment key', type: 'password', placeholder: '10+ characters', value: '', format: function(val) { return val.trim(); } },
 		classSearchUrl: '/api/classes/search?string=',
 		tags: {}
@@ -64,7 +112,7 @@ export default {
 
 	// Components used by this component
 	components: {
-		IfUserForm,
+		IfFormFieldTwoLine,
 		IfDropdown,
 		IfTag,
 		IfMessage
@@ -85,7 +133,7 @@ export default {
 	// Computed properties
 	computed: {
 		fields() {			
-			return [ this.projectName, this.projectCode, this.projectDescription, this.projectKey ];
+			return [  this.projectKey ];
 		},
 
 		// Get users that are selected as Projects
@@ -110,10 +158,7 @@ export default {
 		// Send a POST request to the class creation API, supplying field inputs
 		enrol() {
 			if (this.validFields()) {				
-				let projectData = {
-					name: this.projectName.value,
-					code: this.projectCode.value,
-					description: this.projectDescription.value,
+				let projectData = { 
 					key: this.projectKey.value,
 					Projects: this.Projects
 				};
@@ -127,19 +172,7 @@ export default {
 		},
 
 		// Checks if fields are valid, displaying message if not
-		validFields() {
-			if (!this.projectName.value || this.projectName.value.length < 5) {
-				this.$refs.message.display('Name must be at least 5 characters.');
-				return false;
-			}
-			if (!this.projectCode.value || this.projectCode.value.length < 5) {
-				this.$refs.message.display('Code must be at least 5 characters.');
-				return false;
-			}
-			if (!this.projectDescription.value || this.projectDescription.value.length < 20) {
-				this.$refs.message.display('Description must be at least 20 characters.');
-				return false;
-			}
+		validFields() { 
 			if (!this.projectKey.value || this.projectKey.value.length < 10) {
 				this.$refs.message.display('Key must be at least 10 characters.');
 				return false;
@@ -187,4 +220,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+  legend {
+    text-align: center;
+  }
+</style>
