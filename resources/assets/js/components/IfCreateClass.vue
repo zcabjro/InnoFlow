@@ -21,7 +21,7 @@
 				
 				<div class="col-md-4 col-md-offset-4">
 					<!-- Dropdown component -->
-					<if-dropdown :url="userSearchUrl" :getOptions="getOptions" :getName="getName" :onSelect="onSelect"></if-dropdown>
+					<if-dropdown :onSearch="onSearch" :getOptions="getOptions" :getName="getName" :onSelect="onSelect"></if-dropdown>
 				</div>							
 
 				<!-- Spacer -->
@@ -159,6 +159,16 @@ export default {
 			console.log(error.response);
 			this.$refs.message.display(error.response.data ? error.response.data : 'Failed');		
 			console.log('Create class failure');
+		},
+
+		onSearch(searchInput, resultsCallback) {
+			axios.get(this.userSearchUrl + searchInput)
+        .then((res) => {
+					resultsCallback(res.data);
+				})
+        .catch((error) => {
+					console.log(error);
+				});
 		},
 
 		// How the dropdown menu should retrieve options from the server response data

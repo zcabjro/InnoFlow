@@ -23,7 +23,7 @@ export default {
   },
 
   props: [
-    'url',
+    'onSearch',
     'getOptions',
     'getName',
     'onSelect'
@@ -31,32 +31,24 @@ export default {
 
   watch: {
     searchInput: function() {
-      if (this.searchInput.length > 1) {
-        this.dirty = true;
-        this.search();
-      }
-      else {
-        this.options = null;
-        this.dirty = false;
-      }
+      this.search();
     }
   },
 
   methods: {
     search: _.debounce(function() {
-      axios.get(this.url + this.searchInput)
-        .then(this.onSearchSuccess)
-        .catch(this.onSearchFailure);
-    }, 300),
+      if (this.onSearch && this.searchInput.length > 1) {
+        this.dirty = true;
+        this.onSearch(this.searchInput, this.resultsCallback);
+      }
+      else {
+        this.options = null;
+        this.dirty = false;
+      }
+    }, 300),    
 
-    onSearchSuccess(res) {
-      this.options = this.getDataOptions(res.data);
-      this.dirty = false;
-    },
-
-    onSearchFailure(error) {
-      console.log(error);
-      this.options = null;
+    resultsCallback(results) {
+      this.options = results;
       this.dirty = false;
     },
 
