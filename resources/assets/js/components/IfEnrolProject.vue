@@ -8,12 +8,12 @@
 		<!-- UserForm component -->
     <if-user-form :legend="legend" :fields="fields"></if-user-form>				
 
-		<!-- Form extension (admin tags, admin search) -->
+		<!-- Form extension (class tags, class search) -->
     <div class="form-horizontal">
 			<div class="form-group">
 				<div class="col-md-4 col-md-offset-4">
 					<!-- Tags -->
-					<label>Classes</label>
+					<label>Class</label>
 					<div v-for="tag in tags">
 						<if-tag :label="tag.code" :onRemove="onRemove"></if-tag>
 					</div>					
@@ -56,6 +56,14 @@ function defaultProjectEnrolmentData() {
 		classSearchUrl: '/api/classes/search?string=',
 		tags: {}
 	}
+}
+
+function clearTags(){
+
+//			for each (tag in this.tags){
+//				this.$delete(this.tags, tag)
+//			}
+
 }
 
 export default {
@@ -172,7 +180,10 @@ export default {
 		},
 
 		// User selected an option in the dropdown
-		onSelect(option) {
+		onSelect(option) { 
+			for (let tag in this.tags) {
+				this.$delete(this.tags, tag);
+			}
 			this.$set(this.tags, option.code, option);
 		},
 
