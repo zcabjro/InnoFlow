@@ -5,103 +5,67 @@
 		<!-- Message component -->
     <if-message ref="message"></if-message>
  
-		<!-- Form extension (class tags, class search) -->
- 
-
     <div class="form-horizontal">
 			<div class="form-group">
-
  
       <!--Legend -->
       <legend>{{legend}}</legend> 
 
 				<div class="col-md-4 col-md-offset-4">
-					<!-- ProjTags -->
 					<label>Project</label>
-					<div v-for="tag in projtags">
-						<if-tag :label="tag.code" :onRemove="onRemove"></if-tag>
-					</div>					
 				</div>
-
-				
 				<div class="col-md-4 col-md-offset-4">
 					<!-- Dropdown component -->
-					<if-dropdown :url="projectSearchUrl" :getOptions="getProjOptions" :getName="getProjName" :onSelect="onProjSelect"></if-dropdown>
-				</div>							
-
-
+					<if-search-dropdown :onSearch="onSearchProjects" :getOptions="getProjects" :getName="getProjectName" :onSelect="onSelectProject"></if-search-dropdown>
+				</div>
+				<div class="col-md-4 col-md-offset-4">
+					<!-- Selected project -->
+					<p>{{projectName}}</p>
+				</div>
 
 				<div class="col-md-4 col-md-offset-4">
-					<!-- Tags -->
 					<label>Class</label>
-					<div v-for="tag in tags">
-						<if-tag :label="tag.code" :onRemove="onRemove"></if-tag>
-					</div>					
 				</div>
-				
 				<div class="col-md-4 col-md-offset-4">
-					<!-- Dropdown component -->
-					<if-dropdown :url="classSearchUrl" :getOptions="getOptions" :getName="getName" :onSelect="onSelect"></if-dropdown>
-				</div>							
-
-
-
-
-
-
-
-
-    <!-- Field label -->
-
-				<div class="col-md-6 col-md-offset-4">
- 
-      <if-form-field-two-line v-for="(field, index) in fields" v-model="field.value" :label="field.label" :type="field.type" :placeholder="field.placeholder" :format="field.format"></if-form-field>
-
-
-<input type="password" placeholder="10+ characters" required="required" class="form-control input-md" >
+					<!-- Search Dropdown component -->
+					<if-search-dropdown :onSearch="onSearchClasses" :getOptions="getClasses" :getName="getClassName" :onSelect="onSelectClass"></if-dropdown>
 				</div>
+				<div class="col-md-4 col-md-offset-4">
+					<!-- Selected class -->
+					<p>{{className}}</p>
+				</div>	
 
-
-
-
-
-
-
-
-
-
-
+				<!-- Enrolment key -->			
+				<if-form-field v-model="enrolmentKey" label="Enrolment Key" type="password" placeholder="Key" :format="trimKey"></if-form-field>
 
 				<!-- Spacer -->
 				<div class="col-md-4 col-md-offset-4">
 					<br>
 				</div>
 
-
-
 				<!-- Enrol button -->
 				<div class="col-md-4 col-md-offset-4">
 					<button v-on:click="enrol" type="button" class="btn">Enrol</button>
 				</div>
-
 			</div>			
     </div>
   </div>
 </template>
 
 <script>
-import IfFormFieldTwoLine from './IfFormFieldTwoLine.vue' // Form field component used for this form's fields
-import IfDropdown from './IfDropdown.vue' // Dropdown component for searching users
-import IfTag from './IfTag.vue' // Tag component for adding users as class Classes
+import IfFormField from './IfFormField.vue' // Form field for enrolment key
+import IfSearchDropdown from './IfSearchDropdown.vue' // Dropdown component used for searching projects/classes
 import IfMessage from './IfMessage.vue' // Message copmonent for displaying errors
 
 // Helper for resetting class creation data
 function defaultProjectEnrolmentData() {
 	return {
-		legend: 'Enrol project',  
-		projectKey: { label: 'Enrolment key', type: 'password', placeholder: '10+ characters', value: '', format: function(val) { return val.trim(); } },
-		classSearchUrl: '/api/classes/search?string=',
-		tags: {}
+		legend: 'Enrol project', 
+		selectedProject : null,
+		selectedClass: null,
+		enrolmentKey: '',
+		projects: [],
+		classSearchUrl: '/api/classes/search?string='
 	}
 } 
 
@@ -111,9 +75,8 @@ export default {
 
 	// Components used by this component
 	components: {
-		IfFormFieldTwoLine,
-		IfDropdown,
-		IfTag,
+		IfFormField,
+		IfSearchDropdown,
 		IfMessage
 	},
 	
@@ -124,26 +87,20 @@ export default {
 
 	// Reset the class creation data each time we navigate to this route
 	beforeRouteEnter(to, from, next) {		
-		next(enrolProjectComponent => {			
+		next(enrolProjectComponent => {						
 			enrolProjectComponent.resetProjectEnrolmentData();
+			enrolProjectComponent.loadProjects();
 		});
 	},
 
 	// Computed properties
 	computed: {
-		fields() {			
-			return [  this.projectKey ];
+		projectName() {
+			return this.selectedProject ? this.getProjectName(this.selectedProject) : '';
 		},
 
-		// Get users that are selected as Projects
-		Projects() {
-			let Projects = [];
-			for (let tag in this.tags) {
-				if (this.tags.hasOwnProperty(tag)) {
-					Projects.push(this.tags[tag].userId);
-				}
-			}
-			return Projects.join();
+		className() {
+			return this.selectedClass ? this.getClassName(this.selectedClass) : '';
 		}
 	},
 
@@ -154,17 +111,31 @@ export default {
 			Object.assign(this.$data, defaultProjectEnrolmentData());
 		},
 
+		loadProjects() {
+			axios.get('/api/projects')
+				.then((res) => {
+					this.projects = res.data;
+				})
+				.catch((error) => {
+					console.log(error);
+				})
+		},
+
+		trimKey(val) {
+			return val.trim();
+		},
+
 		// Send a POST request to the class creation API, supplying field inputs
-		enrol() {
+		enrol() {			
 			if (this.validFields()) {				
-				let projectData = { 
-					key: this.projectKey.value,
-					Projects: this.Projects
+				let enrolmentData = { 
+					code: this.selectedClass.code,
+					key: this.enrolmentKey
 				};
 
-				console.log(projectData);
+				let postRoute = '/api/projects/' + this.selectedProject.id + '/enrol';
 
-				axios.post('/api/classes', projectData)
+				axios.post(postRoute, enrolmentData)
 					.then(this.enrolSuccess)
 					.catch(this.enrolFailure);
 				}			
@@ -172,8 +143,8 @@ export default {
 
 		// Checks if fields are valid, displaying message if not
 		validFields() { 
-			if (!this.projectKey.value || this.projectKey.value.length < 10) {
-				this.$refs.message.display('Key must be at least 10 characters.');
+			if (!this.enrolmentKey) {
+				this.$refs.message.display('Please enter an enrolment key.');
 				return false;
 			}
 			return true;
@@ -193,27 +164,49 @@ export default {
 			console.log('Enrol project failure');
 		},
 
-		// How the dropdown menu should retrieve options from the server response data
-		getOptions(data) {
+		onSearchProjects(searchInput, resultsCallback) {
+			let results = [];
+			for (let i = 0; i < this.projects.length; i++) {
+				if (this.projects[i].name.indexOf(searchInput) >= 0) {
+					results.push(this.projects[i]);
+				}
+			}
+			resultsCallback(results);
+		},
+
+		onSearchClasses(searchInput, resultsCallback) {
+			axios.get(this.classSearchUrl + searchInput)
+        .then((res) => {
+					let classes = this.getClasses(res.data);
+					resultsCallback(classes);
+				})
+        .catch((error) => {
+					console.log(error);
+				});
+		},
+		
+		getProjects(data) {
 			return data;
 		},
 
-		// How the dropdown menu should display each option
-		getName(option) {
-			return option.code + ' ' + option.name;
+		getClasses(data) {
+			return data;
 		},
 
-		// User selected an option in the dropdown
-		onSelect(option) { 
-			for (let tag in this.tags) {
-				this.$delete(this.tags, tag);
-			}
-			this.$set(this.tags, option.code, option);
+		getProjectName(projectOption) {
+			return projectOption.name;
 		},
 
-		// User removed a tag
-		onRemove(label) {
-			this.$delete(this.tags, label);
+		getClassName(classOption) {
+			return classOption.code;
+		},
+
+		onSelectProject(projectOption) { 
+			this.selectedProject = projectOption;
+		},
+
+		onSelectClass(classOption) {
+			this.selectedClass = classOption;
 		}
 	}
 }

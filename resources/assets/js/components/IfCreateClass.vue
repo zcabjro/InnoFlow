@@ -164,7 +164,8 @@ export default {
 		onSearch(searchInput, resultsCallback) {
 			axios.get(this.userSearchUrl + searchInput)
         .then((res) => {
-					resultsCallback(res.data);
+					let admins = this.getOptions(res.data);
+					resultsCallback(admins);
 				})
         .catch((error) => {
 					console.log(error);

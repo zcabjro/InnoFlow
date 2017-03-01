@@ -21,12 +21,6 @@ export default {
   ],
 
   methods: {
-    getDataOptions(data) {
-      return this.getOptions
-        ? this.getOptions(data)
-        : data;
-    },
-
     getOptionName(option) {
       return this.getName
         ? this.getName(option)
@@ -37,12 +31,6 @@ export default {
       if (this.onSelect) {
         this.onSelect(option);
       }
-    },
-
-    resetOptions() {
-      setTimeout(() => {
-        this.options = null;
-      }, 200);
     }
   }
 }
