@@ -13,10 +13,12 @@ class CreateCommitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('commits', function (Blueprint $table)
+        Schema::create( 'commits', function ( Blueprint $table )
         {
-            $table->increments('commit_id');
-            $table->timestamps();
+            $table -> string( 'commit_id' );
+            $table -> timestamps();
+
+            $table -> primary( [ 'commit_id' ] );
         });
     }
 
@@ -27,6 +29,6 @@ class CreateCommitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('commits');
+        Schema::dropIfExists( 'commits' );
     }
 }
