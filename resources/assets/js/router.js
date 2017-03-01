@@ -8,6 +8,7 @@ import IfRegister from './components/IfRegister.vue'
 import IfLogin from './components/IfLogin.vue'
 import IfDashboard from './components/IfDashboard.vue'
 import IfCreateClass from './components/IfCreateClass.vue'
+import IfEnrolProject from './components/IfEnrolProject.vue'
 import IfInnovations from './components/IfInnovations.vue'
 import IfProject from './components/IfProject.vue'
 import IfClass from './components/IfClass.vue'
@@ -66,8 +67,8 @@ const routes = [{
   }, {
 
     // Enroll project
-    path: 'enroll',
-    component: IfCreateClass // TODO: Change to IfEnrolProject once it is created
+    path: 'enrol',
+    component: IfEnrolProject // TODO: Change to IfEnrolProject once it is created
   }]
 },  {
   path: '/notFound'
