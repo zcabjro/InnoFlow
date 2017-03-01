@@ -117,13 +117,13 @@ class VstsApiService
     }
 
 
-    public function updateUser( User $user )
+    public function updateUser( User $user, $refresh )
     {
         $expire = Carbon::now() -> subMinute( 10 );
         $lastUpdate = $user -> vsts_last_update;
 
         // Update account and project records (every 10 minutes)
-        if ( is_null( $lastUpdate ) || $expire > $lastUpdate )
+        if ( $refresh || is_null( $lastUpdate ) || $expire > $lastUpdate )
         {
             $this -> storeProfile( $user );
             $this -> storeAccounts( $user );

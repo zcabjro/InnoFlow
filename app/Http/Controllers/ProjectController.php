@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\Module\RefreshProjectRequest;
 use App\Http\Requests\Project\ProjectEnrolmentRequest;
 use App\Models\VstsProject;
 use App\Repositories\Module\ModuleRepoInterface;
@@ -34,13 +35,14 @@ class ProjectController extends Controller
     }
 
 
-    public function index()
+    public function index( RefreshProjectRequest $request )
     {
         $user = Helper::currentUser();
 
         try
         {
-            $this -> vstsService -> updateUser( $user );
+            $refresh = is_null( $request -> refresh ) ? false : $request -> refresh;
+            $this -> vstsService -> updateUser( $user, $refresh );
         }
         catch( ClientException $e )
         {
