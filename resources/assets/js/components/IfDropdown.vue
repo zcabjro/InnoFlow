@@ -30,7 +30,7 @@ export default {
   ],
 
   watch: {
-    search: function() {
+    searchInput: function() {
       if (this.searchInput.length > 1) {
         this.dirty = true;
         this.search();
