@@ -210,7 +210,10 @@ class VstsApiService
             }
 
             // Indicates whether the user is already associated with the account
-            $alreadyAdded = DB::table( 'vsts_account_users' ) -> where('account_id', $vstsAccount -> account_id ) -> count() > 0;
+            $alreadyAdded = DB::table( 'vsts_account_users' )
+                    -> where( 'account_id', $vstsAccount -> account_id )
+                    -> where( 'user_id', $user -> user_id )
+                    -> count() > 0;
 
             // User is not associated with account yet
             if ( !$alreadyAdded )

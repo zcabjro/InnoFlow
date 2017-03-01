@@ -148,18 +148,18 @@
 
       // Request dashboard contents
       loadDashboard() {
-        this.checkVSTSAuth((isAuthorised, redirectUrl) => {
-          
+        this.checkVSTSAuth((isAuthorised, redirectUrl) => {          
           this.loadClasses();
           if (isAuthorised) {
             console.log("VSTS Authorised!");
             this.loadProjects();
             this.loadCommits(); // TEMP: testing VSTS redirect                    
           }
-          else {
-            this.$refs.message.display('Missing VSTS Authorisation.');
-            console.log("Not VSTS Authorised!");
-          }          
+          else if (redirectUrl && confirm('Redirect for VSTS auth?')) {
+            //this.$refs.message.display('Missing VSTS Authorisation.');
+            //console.log("Not VSTS Authorised!");
+            this.redirect(redirectUrl, true);
+          }
           
           // TODO: Set this when all content has been received
           this.display = true;
@@ -170,10 +170,11 @@
       checkVSTSAuth(callback) {
         axios.get('/api/vsts')
           .then((res) => {
-            callback(res.data.isAuthorized);
+            callback(res.data.isAuthorized, res.data.url);
           })
           .catch((error) => {
             console.log(error);
+            callback(false);
           });
       },
 

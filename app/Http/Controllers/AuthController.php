@@ -74,12 +74,16 @@ class AuthController extends Controller
     public function isVstsAuthorized( VstsApiService $vstsService )
     {
         $user = Helper::currentUser();
-        $authorized = !is_null( $user -> vsts_access_token );
-        $url = $vstsService -> getAuthorizationURL( $user );
+        $response = [];
 
-        return response() -> json( [
-            'isAuthorized' => $authorized,
-            'url' => $url
-        ] );
+        $authorized = !is_null( $user -> vsts_access_token );
+        $response[ 'isAuthorized' ] = $authorized;
+
+        if ( !$authorized )
+        {
+            $response[ 'url' ] = $vstsService -> getAuthorizationURL( $user );
+        }
+
+        return response() -> json( $response );
     }
 }

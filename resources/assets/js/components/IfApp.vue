@@ -114,19 +114,14 @@
       // TODO: Perform this check in a nicer way
       // Checks user auth state by contacting trying to access a restricted route
       checkAuth() {
-        axios.get('/api/vsts')
-          .then(this.isAuthorised)
-          .catch(this.isNotAuthorised);
-      },
-
-      // Updates the auth state to be logged in
-      isAuthorised() {
-        this.auth = true;
-      },
-
-      // Updates the auth state to be logged out
-      isNotAuthorised() {
-        this.auth = false;
+        axios.get('/api/innoflow')
+          .then((res) => {
+            this.auth = res.data.isLoggedIn;
+          })
+          .catch((error) => {
+            console.log(error);
+            this.auth = false;
+          });
       },
 
       // Send GET request to logout API after confirmation
