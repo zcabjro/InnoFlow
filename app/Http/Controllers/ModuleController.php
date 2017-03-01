@@ -61,14 +61,21 @@ class ModuleController extends Controller
 
     public function search( SearchRequest $request )
     {
-        $modules = Module::hydrate( Searchy::modules( [ 'code', 'name' ] ) -> query( $request -> string ) -> getQuery() -> limit( 10 ) -> get() -> toArray() );
+        $modules = Module::where( 'code', 'like', '%' . $request -> string . '%' ) -> orWhere( 'name', 'like', '%' . $request -> string . '%' ) -> get();
         return fractal() -> collection( $modules, new ModuleTransformer );
+
+        /*
+        $modules = Module::hydrate( Searchy::modules( [ 'code', 'name' ] ) -> query( $request -> string ) -> getQuery() -> limit( 10 ) -> get() -> toArray() );*/
     }
 
 
     public function searchAdmin( SearchRequest $request )
     {
-        $users = User::hydrate( Searchy::users( [ 'email', 'username' ] ) -> query( $request -> string ) -> getQuery() -> limit( 10 ) -> get() -> toArray() );
+        $users = User::where( 'email', 'like', '%' . $request -> string . '%' ) -> orWhere( 'username', 'like', '%' . $request -> string . '%' ) -> get();
         return fractal() -> collection( $users, new UserTransformer );
+
+        /*
+        $users = User::hydrate( Searchy::users( [ 'email', 'username' ] ) -> query( $request -> string ) -> getQuery() -> limit( 10 ) -> get() -> toArray() );
+        return fractal() -> collection( $users, new UserTransformer );*/
     }
 }

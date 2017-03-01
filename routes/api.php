@@ -27,6 +27,7 @@ Route::post( 'innovations', 'InnovationController@store' );
 Route::post( 'commits', 'CommitController@store' );
 
 
+
 // JWT token protected routes
 Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
