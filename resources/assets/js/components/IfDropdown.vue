@@ -1,7 +1,7 @@
 <template>  
   <div class="btn-group open">
     
-    <input v-model="search" v-on:blur="resetOptions" class="form-control input-md">
+    <input v-model="searchInput" v-on:blur="resetOptions" class="form-control input-md">
     <ul id="optionList" v-show="search && !dirty && options && options.length > 0" class="dropdown-menu scrollable-menu open" role="menu">
         <li v-for="option in options"><a v-on:click="select(option)" href="javascript:void(0)">{{getOptionName(option)}}</a></li>
     </ul>
@@ -16,7 +16,7 @@ export default {
 
   data() {
     return {
-      search: '',
+      searchInput: '',
       dirty: false,
       options: null
     }
@@ -31,9 +31,9 @@ export default {
 
   watch: {
     search: function() {
-      if (this.search.length > 1) {
+      if (this.searchInput.length > 1) {
         this.dirty = true;
-        this.searchUsers();
+        this.search();
       }
       else {
         this.options = null;
@@ -43,8 +43,8 @@ export default {
   },
 
   methods: {
-    searchUsers: _.debounce(function() {
-      axios.get(this.url + this.search)
+    search: _.debounce(function() {
+      axios.get(this.url + this.searchInput)
         .then(this.onSearchSuccess)
         .catch(this.onSearchFailure);
     }, 300),
@@ -80,7 +80,7 @@ export default {
 
     resetOptions() {
       setTimeout(() => {
-        this.search = '';
+        this.searchInput = '';
         this.options = null;
       }, 200);
     }
