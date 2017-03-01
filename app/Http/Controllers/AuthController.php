@@ -68,7 +68,7 @@ class AuthController extends Controller
     public function isLoggedIn( Request $request )
     {
         $token = $request -> cookie( config( 'custom.cookie.name' ) );
-        $isLoggedIn = !is_null( is_null( JWTAuth::toUser( $token ) ) );
+        $isLoggedIn = !is_null( JWTAuth::toUser( $token ) );
         return response() -> json( [ 'isLoggedIn' => $isLoggedIn ] );
     }
 
