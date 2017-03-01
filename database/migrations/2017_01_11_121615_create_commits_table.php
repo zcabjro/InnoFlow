@@ -16,6 +16,7 @@ class CreateCommitsTable extends Migration
         Schema::create( 'commits', function ( Blueprint $table )
         {
             $table -> string( 'commit_id' );
+            $table -> string( 'repository_url' );
             $table -> timestamps();
 
             $table -> primary( [ 'commit_id' ] );
