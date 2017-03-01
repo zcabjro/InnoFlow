@@ -49,7 +49,7 @@ class ProjectEnrolmentRequest extends ApiRequest
             return false;
         }
 
-        if ( $vstsProject -> account -> owner() -> user_id != $user -> user_id )
+        if ( is_null( $ownerUser = $vstsProject -> account -> owner() ) || $ownerUser -> user_id != $user -> user_id )
         {
             $this -> errorMessage = self::NOT_OWNER;
             return false;

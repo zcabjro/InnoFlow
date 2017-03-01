@@ -13,6 +13,7 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Repositories\User\UserRepoInterface;
 use App\Services\VSTS\VstsApiService;
 use App\Traits\JsonResponseTrait;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use App\Services\Common\Helper;
 use JWTAuth;
@@ -64,9 +65,10 @@ class AuthController extends Controller
     }
 
 
-    public function isLoggedIn()
+    public function isLoggedIn( Request $request )
     {
-        $isLoggedIn = !is_null( Helper::currentUser() );
+        $token = $request -> cookie( config( 'custom.cookie.name' ) );
+        $isLoggedIn = !is_null( is_null( JWTAuth::toUser( $token ) ) );
         return response() -> json( [ 'isLoggedIn' => $isLoggedIn ] );
     }
 
