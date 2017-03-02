@@ -35,10 +35,7 @@ class AuthController extends Controller
 
     public function loginUser( LoginRequest $request )
     {
-        $token = $this -> userRepo -> login( [
-            'email' => $request[ 'email' ],
-            'password' => $request[ 'password' ]
-        ] );
+        $token = $this -> userRepo -> login( $request -> all() );
 
         if ( !$token )
         {
