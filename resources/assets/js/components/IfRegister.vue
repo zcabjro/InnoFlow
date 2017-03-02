@@ -6,7 +6,7 @@
     <if-message ref="message"></if-message>
 
     <!-- UserForm component -->
-    <if-user-form :legend="legend" :fields="[email, password, confirmPassword]"></if-user-form>
+    <if-user-form :legend="legend" :fields="fields"></if-user-form>
     
     <!-- Mismatched passwords warning -->
     <div class="form-group">
@@ -44,8 +44,10 @@
       legend: 'Register',
       // Email field
       email: { label: 'Email', type: 'text', placeholder: 'mail@example.com', value: '', format: function(val) { return val.trim(); } },
+      // Username field
+      username: { label: 'Username', type: 'text', placeholder: '5+ characters', value: '', format: function(val) {return val.trim(); } },
       // Password field
-      password: { label: 'Password', type: 'password', placeholder: 'password', value: '', format: function(val) { return val.trim(); } },
+      password: { label: 'Password', type: 'password', placeholder: '10+ characters', value: '', format: function(val) { return val.trim(); } },
       // Confirm password field
       confirmPassword: { label: 'Confirm Password', type: 'password', placeholder: 'password', value: '', format: function(val) { return val.trim(); } }
     }
@@ -75,10 +77,14 @@
     // Computed properties
     computed: {
       // Whether or not their is a password mistmatch
-      passwordMismatch: function () {
+      passwordMismatch() {
         return this.password.value
           && this.confirmPassword.value
           && this.password.value !== this.confirmPassword.value;
+      },
+
+      fields() {
+        return [ this.email, this.username, this.password, this.confirmPassword ];
       }
     },
 
@@ -92,7 +98,7 @@
       // Send POST request to register API, supplying email and password
       register(e) {
         if (!this.passwordMismatch && this.validFields()) {
-          let registerDetails = { email: this.email.value, password: this.password.value };
+          let registerDetails = { email: this.email.value, password: this.password.value, username: this.username.value };
           axios.post('/api/register', registerDetails)
             .then(this.registerSuccess)
             .catch(this.registerFailure);

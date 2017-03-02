@@ -142,7 +142,7 @@
       logoutSuccess(res) {
         console.log("Logout success");                
         bus.$emit('logout');
-        this.isNotAuthorised();
+        this.setAuthorised(false);
       },
 
       // On failure, log the failure
