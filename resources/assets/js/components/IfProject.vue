@@ -15,7 +15,6 @@
 
     <div v-show="details" class="col-md-4">
       <div id="project-metrics">
-        <h2>Project Data</h2>
         <if-card>
           <span class="h3">Code Review</span><span class="pull-right">(1st /13)</span>
           <div class="col-md-12" style="height: 80%;">
