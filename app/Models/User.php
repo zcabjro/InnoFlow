@@ -22,6 +22,7 @@ class User extends Authenticatable
     protected $fillable = [
         'email',
         'password',
+        'username',
         'vsts_last_account_update',
         'vsts_last_project_update'
     ];

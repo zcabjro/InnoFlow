@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\VSTS\VstsApiService;
+use App\Services\Vsts\VstsApiService;
 use Illuminate\Http\Request;
 
 

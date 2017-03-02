@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             // innoflow
             $table -> increments( 'user_id' );
             $table -> string( 'email' ) -> unique();
-            $table -> string( 'username' ) -> unique() -> nullable();
+            $table -> string( 'username' ) -> unique();
             $table -> string( 'password' );
 
             // vsts

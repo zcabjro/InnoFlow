@@ -11,7 +11,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Repositories\User\UserRepoInterface;
-use App\Services\VSTS\VstsApiService;
+use App\Services\Vsts\VstsApiService;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -58,10 +58,7 @@ class AuthController extends Controller
 
     public function registerUser( RegisterRequest $request )
     {
-        $this -> userRepo -> create( [
-            'email' => $request[ 'email' ],
-            'password' => bcrypt( $request[ 'password' ] ),
-        ]);
+        $this -> userRepo -> create( $request -> all() );
     }
 
 

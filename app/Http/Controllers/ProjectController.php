@@ -13,7 +13,7 @@ use App\Http\Requests\Module\RefreshProjectRequest;
 use App\Http\Requests\Project\ProjectEnrolmentRequest;
 use App\Models\VstsProject;
 use App\Repositories\Module\ModuleRepoInterface;
-use App\Services\VSTS\VstsApiService;
+use App\Services\Vsts\VstsApiService;
 use App\Services\Common\Helper;
 use App\Traits\JsonResponseTrait;
 use App\Transformers\VstsProjectTransformer;
@@ -47,7 +47,7 @@ class ProjectController extends Controller
         catch( ClientException $e )
         {
             $user -> resetVsts();
-            return $this -> respondUnauthorized( 'Token cannot be refresh. Authorize with VSTS again.' );
+            return $this -> respondUnauthorized( 'Token cannot be refresh. Authorize with Vsts again.' );
         }
 
         $projects = [];

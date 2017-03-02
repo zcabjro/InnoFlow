@@ -37,4 +37,15 @@ class VstsProject extends Model
     {
         return $this -> belongsTo( 'App\Models\Module', 'module_id', 'module_id' );
     }
+
+
+    /**
+     * Gets all the commits of the project.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function commits()
+    {
+        return $this -> hasMany( 'App\Models\Commit', 'project_id', 'project_id' ) -> orderBy( 'date', 'DESC' );
+    }
 }

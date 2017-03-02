@@ -16,7 +16,7 @@ use League\Fractal\TransformerAbstract;
 class VstsProjectTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
-        'members'
+        'members', 'commits'
     ];
 
     protected $defaultIncludes = [
@@ -63,6 +63,19 @@ class VstsProjectTransformer extends TransformerAbstract
     public function includeMembers( VstsProject $project )
     {
         $users = $project -> account -> users;
-        return $this -> collection( $users, new UserTransformer() );
+        return $this -> collection( $users, new UserTransformer );
+    }
+
+
+    /**
+     * Include commits.
+     *
+     * @param VstsProject $project
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeCommits( VstsProject $project )
+    {
+        $commits = $project -> commits;
+        return $this -> collection( $commits, new CommitTransformer );
     }
 }

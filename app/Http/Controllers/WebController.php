@@ -9,7 +9,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\VSTS\VSTSAuthRequest;
+use App\Http\Requests\Vsts\VstsAuthRequest;
 use App\Repositories\User\UserRepoInterface;
 use App\Services\VSTS\VstsApiService;
 
@@ -22,7 +22,7 @@ class WebController extends Controller
     }
 
 
-    public function getAuthorizeIndex( VSTSAuthRequest $request, VstsApiService $vstsService, UserRepoInterface $userRepo )
+    public function getAuthorizeIndex( VstsAuthRequest $request, VstsApiService $vstsService, UserRepoInterface $userRepo )
     {
         $user = $userRepo -> find( $request[ 'state' ] );
         $code = $request[ 'code' ];
