@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div v-show="details && metrics" class="col-md-4">
+    <div v-show="details" class="col-md-4">
       <div id="class-metrics">
         <h2>Class Data</h2>
         <if-card>
@@ -57,7 +57,7 @@
     return {
       id: '',
       details: null,
-      metrics: []
+      metrics: null
     }
   }
 
@@ -90,10 +90,10 @@
       init(id) {
         this.id = id;
         this.loadDetails();
-        this.loadMetrics();
       },
 
       loadMetrics() {
+        this.metrics = [];
         let codeReviewChartId = 'codeReviewChart';
         var myChart = new Chart(codeReviewChartId, {
           type: 'bar',
@@ -138,8 +138,10 @@
         if (this.id) {
           axios.get('api/classes/' + this.id)
             .then(res => {
-              console.log(res);
               this.details = res.data;
+              setTimeout(() => {
+                this.loadMetrics();
+              }, 300);
             })
             .catch(error => {
               console.log(error);
