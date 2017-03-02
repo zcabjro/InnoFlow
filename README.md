@@ -19,15 +19,16 @@
 
 | Parameter   | Type      | Notes     |
 | ------------|-----------|-----------|
-| email       | string    | Must be a valid email address |
+| email       | string    | Must be a valid and unique email address |
 | password    | string    | A strong password (min 10 characters) |
+| username    | string    | A unique username (min 5 characters) |
 
  **Response Codes**
  
 | Code | Notes |
 | -----|-------|
 | 200 | Successful registration |
-| 422 | <ul><li>email or password parameter are missing</li><li>email or password parameter have incorrect format</li><li>email is already taken</li></ul> |
+| 422 | <ul><li>email, password or username parameters are missing</li><li>email, password or username parameters have incorrect format</li><li>email or username parameters already taken</li></ul> |
 
 **Sample Request**
 
@@ -59,8 +60,8 @@
 | Code | Notes |
 | -----|-------|
 | 200 | Successful Login |
-| 401 | email or password parameter are incorrect and do not match with any registered user |
-| 422 | <ul><li>email or password parameter are missing</li><li>email or password parameter have incorrect format</li></ul> |
+| 401 | email or password parameters are incorrect and do not match with any registered user |
+| 422 | <ul><li>email or password parameters are missing</li><li>email or password parameters have incorrect format</li></ul> |
 
 **Sample Request**
 
@@ -176,8 +177,8 @@ or
 | Code | Notes |
 | -----|-------|
 | 200 | Successful creation |
-| 401 | email or password parameter are incorrect and do not match with any registered user |
-| 422 | <ul><li>email, password or code parameter paramter are missing</li><li>code parameter is not properly encoded</li></ul> |
+| 401 | email or password parameters are incorrect and do not match with any registered user |
+| 422 | <ul><li>email, password or code parameters are missing</li><li>code parameter is not properly encoded</li></ul> |
 
 
 **Sample Request**
@@ -252,7 +253,7 @@ or
 | Code | Notes |
 | -----|-------|
 | 200 | Successful creation |
-| 422 | <ul><li>name, description, code or key parameter paramter are missing</li><li>name, description, code, key or admins parameter  have incorrect formats</li><li>code paramter is already taken</li></ul> |
+| 422 | <ul><li>name, description, code or key paramters are missing</li><li>name, description, code, key or admins parameters have incorrect formats</li><li>code paramter is already taken</li></ul> |
 
 **Sample Request**
 
