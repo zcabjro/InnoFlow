@@ -11,7 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Vsts\VstsAuthRequest;
 use App\Repositories\User\UserRepoInterface;
-use App\Services\VSTS\VstsApiService;
+use App\Services\Vsts\VstsApiService;
 
 
 class WebController extends Controller
