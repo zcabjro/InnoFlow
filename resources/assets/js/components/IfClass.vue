@@ -25,7 +25,6 @@
 
     <div v-show="details" class="col-md-4">
       <div id="class-metrics">
-        <h2>Class Data</h2>
         <if-card>
           <span class="h3">Code Review</span><span class="pull-right">(1st /13)</span>
           <div class="col-md-12" style="height: 80%;">
