@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div v-if="details && metrics" class="col-md-4">
+    <div v-show="details && metrics" class="col-md-4">
       <div id="class-metrics">
         <h2>Class Data</h2>
         <if-card>
