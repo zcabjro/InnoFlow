@@ -33,7 +33,8 @@ class AppServiceProvider extends ServiceProvider
             'Module',
             'Innovation',
             'VstsAccount',
-            'VstsProject'
+            'VstsProject',
+            'Commit'
         );
 
         foreach( $models as $model )

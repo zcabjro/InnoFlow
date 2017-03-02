@@ -8,8 +8,10 @@
 
 namespace App\Services\VSTS;
 
+use App\Models\Commit;
 use App\Models\User;
 use App\Models\VstsProject;
+use App\Repositories\Commit\CommitRepoInterface;
 use App\Repositories\VstsAccount\VstsAccountRepo;
 use App\Repositories\VstsProject\VstsProjectRepoInterface;
 use Carbon\Carbon;
@@ -22,17 +24,20 @@ use Tymon\JWTAuth\Providers\User\UserInterface;
 
 class VstsApiService
 {
+    private $client;
     private $userRepo;
     private $vstsAccountRepo;
-    private $client;
+    private $vstsProjectRepo;
+    private $commitRepo;
 
 
-    public function __construct( UserInterface $userRepo, VstsAccountRepo $vstsAccountRepo, VstsProjectRepoInterface $vstsProjectRepo )
+    public function __construct( UserInterface $userRepo, VstsAccountRepo $vstsAccountRepo, VstsProjectRepoInterface $vstsProjectRepo, CommitRepoInterface $commitRepo )
     {
+        $this -> client = new Client();
         $this -> userRepo = $userRepo;
         $this -> vstsAccountRepo = $vstsAccountRepo;
         $this -> vstsProjectRepo = $vstsProjectRepo;
-        $this -> client = new Client();
+        $this -> commitRepo = $commitRepo;
     }
 
 
@@ -54,66 +59,9 @@ class VstsApiService
     }
 
 
-    private function sendTokenRequest( $user, $grantType, $assertion )
-    {
-        $response = $this -> client -> request( 'POST', 'https://app.vssps.visualstudio.com/oauth2/token', [
-            'form_params' => [
-                'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-                'client_assertion' => env( 'VSTS_APP_SECRET' ),
-                'grant_type' => $grantType,
-                'assertion' => $assertion,
-                'redirect_uri' => env( 'VSTS_REDIRECT_URL' )
-            ]
-        ] );
-
-        $json = json_decode( $response -> getBody(), true );
-
-        $user -> vsts_access_token = $json[ 'access_token' ];
-        $user -> vsts_refresh_token = $json[ 'refresh_token' ];
-        $user -> save();
-
-        return $user;
-    }
-
-
     public function storeToken( $user, $code )
     {
         $this -> sendTokenRequest( $user, 'urn:ietf:params:oauth:grant-type:jwt-bearer', $code );
-    }
-
-
-    private function refreshToken( $user )
-    {
-        return $this -> sendTokenRequest( $user, 'refresh_token', $user -> vsts_refresh_token );
-    }
-
-
-    private function sendAuthRequest( User $user, Request $request )
-    {
-        if ( is_null( $token = $user -> vsts_access_token ) )
-        {
-            return null;
-        }
-
-        $request = $request -> withHeader( 'Authorization', 'Bearer ' . $token );
-        $response = $this -> client -> send( $request );
-
-        // Request successful
-        if ( $response -> getStatusCode() == 200 )
-        {
-            return json_decode( $response -> getBody(), true );
-        }
-        // Token expired, hence refresh token
-        else if ( $response -> getStatusCode() == 203 )
-        {
-            $user = $this -> refreshToken( $user );
-            return $this -> sendAuthRequest( $user, $request );
-        }
-        // Unhandled status code
-        else
-        {
-            return null;
-        }
     }
 
 
@@ -155,6 +103,103 @@ class VstsApiService
         $request = new Request( 'POST', 'https://' . $vstsAccount -> name . '.visualstudio.com/DefaultCollection/_apis/hooks/subscriptions?api-version=1.0', [ 'Content-Type' => 'application/json' ], $body );
 
         $this -> sendAuthRequest( $user, $request );
+    }
+
+
+    public function storeCommit( \Illuminate\Http\Request $request )
+    {
+        // Not a git push
+        if ( !$request -> eventType == 'git.push' )
+        {
+            return;
+        }
+
+        $repositoryUrl = $request -> resource[ 'repository' ][ 'url' ];
+        $repositoryId = $request -> resource[ 'repository' ][ 'project' ][ 'id' ];
+
+        // No registered project id is matching the git push project id
+        if ( is_null( $this -> vstsProjectRepo -> find( $repositoryId ) ) )
+        {
+            return;
+        }
+
+        $commits = $request -> resource[ 'commits' ];
+        $date = $request -> resource[ 'date' ];
+
+        foreach ( $commits as $commit )
+        {
+            // Commit is already stored
+            if ( !is_null( $this -> commitRepo -> find( $commit[ 'commitId' ] ) ) )
+            {
+                continue;
+            }
+
+            // Store new commit
+            $this -> commitRepo -> create([
+                'commit_id' => $commit[ 'commitId' ],
+                'project_id' => $repositoryId,
+                'comment' => $commit[ 'comment' ],
+                'date' => $date,
+                'details_url' => $repositoryUrl . '/commits/' . $commit[ 'commitId' ]
+            ]);
+        }
+    }
+
+
+    private function sendTokenRequest( $user, $grantType, $assertion )
+    {
+        $response = $this -> client -> request( 'POST', 'https://app.vssps.visualstudio.com/oauth2/token', [
+            'form_params' => [
+                'client_assertion_type' => 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+                'client_assertion' => env( 'VSTS_APP_SECRET' ),
+                'grant_type' => $grantType,
+                'assertion' => $assertion,
+                'redirect_uri' => env( 'VSTS_REDIRECT_URL' )
+            ]
+        ] );
+
+        $json = json_decode( $response -> getBody(), true );
+
+        $user -> vsts_access_token = $json[ 'access_token' ];
+        $user -> vsts_refresh_token = $json[ 'refresh_token' ];
+        $user -> save();
+
+        return $user;
+    }
+
+
+    private function refreshToken( $user )
+    {
+        return $this -> sendTokenRequest( $user, 'refresh_token', $user -> vsts_refresh_token );
+    }
+
+
+    private function sendAuthRequest( User $user, Request $request )
+    {
+        if ( is_null( $token = $user -> vsts_access_token ) )
+        {
+            return null;
+        }
+
+        $request = $request -> withHeader( 'Authorization', 'Bearer ' . $token );
+        $response = $this -> client -> send( $request );
+
+        // Request successful
+        if ( $response -> getStatusCode() == 200 )
+        {
+            return json_decode( $response -> getBody(), true );
+        }
+        // Token expired, hence refresh token
+        else if ( $response -> getStatusCode() == 203 )
+        {
+            $user = $this -> refreshToken( $user );
+            return $this -> sendAuthRequest( $user, $request );
+        }
+        // Unhandled status code
+        else
+        {
+            return null;
+        }
     }
 
 

@@ -8,30 +8,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\VSTS\VstsApiService;
 use Illuminate\Http\Request;
-use App\Models\Commit;
 
 
 class CommitController extends Controller
 {
-    public function store( Request $request )
+    public function store( Request $request, VstsApiService $vstsApiService )
     {
-        if ( !$request -> eventType == 'git.push' )
-        {
-            return;
-        }
-
-        $repository = $request -> resource[ 'repository' ][ 'url' ];
-        $commitsMetadata = $request -> resource[ 'commits' ];
-
-        foreach ( $commitsMetadata as $metadata )
-        {
-            $commit = new Commit();
-            $commit -> commit_id = $metadata[ 'commitId' ];
-            $commit -> comment = $metadata[ 'comment' ];
-            $commit -> repository_url = $repository;
-            $commit -> save();
-        }
-
+        $vstsApiService -> storeCommit( $request );
     }
 }

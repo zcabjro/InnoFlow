@@ -18,7 +18,7 @@ interface UserRepoInterface
     /**
      * Logs in a user.
      *
-     * @param array $input
+     * @param array $data
      * @return string
      */
     public function login( $data );
@@ -27,7 +27,7 @@ interface UserRepoInterface
     /**
      * Create a new user.
      *
-     * @param array $input
+     * @param array $data
      * @return User
      */
     public function create( array $data );
@@ -44,7 +44,7 @@ interface UserRepoInterface
      * Update a user's information.
      *
      * @param $id
-     * @param array $input
+     * @param array $data
      * @return void
      */
     public function update( $id, array $data );
