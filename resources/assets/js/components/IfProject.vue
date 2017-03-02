@@ -1,22 +1,53 @@
 <template>
-  <div>
-    <h1>Details for Project {{id}}</h1>
-    <div v-if="details">
-      <p>Name: {{details.name}}</p>
-      <p>Owned: {{details.isOwner ? true : false}}</p>
-      <p v-if="details.classId">Class ID: {{details.classId}}</p>
-      <p v-if="details.description">Description: {{details.description}}</p>
-      <p>members: {{details.members}}</p>
+  <div class="row project">
+    <div v-if="details" class="col-md-8">
+      <h1>{{details.name}}</h1>
+      <a v-if="className" href="#" v-on:click="selectClass($event)">{{className}}</a>
+      <p v-if="details.description">{{details.description}}</p>      
+      <div id="members">
+        <h2>Members</h2>
+        <if-card v-for="member in details.members">
+          <span class="glyphicon glyphicon-user"></span>
+          <b>{{member.email}}</b>
+        </if-card>
+      </div>
+    </div>
+
+    <div v-if="metrics" class="col-md-4">
+      <div id="project-metrics">
+        <h2>Project Data</h2>
+        <if-card>
+          <span class="h3">Code Review</span><span class="pull-right">(1st /13)</span>
+          <div class="col-md-12" style="height: 80%;">
+            <canvas id="codeReviewChart" width="200" height="200"></canvas>
+          </div>
+        </if-card>
+        <if-card>
+          <span class="h3">Feedback</span><span class="pull-right">(2nd /13)</span>
+          <div class="col-md-12" style="height: 80%;">
+            <canvas id="feedbackChart" width="200" height="200"></canvas>
+          </div>
+        </if-card>
+        <if-card>
+          <span class="h3">Commit Activity</span><span class="pull-right">(1st /13)</span>
+          <div class="col-md-12" style="height: 80%;">
+            <canvas id="commitActivityChart" width="200" height="200"></canvas>
+          </div>
+        </if-card>
+      </div>      
     </div>
   </div>
 </template>
 
 <script>
+  import IfCard from './IfCard.vue'
 
   function defaultProjectData() {
     return {
       id: '',
-      details: null
+      details: null,
+      className: '',
+      metrics: []
     }
   }
 
@@ -24,34 +55,91 @@
     // Debug name and html tag of this component
     name: 'if-project',
 
+    components: {
+      IfCard
+    },
+
     data() {
       return defaultProjectData();
     },
     
     beforeRouteEnter(to, from, next) {
-      next(project => {
-        project.id = to.params.id;
-        project.loadDetails();
+      next(projectComponent => {
+        projectComponent.init(to.params.id);
       });
     },
 
     beforeRouteUpdate (to, from, next) {
       if (to.params.id !== this.id) {
-        this.id = to.params.id;
-        this.loadDetails();
+        this.init(to.params.id);
       }
-
       next();
     },
 
     methods: {
-      
+      init(id) {
+        this.id = id;
+        this.loadDetails();        
+        this.loadMetrics();
+      },
+
+      loadMetrics() {
+        let codeReviewChartId = 'codeReviewChart';
+        var myChart = new Chart(codeReviewChartId, {
+          type: 'bar',
+          data: {
+            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+          },
+          options: {
+            maintainAspectRatio: false,
+            scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+            }
+          }
+        });
+      },
+
       loadDetails() {
         if (this.id) {
           axios.get('api/projects/' + this.id)
             .then(res => {
-              console.log(res);
               this.details = res.data;
+              if (this.details && this.details.classId) {
+                axios.get('api/classes/' + this.details.classId)
+                  .then(classRes => {
+                    this.className = classRes.data.code;
+                    console.log(this.className);
+                  })
+                  .catch(classError => {
+                    console.log(classError);
+                    console.log('Failed to load class details');
+                  });
+              }
             })
             .catch(error => {
               console.log(error);
@@ -66,6 +154,11 @@
 
       resetData() {
         Object.assign(this.$data, defaultProjectData());
+      },
+
+      selectClass(e) {
+        e.preventDefault();
+        this.$router.push('/dashboard/classes/' + this.details.classId);
       }
     }
 
@@ -73,4 +166,19 @@
 </script>
 
 <style scoped>
+  #project-metrics {
+    height: 90vh;
+    overflow-y: auto;
+    overflow-x: auto;    
+  }
+
+  .project .if-card {
+    margin-right: 1vw;
+    margin-bottom: 1vw;
+  }
+  #project-metrics > *.if-card {
+    width: 80%;
+    height: 33vh;
+    margin-right: 0;
+  }
 </style>

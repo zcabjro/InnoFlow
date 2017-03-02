@@ -6,7 +6,8 @@
     <!-- Item children -->
     <ul class="child-list" v-show="active">
       <li class="child" v-for="child in options.children"><a href="#" v-on:click="load(child, $event)">{{getChildName(child)}}</a></li>
-      <li class="child"><a href="#" v-on:click="add($event)">{{options.addText}}</router-link></li>
+      <li class="child"><a href="#" v-on:click="add($event)">{{options.addText}}</router-link></li>      
+      <slot></slot>
     </ul>
   </li>
 </template>
@@ -39,7 +40,6 @@
         if (this.options.selectUrl) {
           let id = item.id ? item.id : '';
           let url = this.options.selectUrl.endsWith('/') ? this.options.selectUrl : this.options.selectUrl + '/';
-          console.log('link to: ' + url + id);
           this.$router.push(url + id);
         }        
       },

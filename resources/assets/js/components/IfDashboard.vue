@@ -10,7 +10,9 @@
       <div v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
         <ul class="sidebar-nav">
           <if-item :options="menu.innovations" :active="menuOpen"></if-item>
-          <if-item :options="menu.projects" :active="menuOpen"></if-item>
+          <if-item :options="menu.projects" :active="menuOpen">
+            <a href="#" v-on:click="refreshProjects($event)">[+] Refresh</a>  
+          </if-item>          
           <if-item :options="menu.classes" :active="menuOpen"></if-item>
         </ul>
       </div>
@@ -178,9 +180,14 @@
           });
       },
 
+      refreshProjects(e) {
+        e.preventDefault();
+        this.loadProjects(true);
+      },
+
       // Request projects
-      loadProjects() {
-        axios.get('/api/projects')
+      loadProjects(refresh) {
+        axios.get('/api/projects?refresh=' + (refresh ? 1 : 0))
           .then((res) => {
             // Update project list
             this.menu.projects.children = res.data ? res.data : [];
