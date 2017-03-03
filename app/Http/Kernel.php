@@ -54,6 +54,8 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'jwt-auth' => \App\Http\Middleware\JWTTokenAuth::class,
-        'vsts-auth' => \App\Http\Middleware\VSTSTokenAuth::class
+        'vsts-auth' => \App\Http\Middleware\VSTSTokenAuth::class,
+        'project-auth' => \App\Http\Middleware\ProjectAuth::class,
+        'module-auth' => \App\Http\Middleware\ModuleAuth::class,
     ];
 }
