@@ -2,24 +2,23 @@
 /**
  * Created by PhpStorm.
  * User: andreas
- * Date: 18/01/2017
- * Time: 14:07
+ * Date: 03/03/2017
+ * Time: 18:56
  */
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\Models\User;
+use League\Fractal\TransformerAbstract;
 
 
-class UserTransformer extends TransformerAbstract
+class LightUserTransformer extends TransformerAbstract
 {
     public function transform( User $user )
     {
         return [
 
-            'userId' => $user -> user_id,
-            'email' => $user -> email,
+            'id' => $user -> user_id,
             'username' => $user -> username
 
         ];

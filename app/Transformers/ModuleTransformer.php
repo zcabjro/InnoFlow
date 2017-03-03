@@ -15,15 +15,6 @@ use League\Fractal\TransformerAbstract;
 
 class ModuleTransformer extends TransformerAbstract
 {
-    protected $availableIncludes = [
-        'admins', 'projects'
-    ];
-
-    protected $defaultIncludes = [
-
-    ];
-
-
     public function transform( Module $module )
     {
         return [

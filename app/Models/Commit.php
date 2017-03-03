@@ -18,6 +18,20 @@ class Commit extends Model
      * @var array
      */
     protected $fillable = [
-        'commit_id', 'project_id', 'comment', 'date', 'details_url'
+        'commit_id',
+        'project_id',
+        'comment',
+        'date',
+        'details_url',
+        'profile_id',
+        'web_url',
+        'adds_counter',
+        'edits_counter',
+        'is_complete'
     ];
+
+    public function commiter()
+    {
+        return User::where( 'vsts_profile_id', $this -> profile_id ) -> first();
+    }
 }

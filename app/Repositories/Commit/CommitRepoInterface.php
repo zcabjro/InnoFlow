@@ -15,10 +15,10 @@ interface CommitRepoInterface
     /**
      * Creates a new commit.
      *
-     * @param array $input
+     * @param array $data
      * @return Commit
      */
-    public function create( array $input );
+    public function create( array $data );
 
     /**
      * Finds a commit by id.

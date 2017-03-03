@@ -146,9 +146,35 @@ class VstsApiService
     }
 
 
-    public function completeCommit()
+    public function completeCommit( User $user, Commit $commit )
     {
+        // Commit already has all its metadata stored
+        if ( $commit -> is_complete )
+        {
+            return $commit;
+        }
 
+        // Stores commit updates
+        $updates = [];
+
+        // Get commit details
+        $request = new Request( 'GET', $commit -> details_url );
+        $json = $this -> sendAuthRequest( $user, $request );
+
+        $updates[ 'profile_id' ] = $json[ 'push' ][ 'pushedBy' ][ 'id' ];
+        $updates[ 'web_url' ] = $json[ '_links' ][ 'web' ][ 'href' ];
+        $changes_url = $json[ '_links' ][ 'changes' ][ 'href' ];
+
+        // Get commit changes
+        $request = new Request( 'GET', $changes_url );
+        $json = $this -> sendAuthRequest( $user, $request );
+        $updates[ 'adds_counter' ] = key_exists( 'Add', $json[ 'changeCounts' ] ) ? $json[ 'changeCounts' ][ 'Add' ] : 0;
+        $updates[ 'edits_counter' ] = key_exists( 'Edit', $json[ 'changeCounts' ] ) ? $json[ 'changeCounts' ][ 'Edit' ] : 0;
+
+        // Mark commit as complete
+        $updates[ 'is_complete' ] = true;
+
+        return $commit -> update( $updates );
     }
 
 
