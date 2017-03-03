@@ -505,6 +505,7 @@ Includes both classes created as well as those where user was assinged as admin.
 | Code | Notes |
 | -----|-------|
 | 200 | Successful fetch |
+| 401 | User is not member of the project |
 | 404 | Invalid projectId |
 
 **Sample Request**
@@ -550,7 +551,7 @@ Includes both classes created as well as those where user was assinged as admin.
 | -----|-------|
 | 200 | Successful enrolment |
 | 400 | <ul><li>The project is already enrolled </li><li>The user is not the owner of the project</li></ul> |
-| 401 | code or key are incorrect and do not match any registered class |
+| 401 | <ul><li>code or key are incorrect and do not match any registered class</li><li>User is not member of the project</li></ul> |
 
 **Sample Request**
 
@@ -582,6 +583,7 @@ Includes both classes created as well as those where user was assinged as admin.
 | Code | Notes |
 | -----|-------|
 | 200 | Successful fetch |
+| 401 | User is not member of the project |
 | 404 | Invalid projectId |
 
 **Sample Request**
@@ -622,6 +624,7 @@ Includes both classes created as well as those where user was assinged as admin.
 | Code | Notes |
 | -----|-------|
 | 200 | Successful fetch |
+| 401 | User is not member of the project |
 | 404 | Invalid projectId or commitId |
 
 **Sample Request**
