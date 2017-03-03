@@ -114,11 +114,18 @@ class VstsApiService
             return;
         }
 
+        // Get repository data
         $repositoryUrl = $request -> resource[ 'repository' ][ 'url' ];
         $repositoryId = $request -> resource[ 'repository' ][ 'project' ][ 'id' ];
 
         // No registered project id is matching the git push project id
-        if ( is_null( $this -> vstsProjectRepo -> find( $repositoryId ) ) )
+        if ( is_null( $vstsProject = $this -> vstsProjectRepo -> find( $repositoryId ) ) )
+        {
+            return;
+        }
+
+        // Project has no owner
+        if ( is_null( $owner = $vstsProject -> account() -> owner() ) )
         {
             return;
         }
@@ -134,47 +141,28 @@ class VstsApiService
                 continue;
             }
 
+            // Stores commit details
+            $data = [];
+
+            $data[ 'commit_id' ] = $commit[ 'commitId' ];
+            $data[ 'project_id' ] = $repositoryId;
+            $data[ 'comment' ] = $commit[ 'comment' ];
+            $data[ 'date' ] = $date;
+
+            $request = new Request( 'GET', $repositoryUrl . '/commits/' . $commit[ 'commitId' ] );
+            $json = $this -> sendAuthRequest( $owner, $request );
+            $data[ 'profile_id' ] = $json[ 'push' ][ 'pushedBy' ][ 'id' ];
+            $data[ 'web_url' ] = $json[ '_links' ][ 'web' ][ 'href' ];
+
+            $changes_url = $json[ '_links' ][ 'changes' ][ 'href' ];
+            $request = new Request( 'GET', $changes_url );
+            $json = $this -> sendAuthRequest( $owner, $request );
+            $data[ 'adds_counter' ] = key_exists( 'Add', $json[ 'changeCounts' ] ) ? $json[ 'changeCounts' ][ 'Add' ] : 0;
+            $data[ 'edits_counter' ] = key_exists( 'Edit', $json[ 'changeCounts' ] ) ? $json[ 'changeCounts' ][ 'Edit' ] : 0;
+
             // Store new commit
-            $this -> commitRepo -> create([
-                'commit_id' => $commit[ 'commitId' ],
-                'project_id' => $repositoryId,
-                'comment' => $commit[ 'comment' ],
-                'date' => $date,
-                'details_url' => $repositoryUrl . '/commits/' . $commit[ 'commitId' ]
-            ]);
+            $this -> commitRepo -> create( $data );
         }
-    }
-
-
-    public function completeCommit( User $user, Commit $commit )
-    {
-        // Commit already has all its metadata stored
-        if ( $commit -> is_complete )
-        {
-            return $commit;
-        }
-
-        // Stores commit updates
-        $updates = [];
-
-        // Get commit details
-        $request = new Request( 'GET', $commit -> details_url );
-        $json = $this -> sendAuthRequest( $user, $request );
-
-        $updates[ 'profile_id' ] = $json[ 'push' ][ 'pushedBy' ][ 'id' ];
-        $updates[ 'web_url' ] = $json[ '_links' ][ 'web' ][ 'href' ];
-        $changes_url = $json[ '_links' ][ 'changes' ][ 'href' ];
-
-        // Get commit changes
-        $request = new Request( 'GET', $changes_url );
-        $json = $this -> sendAuthRequest( $user, $request );
-        $updates[ 'adds_counter' ] = key_exists( 'Add', $json[ 'changeCounts' ] ) ? $json[ 'changeCounts' ][ 'Add' ] : 0;
-        $updates[ 'edits_counter' ] = key_exists( 'Edit', $json[ 'changeCounts' ] ) ? $json[ 'changeCounts' ][ 'Edit' ] : 0;
-
-        // Mark commit as complete
-        $updates[ 'is_complete' ] = true;
-
-        return $commit -> update( $updates );
     }
 
 

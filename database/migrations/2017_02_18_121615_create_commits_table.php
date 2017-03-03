@@ -20,12 +20,10 @@ class CreateCommitsTable extends Migration
             $table -> string( 'project_id' );
             $table -> string( 'comment' );
             $table -> dateTimeTz( 'date' );
-            $table -> string( 'details_url' );
-            $table -> string( 'profile_id' ) -> nullable();
+            $table -> string( 'profile_id' );
             $table -> integer( 'adds_counter' ) ->default( 0 );
             $table -> integer( 'edits_counter' ) ->default( 0 );
-            $table -> string( 'web_url' ) -> nullable();
-            $table -> boolean( 'is_complete' ) ->default( false );
+            $table -> string( 'web_url' );
 
             $table -> primary( [ 'commit_id' ] );
 

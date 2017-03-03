@@ -11,8 +11,6 @@ namespace App\Http\Controllers\Project;
 use App\Http\Controllers\Controller;
 use App\Models\Commit;
 use App\Models\VstsProject;
-use App\Services\Common\Helper;
-use App\Services\Vsts\VstsApiService;
 use App\Transformers\CommitTransformer;
 use App\Transformers\VstsProjectTransformer;
 
@@ -25,11 +23,8 @@ class CommitController extends Controller
     }
 
 
-    public function show( VstsProject $vstsProject, Commit $commit, VstsApiService $vstsApiService )
+    public function show( VstsProject $vstsProject, Commit $commit )
     {
-        $user = Helper::currentUser();
-        $commit = $vstsApiService -> completeCommit( $user, $commit );
-
         return fractal() -> item( $commit, new CommitTransformer );
     }
 }
