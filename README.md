@@ -505,7 +505,7 @@ Includes both classes created as well as those where user was assinged as admin.
 | Code | Notes |
 | -----|-------|
 | 200 | Successful fetch |
-| 404 | Invalid project id |
+| 404 | Invalid projectId |
 
 **Sample Request**
 
@@ -560,6 +560,88 @@ Includes both classes created as well as those where user was assinged as admin.
 {
   "code" : "COMPGS02",
   "key" : "AwesomeClass2017"
+}
+```
+<br>
+
+
+
+### Get project commits:
+
+**Route**
+
+`GET` api/projects/{projectId}/commits
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| projectId   | string       | A valid project id |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful fetch |
+| 404 | Invalid projectId |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/commits
+
+```json
+{
+  "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
+  "name": "Freshly",
+  "commits": [
+    {
+      "id": "d85d3dbf724127588d39e6f030ac6bd5e4cfa09f",
+      "comment": "updated text2.txt",
+      "date": "2017-03-02 20:58:34"
+    }
+  ]
+}
+```
+<br>
+
+
+
+### Get a project commit:
+
+**Route**
+
+`GET` api/projects/{projectId}/commits/{commitId}
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| projectId   | string       | A valid project id |
+| commitId    | string       | A valid commit id  |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful fetch |
+| 404 | Invalid projectId or commitId |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/commits/d85d3dbf724127588d39e6f030ac6bd5e4cfa09f
+
+```json
+{
+  "id": "d85d3dbf724127588d39e6f030ac6bd5e4cfa09f",
+  "comment": "updated text2.txt",
+  "date": "2017-03-02 20:58:34",
+  "commit_url": "https://andreas.visualstudio.com/_git/Freshly/commit/d85d3dbf724127588d39e6f030ac6bd5e4cfa09f",
+  "changes": {
+    "adds": 0,
+    "edits": 1
+  },
+  "commiter": {
+    "id": 101,
+    "username": "SickAustrian"
+  }
 }
 ```
 <br>
