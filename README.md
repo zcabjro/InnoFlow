@@ -768,7 +768,7 @@ Includes both classes created as well as those where user was assinged as admin.
 | Parameter   | Type         | Notes     |
 | ------------|--------------|-----------|
 | projectId   | string       | A valid project id |
-| codeReviewId   | Int       | A valid code review id |
+| codeReviewId   | int       | A valid code review id |
 
  **Response Codes**
  
@@ -836,6 +836,126 @@ Includes both classes created as well as those where user was assinged as admin.
       }
     }
   ]
+}
+```
+<br>
+
+
+
+### Create a comment
+
+**Route**
+
+`POST` api/projects/{projectId}/codereviews/{codeReviewId}/comments
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| projectId   | string       | A valid project id |
+| codeReviewId   | int       | A valid code review id |
+| message   | string         | A useful comment (min 20 chars) |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful creation |
+| 401 | User is not a member of the project |
+| 404 | Invalid projectId or codeReviewId parameter |
+| 422  | <ul><li>message parameter is missing</li><li>message parameter has incorrect format</li></ul> |
+
+**Sample Request**
+
+`POST` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/codereviews/1/comments?message=This%20is%20a%20comment.%20Always%20make%20sure%20a%20comment%20is%20useful.
+
+<br>
+
+
+
+### Get a list of comments
+
+**Route**
+
+`GET` api/projects/{projectId}/codereviews/{codeReviewId}/comments
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| projectId   | string       | A valid project id |
+| codeReviewId   | int       | A valid code review id |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful creation |
+| 401 | User is not a member of the project |
+| 404 | Invalid projectId or codeReviewId parameter |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/codereviews/1/comments
+
+```json
+[
+  {
+    "id": 4,
+    "date": "2017-03-04 18:13:18",
+    "text": "This is a comment. Always make sure a comment is useful.",
+    "owner": {
+      "id": 101,
+      "username": "SickAustrian"
+    }
+  },
+  {
+    "id": 3,
+    "date": "2017-03-04 17:26:39",
+    "text": "This is a comment. Always make sure a comment is useful.",
+    "owner": {
+      "id": 3,
+      "username": "JackRoper"
+    }
+  },
+]
+```
+<br>
+
+
+
+### Get a comment
+
+**Route**
+
+`GET` api/projects/{projectId}/codereviews/{codeReviewId}/comments/{commentId}
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| projectId   | string       | A valid project id |
+| codeReviewId   | int       | A valid code review id |
+| commentId   | int          | A valid comment id |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful creation |
+| 401 | User is not a member of the project |
+| 404 | Invalid projectId, codeReviewId or commentId parameter |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/codereviews/1/comments/4
+
+```json
+{
+  "id": 4,
+  "date": "2017-03-04 18:13:18",
+  "text": "This is a comment. Always make sure a comment is useful.",
+  "owner": {
+    "id": 101,
+    "username": "SickAustrian"
+  }
 }
 ```
 <br>
