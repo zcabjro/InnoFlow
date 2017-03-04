@@ -99,7 +99,9 @@ return [
 
     'user' => 'The :attribute must be a valid user id.',
     'int_list' => 'The :attribute must be a list of integers.',
-    'base64_encoded' => 'The :attribute must be base_64 encoded',
+    'commit_list' => 'The :attribute must be a list of valid commit ids.',
+    'base64_encoded' => 'The :attribute must be base_64 encoded.',
+    'user_id' => 'The :attribute must be a valid user id.',
 
     'custom' => [
         'attribute-name' => [

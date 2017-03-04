@@ -34,7 +34,9 @@ class AppServiceProvider extends ServiceProvider
             'Innovation',
             'VstsAccount',
             'VstsProject',
-            'Commit'
+            'Commit',
+            'CodeReview',
+            'Comment'
         );
 
         foreach( $models as $model )

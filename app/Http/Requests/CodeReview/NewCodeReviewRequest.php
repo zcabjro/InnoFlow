@@ -9,7 +9,6 @@
 namespace App\Http\Requests\CodeReview;
 
 use App\Http\Requests\ApiRequest;
-use App\Models\Commit;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -35,7 +34,7 @@ class NewCodeReviewRequest extends ApiRequest
     {
         return [
 
-            'commitIds' => 'required|string',
+            'commitIds' => 'required|commit_list',
 
         ];
     }
@@ -52,20 +51,10 @@ class NewCodeReviewRequest extends ApiRequest
 
         $validator -> after( function() use ( $validator )
         {
-            $commit_ids = explode( ',', $this -> get( 'commitIds' ) );
-            dd( $commit_ids );
-            $filtered = [];
-
-            foreach ( $commit_ids as $commit_id )
-            {
-                if ( !is_null( Commit::find( $commit_id ) ) )
-                {
-                    $filtered[] = $commit_id;
-                }
-            }
+            $commit_ids = array_unique( explode( ',', $this -> get( 'commitIds' ) ) );
 
             $all = $this -> all();
-            $all[ 'commitIds' ] = $filtered;
+            $all[ 'commitIds' ] = $commit_ids;
             $this -> replace( $all );
         });
 

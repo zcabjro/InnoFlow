@@ -18,7 +18,7 @@ class CreateAdminsTable extends Migration
             $table -> integer( 'module_id' ) -> unsigned();
             $table -> boolean( 'is_owner' );
 
-            $table -> primary( array( 'user_id', 'module_id' ) );
+            $table -> primary( [ 'user_id', 'module_id' ] );
 
             $table -> foreign( 'user_id' )
                 -> references( 'user_id' )

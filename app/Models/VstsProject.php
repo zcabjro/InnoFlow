@@ -40,12 +40,23 @@ class VstsProject extends Model
 
 
     /**
-     * Gets all the commits of the project.
+     * Gets the commits of the project.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function commits()
     {
         return $this -> hasMany( 'App\Models\Commit', 'project_id', 'project_id' ) -> orderBy( 'date', 'DESC' );
+    }
+
+
+    /**
+     * Gets the code review discussions of the project.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function codeReviews()
+    {
+        return $this -> hasMany( 'App\Models\CodeReview', 'project_id', 'project_id' ) -> orderBy( 'created_at', 'DESC' );
     }
 }

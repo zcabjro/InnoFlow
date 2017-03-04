@@ -51,7 +51,12 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
         Route::get( 'projects/{vstsProject}/commits/{commit}', 'Project\CommitController@show' );
 
         Route::post( 'projects/{vstsProject}/codereviews', 'Project\CodeReviewController@store' );
-        Route::post( 'projects/{vstsProject}/codereviews', 'Project\CodeReviewController@index' );
+        Route::get( 'projects/{vstsProject}/codereviews', 'Project\CodeReviewController@index' );
+        Route::get( 'projects/{vstsProject}/codereviews/{codeReview}', 'Project\CodeReviewController@show' );
+
+        Route::post( 'projects/{vstsProject}/codereviews/{codeReview}/comments', 'Project\CodeReview\CommentController@store' );
+        Route::get( 'projects/{vstsProject}/codereviews/{codeReview}/comments', 'Project\CodeReview\CommentController@index' );
+        Route::get( 'projects/{vstsProject}/codereviews/{codeReview}/comments/{comment}', 'Project\CodeReview\CommentController@show' );
     });
 
 });

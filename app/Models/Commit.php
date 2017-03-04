@@ -30,8 +30,20 @@ class Commit extends Model
         'deletes_counter'
     ];
 
+
     public function commiter()
     {
         return User::where( 'vsts_profile_id', $this -> profile_id ) -> first();
+    }
+
+
+    /**
+     * Gets the code reviews the commit is associated with.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function codeReviews()
+    {
+        return $this -> belongsToMany( 'App\Models\CodeReview', 'code_review_commits', 'commit_id', 'code_review_id' );
     }
 }
