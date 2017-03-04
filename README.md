@@ -595,11 +595,37 @@ Includes both classes created as well as those where user was assinged as admin.
 {
   "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
   "name": "Freshly",
+  "classId": 1,
   "commits": [
     {
-      "id": "d85d3dbf724127588d39e6f030ac6bd5e4cfa09f",
-      "comment": "updated text2.txt",
-      "date": "2017-03-02 20:58:34"
+      "id": "3f1d3a2bbbc31424f0f758858bf51a11e22a718f",
+      "comment": "add text2.txt",
+      "date": "2017-03-04 15:21:29+00",
+      "commit_url": "https://andreas.visualstudio.com/_git/ProjectA/commit/3e1d3a2bbbc31424f0f758858bf51a11e22a718e",
+      "changes": {
+        "adds": 1,
+        "edits": 0,
+        "deletes": 0
+      },
+      "commiter": {
+        "id": 102,
+        "username": "SickAustrian"
+      }
+    },
+    {
+      "id": "ff95c78b8d22cd321ad8fb31ef5ad2dd18e54b82",
+      "comment": "delete text2.txt",
+      "date": "2017-03-04 15:20:44+00",
+      "commit_url": "https://andreas.visualstudio.com/_git/ProjectA/commit/fe95c78b8d22cd321ad8fb31ef5ad2dd18e54b83",
+      "changes": {
+        "adds": 0,
+        "edits": 0,
+        "deletes": 1
+      },
+      "commiter": {
+        "id": 102,
+        "username": "SickAustrian"
+      }
     }
   ]
 }
@@ -630,20 +656,21 @@ Includes both classes created as well as those where user was assinged as admin.
 
 **Sample Request**
 
-`GET` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/commits/d85d3dbf724127588d39e6f030ac6bd5e4cfa09f
+`GET` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/commits/3f1d3a2bbbc31424f0f758858bf51a11e22a718f
 
 ```json
 {
-  "id": "d85d3dbf724127588d39e6f030ac6bd5e4cfa09f",
-  "comment": "updated text2.txt",
-  "date": "2017-03-02 20:58:34",
-  "commit_url": "https://andreas.visualstudio.com/_git/Freshly/commit/d85d3dbf724127588d39e6f030ac6bd5e4cfa09f",
+  "id": "3f1d3a2bbbc31424f0f758858bf51a11e22a718f",
+  "comment": "add text2.txt",
+  "date": "2017-03-04 15:21:29+00",
+  "commit_url": "https://andreas.visualstudio.com/_git/ProjectA/commit/3e1d3a2bbbc31424f0f758858bf51a11e22a718e",
   "changes": {
-    "adds": 0,
-    "edits": 1
+    "adds": 1,
+    "edits": 0,
+    "deletes": 0
   },
   "commiter": {
-    "id": 101,
+    "id": 102,
     "username": "SickAustrian"
   }
 }
