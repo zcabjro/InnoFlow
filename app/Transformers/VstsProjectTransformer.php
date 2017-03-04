@@ -76,6 +76,6 @@ class VstsProjectTransformer extends TransformerAbstract
     public function includeCommits( VstsProject $project )
     {
         $commits = $project -> commits;
-        return $this -> collection( $commits, new LightCommitTransformer );
+        return $this -> collection( $commits, new CommitTransformer );
     }
 }

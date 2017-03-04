@@ -31,6 +31,7 @@ class CommitTransformer extends TransformerAbstract
                 'adds' => $commit -> adds_counter,
                 'edits' => $commit -> edits_counter
             ]
+
         ];
     }
 

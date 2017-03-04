@@ -45,10 +45,13 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
     Route::group( [ 'middleware' => 'project-auth' ], function () {
 
         Route::get( 'projects/{vstsProject}', 'ProjectController@show' );
-        Route::get( 'projects/{vstsProject}/commits', 'Project\CommitController@index' );
         Route::post( 'projects/{vstsProject}/enrol', 'ProjectController@enrol' ) -> middleware( 'vsts-auth' );
+
+        Route::get( 'projects/{vstsProject}/commits', 'Project\CommitController@index' );
         Route::get( 'projects/{vstsProject}/commits/{commit}', 'Project\CommitController@show' );
 
+        Route::post( 'projects/{vstsProject}/codereviews', 'Project\CodeReviewController@store' );
+        Route::post( 'projects/{vstsProject}/codereviews', 'Project\CodeReviewController@index' );
     });
 
 });
