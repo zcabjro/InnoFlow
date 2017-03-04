@@ -711,7 +711,7 @@ Includes both classes created as well as those where user was assinged as admin.
 
 
 
-### Get a list of code review discussions:
+### Get a list of code review discussion:
 
 **Route**
 
