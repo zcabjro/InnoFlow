@@ -196,7 +196,7 @@ or
 
 
 
-### Get innovations:
+### Get a list of innovations:
 
 **Route**
 
@@ -272,7 +272,7 @@ or
 
 
 
-### Get classes:
+### Get a list of classes:
 
 Includes both classes created as well as those where user was assinged as admin.
 
@@ -452,7 +452,7 @@ Includes both classes created as well as those where user was assinged as admin.
 
 ## 4. Projects
 
-### Get projects:
+### Get a list of projects:
 
 **Route**
 
@@ -507,7 +507,7 @@ Includes both classes created as well as those where user was assinged as admin.
 | -----|-------|
 | 200 | Successful fetch |
 | 401 | User is not a member of the project |
-| 404 | Invalid projectId |
+| 404 | Invalid projectId parameter |
 
 **Sample Request**
 
@@ -568,7 +568,8 @@ Includes both classes created as well as those where user was assinged as admin.
 
 
 
-### Get project commits:
+## 5. Commits
+### Get a list of commits:
 
 **Route**
 
@@ -585,7 +586,7 @@ Includes both classes created as well as those where user was assinged as admin.
 | -----|-------|
 | 200 | Successful fetch |
 | 401 | User is not a member of the project |
-| 404 | Invalid projectId |
+| 404 | Invalid projectId parameter |
 
 **Sample Request**
 
@@ -634,7 +635,7 @@ Includes both classes created as well as those where user was assinged as admin.
 
 
 
-### Get a project commit:
+### Get a commit:
 
 **Route**
 
@@ -652,7 +653,7 @@ Includes both classes created as well as those where user was assinged as admin.
 | -----|-------|
 | 200 | Successful fetch |
 | 401 | User is not a member of the project |
-| 404 | Invalid projectId or commitId |
+| 404 | Invalid projectId or commitId parameter |
 
 **Sample Request**
 
@@ -673,6 +674,168 @@ Includes both classes created as well as those where user was assinged as admin.
     "id": 102,
     "username": "SickAustrian"
   }
+}
+```
+<br>
+
+
+
+## 6. Code review
+
+### Create a code review discussion:
+
+**Route**
+
+`POST` api/projects/{projectId}/codereviews
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| projectId   | string       | A valid project id |
+| commitIds   | list of strings  | A list of valid commit ids |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful creation |
+| 401 | User is not a member of the project |
+| 404 | Invalid projectId parameter |
+| 422  | <ul><li>commitIds parameter is missing</li><li>commitIds parameter has incorrect format</li></ul> |
+
+**Sample Request**
+
+`POST` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/codereviews?commitIds=e93a59aaa7d627174aa78c686cd13eaaa9e7e7d5,ffff59aaa7d627174aa78c686cd13eaaa9e7e7d5
+
+<br>
+
+
+
+### Get a list of code review discussions:
+
+**Route**
+
+`GET` api/projects/{projectId}/codereviews
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| projectId   | string       | A valid project id |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful creation |
+| 401 | User is not a member of the project |
+| 404 | Invalid projectId parameter |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/codereviews
+
+```json
+[
+  {
+    "id": 2,
+    "date": "2017-03-04 16:34:17",
+    "owner": {
+      "id": 101,
+      "username": "SickAustrian"
+    }
+  },
+  {
+    "id": 1,
+    "date": "2017-03-04 16:33:38",
+    "owner": {
+      "id": 101,
+      "username": "SickAustrian"
+    }
+  }
+]
+```
+<br>
+
+
+
+### Get a code review discussions:
+
+**Route**
+
+`GET` api/projects/{projectId}/codereviews/{codeReviewId}
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| projectId   | string       | A valid project id |
+| codeReviewId   | Int       | A valid code review id |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200 | Successful creation |
+| 401 | User is not a member of the project |
+| 404 | Invalid projectId or codeReviewId parameter |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/codereviews/1
+
+```json
+{
+  "id": 1,
+  "date": "2017-03-04 16:33:38",
+  "owner": {
+    "id": 101,
+    "username": "SickAustrian"
+  },
+  "commits": [
+    {
+      "id": "e93a59aaa7d627174aa78c686cd13eaaa9e7e7d5",
+      "comment": "refresh folder",
+      "date": "2017-03-04 14:44:25",
+      "commit_url": "https://andreasrauter.visualstudio.com/_git/Freshly/commit/e93a59aaa7d627174aa78c686cd13eaaa9e7e7d5",
+      "changes": {
+        "adds": 0,
+        "edits": 0,
+        "deletes": 0
+      },
+      "commiter": {
+        "id": 101,
+        "username": "SickAustrian"
+      }
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "date": "2017-03-04 17:25:44",
+      "text": "This is a comment by JackRoper",
+      "owner": {
+        "id": 3,
+        "username": "JackRoper"
+      }
+    },
+    {
+      "id": 2,
+      "date": "2017-03-04 17:25:56",
+      "text": "This is a comment by DavidWhite",
+      "owner": {
+        "id": 66,
+        "username": "DavidWhite"
+      }
+    },
+    {
+      "id": 3,
+      "date": "2017-03-04 17:26:39",
+      "text": "This is a comment by Dean",
+      "owner": {
+        "id": 24,
+        "username": "Dean"
+      }
+    }
+  ]
 }
 ```
 <br>
