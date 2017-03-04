@@ -42,6 +42,6 @@ class CodeReview extends Model
      */
     public function comments()
     {
-        return $this -> hasMany( 'App\Models\Comment', 'code_review_id', 'code_review_id' );
+        return $this -> hasMany( 'App\Models\Comment', 'code_review_id', 'code_review_id' ) -> orderBy( 'created_at', 'DESC' );
     }
 }

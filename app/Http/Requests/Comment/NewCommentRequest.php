@@ -35,7 +35,7 @@ class NewCommentRequest extends ApiRequest
     {
         return [
 
-            'message' => 'required|string|min:20|unique:comments',
+            'message' => 'required|string|min:20',
 
         ];
     }
