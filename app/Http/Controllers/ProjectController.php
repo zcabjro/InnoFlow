@@ -9,8 +9,8 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Requests\Module\RefreshProjectRequest;
 use App\Http\Requests\Project\ProjectEnrolmentRequest;
+use App\Http\Requests\Project\RefreshProjectRequest;
 use App\Models\VstsProject;
 use App\Repositories\Module\ModuleRepoInterface;
 use App\Services\Vsts\VstsApiService;

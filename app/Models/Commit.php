@@ -27,6 +27,7 @@ class Commit extends Model
         'web_url',
         'adds_counter',
         'edits_counter',
+        'deletes_counter',
         'is_complete'
     ];
 

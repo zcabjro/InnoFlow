@@ -14,7 +14,7 @@ use App\Models\VstsProject;
 
 class CodeReviewController extends Controller
 {
-    public function store()
+    public function store( NewCodeReviewRequest $request )
     {
 
     }

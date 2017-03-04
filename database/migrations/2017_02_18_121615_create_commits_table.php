@@ -23,6 +23,7 @@ class CreateCommitsTable extends Migration
             $table -> string( 'profile_id' );
             $table -> integer( 'adds_counter' ) ->default( 0 );
             $table -> integer( 'edits_counter' ) ->default( 0 );
+            $table -> integer( 'delets_counter' ) ->default( 0 );
             $table -> string( 'web_url' );
 
             $table -> primary( [ 'commit_id' ] );

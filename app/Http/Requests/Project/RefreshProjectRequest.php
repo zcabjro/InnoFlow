@@ -6,7 +6,7 @@
  * Time: 19:31
  */
 
-namespace App\Http\Requests\Module;
+namespace App\Http\Requests\Project;
 
 use App\Http\Requests\ApiRequest;
 

@@ -29,7 +29,8 @@ class CommitTransformer extends TransformerAbstract
             'commit_url' => $commit -> web_url,
             'changes' => [
                 'adds' => $commit -> adds_counter,
-                'edits' => $commit -> edits_counter
+                'edits' => $commit -> edits_counter,
+                'deletes' => $commit -> deletes_counter
             ]
 
         ];
