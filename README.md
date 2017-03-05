@@ -705,8 +705,13 @@ Includes both classes created as well as those where user was assinged as admin.
 
 **Sample Request**
 
-`POST` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/codereviews?commitIds=e93a59aaa7d627174aa78c686cd13eaaa9e7e7d5,ffff59aaa7d627174aa78c686cd13eaaa9e7e7d5
+`POST` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/codereviews
 
+```json
+{
+	"commitIds" : "e93a59aaa7d627174aa78c686cd13eaaa9e7e7d5"
+}
+```
 <br>
 
 
@@ -866,7 +871,11 @@ Includes both classes created as well as those where user was assinged as admin.
 
 **Sample Request**
 
-`POST` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/codereviews/1/comments?message=This%20is%20a%20comment.%20Always%20make%20sure%20a%20comment%20is%20useful.
+`POST` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/codereviews/1/comments
+
+{
+	"message" : "This is a comment. Always make sure a comment is useful."
+}
 
 <br>
 
