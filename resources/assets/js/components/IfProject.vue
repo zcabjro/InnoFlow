@@ -170,7 +170,7 @@
             .then(res => {
               this.details = res.data;
               this.loadClassName();
-              //this.loadCommits();
+              this.loadCommits();
 
               // Load metrics after short delay (for animation)
               this.loadMetricsAfter(300);

@@ -211,32 +211,6 @@
             console.log(error.response);
             console.log("Load classes failed");
           });
-      },
-
-      // Request commits
-      // TODO: Perform redirect elsewhere
-      loadCommits() {
-        axios.post('/api/commits')
-          .then(function (res) {
-            console.log(res.data);
-          })
-          .catch((error) => {
-            console.log(error.response);
-            if (error.response && error.response.data) {
-              let data = error.response.data;
-              if (typeof data.error === 'string') {
-                // TODO: establish a proper error format
-                console.log('login again');
-                this.redirect('/login', false);
-              }
-              else if (data.error && data.error.url && confirm('Redirect for VSTS auth?')) {
-                this.redirect(data.error.url, true);
-              }
-            }
-            else {
-              console.log('ERROR: ' + error.message);
-            }
-          });
       }      
     }
   }
