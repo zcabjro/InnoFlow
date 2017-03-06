@@ -14,12 +14,13 @@ class CreateVstsProjectsTable extends Migration
     public function up()
     {
         Schema::create('vsts_projects', function (Blueprint $table) {
-            $table->string('project_id');
-            $table->string('account_id');
-            $table->integer( 'module_id' ) -> unsigned() -> nullable();
-            $table->string('name') -> nullable();
-            $table->text('description') -> nullable();
-            $table->integer('revision');
+            $table -> string('project_id');
+            $table -> string('account_id');
+            $table -> integer( 'module_id' ) -> unsigned() -> nullable();
+            $table -> string('name') -> nullable();
+            $table -> text('description') -> nullable();
+            $table -> integer('revision');
+            $table -> dateTime( 'last_update' ) -> nullable();
 
             $table -> primary( array( 'project_id' ) );
 
