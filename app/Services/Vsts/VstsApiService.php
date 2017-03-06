@@ -261,6 +261,9 @@ class VstsApiService
         // Member accounts (includes owner accounts as well)
         $memberAccounts = $accounts[ 1 ];
 
+        // Remove all accounts the user has access to
+        $user -> accounts() -> detach();
+
         // Loop over all member accounts
         foreach ( $memberAccounts as $memberAccount )
         {
@@ -276,47 +279,48 @@ class VstsApiService
                 ] );
             }
 
-            // Indicates whether the user is already associated with the account
-            $alreadyAdded = DB::table( 'vsts_account_users' )
-                    -> where( 'account_id', $vstsAccount -> account_id )
-                    -> where( 'user_id', $user -> user_id )
-                    -> count() > 0;
+            $isOwner = false;
 
-            // User is not associated with account yet
-            if ( !$alreadyAdded )
+            // Loop over all owner accounts
+            foreach ( $ownerAccounts as $ownerAccount )
             {
-                $isOwner = false;
-
-                // Loop over all owner accounts
-                foreach ( $ownerAccounts as $ownerAccount )
+                // User is owner of the account
+                if ( $ownerAccount[ 'accountId' ] == $memberAccount[ 'accountId' ] )
                 {
-                    // User is owner of the account
-                    if ( $ownerAccount[ 'accountId' ] == $memberAccount[ 'accountId' ] )
-                    {
-                        $isOwner = true;
-                        break;
-                    }
+                    $isOwner = true;
+                    break;
                 }
-
-                $user -> accounts() -> attach( $vstsAccount, [ 'is_owner' => $isOwner ] );
             }
+
+            $user -> accounts() -> attach( $vstsAccount, [ 'is_owner' => $isOwner ] );
         }
     }
 
 
     private function storeProjects( User $user )
     {
-        $accounts = $user -> accounts;
+        // Remove all projects the user has access to
+        $user -> projects() -> detach();
 
-        foreach ( $accounts as $account )
+        foreach ( $user -> accounts as $account )
         {
             $request = new Request( 'GET', 'https://' . $account -> name . '.visualstudio.com/DefaultCollection/_apis/projects?api-version=1.0' );
             $jsonArray = $this -> sendAuthRequest( $user, $request );
+            $projectIds = [];
 
             foreach ( $jsonArray[ 'value' ] as $json )
             {
+                // Ignore projects that are not ready
+                if ( $json[ 'state' ] != 'wellFormed' )
+                {
+                    continue;
+                }
+
                 // Get project if it already exists in database
                 $project = $this -> vstsProjectRepo -> find( $json[ 'id' ] );
+
+                // Store each project id the user has access to
+                $projectIds[] = $json[ 'id' ];
 
                 // Project is new, hence store it in database
                 if ( is_null( $project ) )
@@ -339,6 +343,9 @@ class VstsApiService
                     ]);
                 }
             }
+
+            // Add projects so that user has access to them
+            $user -> projects() -> attach( $projectIds );
         }
     }
 }

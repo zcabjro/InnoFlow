@@ -59,4 +59,15 @@ class VstsProject extends Model
     {
         return $this -> hasMany( 'App\Models\CodeReview', 'project_id', 'project_id' ) -> orderBy( 'created_at', 'DESC' );
     }
+
+
+    /**
+     * Gets the members of the project.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     */
+    public function members()
+    {
+        return $this -> belongsToMany( 'App\Models\User', 'vsts_project_users', 'project_id', 'user_id' );
+    }
 }

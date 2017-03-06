@@ -52,13 +52,10 @@ class ProjectController extends Controller
 
         $projects = [];
 
-        foreach ( $user -> accounts as $account )
+        foreach ( $user -> projects as $project )
         {
-            foreach ( $account -> projects as $project )
-            {
-                $project -> is_owner = $account -> pivot -> is_owner;
-                $projects[] = $project;
-            }
+            $project -> is_owner = !is_null( $project -> account -> owner() );
+            $projects[] = $project;
         }
 
         return fractal() -> collection( $projects, new VstsProjectTransformer );

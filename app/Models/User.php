@@ -89,4 +89,15 @@ class User extends Authenticatable
             -> belongsToMany( 'App\Models\VstsAccount', 'vsts_account_users', 'user_id', 'account_id' )
             -> withPivot( 'is_owner' );
     }
+
+
+    /**
+     * Gets all projects that the user is member of
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function projects()
+    {
+        return $this -> belongsToMany( 'App\Models\VstsProject', 'vsts_project_users', 'user_id', 'project_id' );
+    }
 }

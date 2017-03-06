@@ -25,7 +25,7 @@ class VstsProjectRepo implements VstsProjectRepoInterface
 
     public function create( array $data )
     {
-        $this -> model -> create( $data );
+        return $this -> model -> create( $data );
     }
 
 
@@ -37,6 +37,6 @@ class VstsProjectRepo implements VstsProjectRepoInterface
 
     public function update( array $data )
     {
-        $this -> model -> update( $data );
+        return $this -> model -> update( $data );
     }
 }

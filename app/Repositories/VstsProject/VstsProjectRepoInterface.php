@@ -17,7 +17,7 @@ interface VstsProjectRepoInterface
      * Creates a new vsts project.
      *
      * @param array $data
-     * @return void
+     * @return VstsProject
      */
     public function create( array $data );
 
@@ -33,7 +33,7 @@ interface VstsProjectRepoInterface
      * Update details of a vsts project.
      *
      * @param array $data
-     * @return void
+     * @return VstsProject
      */
     public function update( array $data );
 }

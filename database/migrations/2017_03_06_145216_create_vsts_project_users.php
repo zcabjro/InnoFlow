@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVstsAccountUsersTable extends Migration
+class CreateVstsProjectUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateVstsAccountUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('vsts_account_users', function (Blueprint $table) {
-            $table -> string( 'account_id' );
+        Schema::create('vsts_project_users', function (Blueprint $table) {
+            $table -> string( 'project_id' );
             $table -> integer( 'user_id' ) -> unsigned();
-            $table -> boolean( 'is_owner' );
 
-            $table -> primary( array( 'account_id', 'user_id' ) );
+            $table -> primary( array( 'project_id', 'user_id' ) );
 
-            $table -> foreign( 'account_id' )
-                -> references( 'account_id' )
-                -> on( 'vsts_accounts' )
+            $table -> foreign( 'project_id' )
+                -> references( 'project_id' )
+                -> on( 'vsts_projects' )
                 -> onUpdate( 'cascade' )
                 -> onDelete( 'cascade' );
 
@@ -41,6 +40,6 @@ class CreateVstsAccountUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists( 'vsts_account_users' );
+        Schema::dropIfExists( 'vsts_project_users' );
     }
 }

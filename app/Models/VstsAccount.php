@@ -31,17 +31,6 @@ class VstsAccount extends Model
 
 
     /**
-     * Gets all projects that belong to an account.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function projects()
-    {
-        return $this -> hasMany( 'App\Models\VstsProject', 'account_id', 'account_id' );
-    }
-
-
-    /**
      * Gets the owner of the account.
      *
      * @return mixed

@@ -17,22 +17,22 @@ class MetricController extends Controller
 {
     public function index( VstsProject $vstsProject )
     {
-        /*$totalReviews = 0;
-        $myReviews = 0;
+        /*$totalValidReviews = 0;
+        $totalInvalidReviews = 0;
 
-        dd( $vstsProject -> account -> users() -> toSql() );
+        $users = $vstsProject -> users;
 
         foreach ( $vstsProject -> codeReviews as $codeReview )
         {
             if ( $codeReview -> commits() -> count() == 0 )
             {
+                $totalInvalidReviews++;;
                 continue;
             }
 
-            $totalReviews++;
+            $totalValidReviews++;
 
-        }
+        }*/
 
-        dd( [ $myReviews, $totalReviews ] );*/
     }
 }

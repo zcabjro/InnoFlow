@@ -62,7 +62,7 @@ class VstsProjectTransformer extends TransformerAbstract
      */
     public function includeMembers( VstsProject $project )
     {
-        $users = $project -> account -> users;
+        $users = $project -> members;
         return $this -> collection( $users, new UserTransformer );
     }
 
