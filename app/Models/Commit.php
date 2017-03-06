@@ -23,7 +23,7 @@ class Commit extends Model
         'comment',
         'date',
         'details_url',
-        'profile_id',
+        'author_email',
         'web_url',
         'adds_counter',
         'edits_counter',
