@@ -28,6 +28,8 @@ class CodeReviewTransformer extends TransformerAbstract
 
             'id' => $codeReview -> code_review_id,
             'date' => $codeReview -> created_at -> toDateTimeString(),
+            'title' => $codeReview -> title,
+            'description' => $codeReview -> description,
 
         ];
     }
