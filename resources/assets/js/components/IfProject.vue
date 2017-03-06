@@ -1,5 +1,8 @@
 <template>
   <div class="project">
+
+    <if-message ref="message"></if-message>
+
     <div v-if="details" class="row">
       <div v-if="details" id="projectDetails" class="col-sm-6" style="max-height: 33vh; overflow: auto;">
         <h1>{{details.name}}</h1>
@@ -18,17 +21,20 @@
 
     <div style="margin-top: 25px;" class="row">
       <div class="col-md-12">      
-        <ul class="nav nav-tabs">
+        <ul id="my-tabs" class="nav nav-tabs">
           <li class="active"><a v-on:click="loadMetrics()" data-toggle="tab" href="#metrics">Metrics</a></li>
           <li><a data-toggle="tab" href="#commits">Commits</a></li>
-          <li><a data-toggle="tab" href="#codeReview">Code Review</a></li>
+          <li><a data-toggle="tab" href="#codeReviews">Code Review</a></li>
         </ul>
+        
         <br>
+
         <div class="tab-content" style="max-height: 60vh; overflow-y: auto; overflow-x: hidden;">
+          
           <div id="metrics" class="tab-pane fade in active">
             <div v-show="details" id="project-metrics">              
               <div class="row">
-                <div style="padding: 15px" class="col-md-4">
+                <div class="col-md-4">
                   <if-card>
                     <span class="h3">Code Review</span>
                     <span class="pull-right">(1st /13)</span>
@@ -37,7 +43,7 @@
                     </div>
                   </if-card>
                 </div>
-                <div style="padding: 15px" class="col-md-4">
+                <div class="col-md-4">
                   <if-card>
                     <span class="h3">Feedback</span>
                     <span class="pull-right">(1st /13)</span>
@@ -46,7 +52,7 @@
                     </div>
                   </if-card>
                 </div>
-                <div style="padding: 15px" class="col-md-4">
+                <div class="col-md-4">
                   <if-card>
                     <span class="h3">Commit Balance</span>
                     <span class="pull-right">(1st /13)</span>
@@ -58,15 +64,42 @@
               </div>
             </div>
           </div>
+
           <div id="commits" class="tab-pane fade">
-            <if-card v-for="commit in commits">
-              <a :href="commit.commit_url" class="pull-right">{{commit.commit_url}}</a>
-              <span class="h3">{{commit.comment}}</span>                            
-              <br>by {{commit.commiter}} ({{commit.date}})
-            </if-card>
+            <div v-for="(commit, index) in commits" v-on:click="addCommitForReview(index)">
+              <if-card :style="seletableStyle(index)">
+                <a :href="commit.commit_url" class="pull-right">{{commit.commit_url}}</a>
+                <span class="h3">{{commit.comment}}</span>                            
+                <br>by {{commit.commiter.username}} ({{commit.date}})
+              </if-card>
+            </div>
           </div>
-          <div id="codeReview" class="tab-pane fade">
-            <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+
+          <div id="codeReviews" class="tab-pane fade">
+            <div style="padding: 0px;" class="col-md-3">             
+              <if-card v-if="createReview">      
+                <b>Title</b><br><input v-model="newTitle" style="width: 90%;" type="text" placeholder="10+ chars"><br>
+                <b>Description</b><br><textarea v-model="newDescription" style="width: 90%; height: 50%;" placeholder="20+ chars"></textarea><br>
+                <span class="pull-right" style="margin-right: 10%;">
+                  <a v-if="selectingCommits" href="#" v-on:click="submitCodeReview($event)">[+] Create</a>
+                  <a v-else href="#" v-on:click="selectCommits($event)">[+] Commits</a>
+                  <a style="color: red;" href="#" v-on:click="setCreateReview($event, false)">[-] Cancel</a>
+                </span>                    
+              </if-card>
+              <div v-else v-on:click="setCreateReview($event, true)">
+                <if-card>
+                  <h2>[+] Create</h2>
+                </if-card>
+              </div>              
+            </div>
+            <div v-for="codeReview in codeReviews" style="padding: 0px;" class="col-md-3">
+              <if-card>
+                <p class="pull-right">{{codeReview.date}}</p>
+                <h3>{{codeReview.title}}</h3>
+                <p>{{codeReview.description}}</p>
+                <b>{{codeReview.owner ? codeReview.owner.username : ''}}</b>
+              </if-card>
+            </div>
           </div>
         </div>
       </div>      
@@ -76,6 +109,7 @@
 
 <script>
   import IfCard from './IfCard.vue'
+  import IfMessage from './IfMessage.vue'
 
   function defaultProjectData() {
     return {
@@ -83,7 +117,12 @@
       details: null,
       className: '',
       metrics: null,
-      commits: [{"id":"5161f9f9f880285f350c0d1dc1abac72a4f41a57","comment":"Update README.md","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/5161f9f9f880285f350c0d1dc1abac72a4f41a57","changes":{"adds":0,"edits":1,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"483789474858dc78ee79ef3c40a5881990196472","comment":"Merge branch 'master' of https:\/\/github.com\/zcabjro\/InnoFlow","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/483789474858dc78ee79ef3c40a5881990196472","changes":{"adds":0,"edits":1,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"a5e229054786b8b7f3610d0935c50275e2375d31","comment":"Update README.md","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/a5e229054786b8b7f3610d0935c50275e2375d31","changes":{"adds":0,"edits":1,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"10cd7905ecb31cea5f652b1324a206afab3dba55","comment":"model not found exception","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/10cd7905ecb31cea5f652b1324a206afab3dba55","changes":{"adds":0,"edits":3,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"8ac39bf31faebe4746fa2d33aa729d44531917da","comment":"commit endpoints","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/8ac39bf31faebe4746fa2d33aa729d44531917da","changes":{"adds":2,"edits":21,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"a45391649dc23d7e04ca31d061a6eadeb38f0c74","comment":"Update README.md","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/a45391649dc23d7e04ca31d061a6eadeb38f0c74","changes":{"adds":0,"edits":1,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"a610bcc858bf88a0d4751b78d466b3a1ad114133","comment":"Updated Register component to include username","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/a610bcc858bf88a0d4751b78d466b3a1ad114133","changes":{"adds":0,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"e6109a36a3e18a7a57c6f91049fe67d3a60098ba","comment":"Merge branch 'master' of https:\/\/github.com\/zcabjro\/InnoFlow","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/e6109a36a3e18a7a57c6f91049fe67d3a60098ba","changes":{"adds":0,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"6fa8bb3ece3ca020a5f1d7b754d9f6aff79c5bce","comment":"Removed metric titles","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/6fa8bb3ece3ca020a5f1d7b754d9f6aff79c5bce","changes":{"adds":0,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"67cb40fe9d1fb3e398f65caf1b59472ba0804c7e","comment":"app.js","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/67cb40fe9d1fb3e398f65caf1b59472ba0804c7e","changes":{"adds":0,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"0fd858663503631e636d6aeaf474eca175c0bfa8","comment":"Delay the loading of metrics for better display and animation","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/0fd858663503631e636d6aeaf474eca175c0bfa8","changes":{"adds":2,"edits":7,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"98ed2cd292e2a0b16aaa8de8e56176c8addf761c","comment":"app.js","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/98ed2cd292e2a0b16aaa8de8e56176c8addf761c","changes":{"adds":0,"edits":12,"deletes":2},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"3702269cf66fa69dd122f97ea5fe08d252cf45ee","comment":"replaced v-if for v-show in metric display","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/3702269cf66fa69dd122f97ea5fe08d252cf45ee","changes":{"adds":0,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"62b2ffa2681b7b23ba184efd94e7fc93b964442d","comment":"Merge branch 'master' of github.com:zcabjro\/InnoFlow","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/62b2ffa2681b7b23ba184efd94e7fc93b964442d","changes":{"adds":0,"edits":1,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"ca55341913f53a9071f51b4a6c5c216f09334ce6","comment":"Update README.md","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/ca55341913f53a9071f51b4a6c5c216f09334ce6","changes":{"adds":0,"edits":1,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"fc50ea46946ef3b093a2bb65b8c7e106795baddb","comment":"Updated project and class display with styles, links and dummy metrics","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/fc50ea46946ef3b093a2bb65b8c7e106795baddb","changes":{"adds":0,"edits":13,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"d42497d7665b68f750b2a3cec3a055da57636517","comment":"storeCommit VstsApiService","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/d42497d7665b68f750b2a3cec3a055da57636517","changes":{"adds":3,"edits":17,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"bd14385c1bc79d61579a018afb1cf8ad2a27450b","comment":"refresh projects index","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/bd14385c1bc79d61579a018afb1cf8ad2a27450b","changes":{"adds":1,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"7aa2dd0227b89b695b62f5497d3ab6c7901379ea","comment":"isLoggedIn improved","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/7aa2dd0227b89b695b62f5497d3ab6c7901379ea","changes":{"adds":0,"edits":4,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"187b334511d8159ee0937d62c6bfa76bf38a0f97","comment":"isLoggedIn bug fix revisited","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/187b334511d8159ee0937d62c6bfa76bf38a0f97","changes":{"adds":0,"edits":4,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"e26eea50ac1b4d03fcf92c05bf3cbc6a5cc87282","comment":"isLoggedIn bug fix","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/e26eea50ac1b4d03fcf92c05bf3cbc6a5cc87282","changes":{"adds":0,"edits":7,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"37225845bfdc67ccc3595933df5966f9ff71937c","comment":"Merge branch 'master' of github.com:zcabjro\/InnoFlow","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/37225845bfdc67ccc3595933df5966f9ff71937c","changes":{"adds":0,"edits":11,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"cc1a2da79ebbbe13b0b92557bf108dd6cc86d196","comment":"Merge branch 'master' of https:\/\/github.com\/zcabjro\/InnoFlow","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/cc1a2da79ebbbe13b0b92557bf108dd6cc86d196","changes":{"adds":2,"edits":13,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"2f771667972cadba4c9a9c969fbb30fa2ff97165","comment":"Separated dropdown from search","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/2f771667972cadba4c9a9c969fbb30fa2ff97165","changes":{"adds":1,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"a70a562fabcf0c3a18343da3aa94801093a3a746","comment":"Refactored dropdown","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/a70a562fabcf0c3a18343da3aa94801093a3a746","changes":{"adds":0,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"5161f9f9f880285f350c0d1dc1abac72a4f41a57","comment":"Update README.md","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/5161f9f9f880285f350c0d1dc1abac72a4f41a57","changes":{"adds":0,"edits":1,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"483789474858dc78ee79ef3c40a5881990196472","comment":"Merge branch 'master' of https:\/\/github.com\/zcabjro\/InnoFlow","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/483789474858dc78ee79ef3c40a5881990196472","changes":{"adds":0,"edits":1,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"a5e229054786b8b7f3610d0935c50275e2375d31","comment":"Update README.md","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/a5e229054786b8b7f3610d0935c50275e2375d31","changes":{"adds":0,"edits":1,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"10cd7905ecb31cea5f652b1324a206afab3dba55","comment":"model not found exception","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/10cd7905ecb31cea5f652b1324a206afab3dba55","changes":{"adds":0,"edits":3,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"8ac39bf31faebe4746fa2d33aa729d44531917da","comment":"commit endpoints","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/8ac39bf31faebe4746fa2d33aa729d44531917da","changes":{"adds":2,"edits":21,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"a45391649dc23d7e04ca31d061a6eadeb38f0c74","comment":"Update README.md","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/a45391649dc23d7e04ca31d061a6eadeb38f0c74","changes":{"adds":0,"edits":1,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"a610bcc858bf88a0d4751b78d466b3a1ad114133","comment":"Updated Register component to include username","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/a610bcc858bf88a0d4751b78d466b3a1ad114133","changes":{"adds":0,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"e6109a36a3e18a7a57c6f91049fe67d3a60098ba","comment":"Merge branch 'master' of https:\/\/github.com\/zcabjro\/InnoFlow","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/e6109a36a3e18a7a57c6f91049fe67d3a60098ba","changes":{"adds":0,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"6fa8bb3ece3ca020a5f1d7b754d9f6aff79c5bce","comment":"Removed metric titles","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/6fa8bb3ece3ca020a5f1d7b754d9f6aff79c5bce","changes":{"adds":0,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"67cb40fe9d1fb3e398f65caf1b59472ba0804c7e","comment":"app.js","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/67cb40fe9d1fb3e398f65caf1b59472ba0804c7e","changes":{"adds":0,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"0fd858663503631e636d6aeaf474eca175c0bfa8","comment":"Delay the loading of metrics for better display and animation","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/0fd858663503631e636d6aeaf474eca175c0bfa8","changes":{"adds":2,"edits":7,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"98ed2cd292e2a0b16aaa8de8e56176c8addf761c","comment":"app.js","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/98ed2cd292e2a0b16aaa8de8e56176c8addf761c","changes":{"adds":0,"edits":12,"deletes":2},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"3702269cf66fa69dd122f97ea5fe08d252cf45ee","comment":"replaced v-if for v-show in metric display","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/3702269cf66fa69dd122f97ea5fe08d252cf45ee","changes":{"adds":0,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"62b2ffa2681b7b23ba184efd94e7fc93b964442d","comment":"Merge branch 'master' of github.com:zcabjro\/InnoFlow","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/62b2ffa2681b7b23ba184efd94e7fc93b964442d","changes":{"adds":0,"edits":1,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"ca55341913f53a9071f51b4a6c5c216f09334ce6","comment":"Update README.md","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/ca55341913f53a9071f51b4a6c5c216f09334ce6","changes":{"adds":0,"edits":1,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"fc50ea46946ef3b093a2bb65b8c7e106795baddb","comment":"Updated project and class display with styles, links and dummy metrics","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/fc50ea46946ef3b093a2bb65b8c7e106795baddb","changes":{"adds":0,"edits":13,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"d42497d7665b68f750b2a3cec3a055da57636517","comment":"storeCommit VstsApiService","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/d42497d7665b68f750b2a3cec3a055da57636517","changes":{"adds":3,"edits":17,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"bd14385c1bc79d61579a018afb1cf8ad2a27450b","comment":"refresh projects index","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/bd14385c1bc79d61579a018afb1cf8ad2a27450b","changes":{"adds":1,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"7aa2dd0227b89b695b62f5497d3ab6c7901379ea","comment":"isLoggedIn improved","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/7aa2dd0227b89b695b62f5497d3ab6c7901379ea","changes":{"adds":0,"edits":4,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"187b334511d8159ee0937d62c6bfa76bf38a0f97","comment":"isLoggedIn bug fix revisited","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/187b334511d8159ee0937d62c6bfa76bf38a0f97","changes":{"adds":0,"edits":4,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"e26eea50ac1b4d03fcf92c05bf3cbc6a5cc87282","comment":"isLoggedIn bug fix","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/e26eea50ac1b4d03fcf92c05bf3cbc6a5cc87282","changes":{"adds":0,"edits":7,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"37225845bfdc67ccc3595933df5966f9ff71937c","comment":"Merge branch 'master' of github.com:zcabjro\/InnoFlow","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/37225845bfdc67ccc3595933df5966f9ff71937c","changes":{"adds":0,"edits":11,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"cc1a2da79ebbbe13b0b92557bf108dd6cc86d196","comment":"Merge branch 'master' of https:\/\/github.com\/zcabjro\/InnoFlow","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/cc1a2da79ebbbe13b0b92557bf108dd6cc86d196","changes":{"adds":2,"edits":13,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"2f771667972cadba4c9a9c969fbb30fa2ff97165","comment":"Separated dropdown from search","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/2f771667972cadba4c9a9c969fbb30fa2ff97165","changes":{"adds":1,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}},{"id":"a70a562fabcf0c3a18343da3aa94801093a3a746","comment":"Refactored dropdown","date":"2017-03-06 12:00:34+00","commit_url":"https:\/\/zcabjro.visualstudio.com\/_git\/InnoFlow\/commit\/a70a562fabcf0c3a18343da3aa94801093a3a746","changes":{"adds":0,"edits":9,"deletes":0},"commiter":{"id":103,"username":"jedi_jack"}}]
+      codeReviews: null,
+      createReview: false,
+      newTitle: '',
+      newDescription: '',
+      newCommits: [],
+      commits: null
     }
   }
 
@@ -92,7 +131,8 @@
     name: 'if-project',
 
     components: {
-      IfCard
+      IfCard,
+      IfMessage
     },
 
     data() {
@@ -112,10 +152,35 @@
       next();
     },
 
+    computed: {
+      validCodeReviewFields() {
+        if (!this.newTitle || this.newTitle.length < 10) {
+          this.$refs.message.display('Title must be at least 10 characters.');
+          return false;
+        }
+        if (!this.newDescription || this.newDescription.length < 20) {
+          this.$refs.message.display('Description must be at least 20 characters.');
+          return false;
+        }
+        if (!this.newCommits || this.newCommits.length < 1) {
+          this.$refs.message.display('Please select at least one commit for review.');
+          return false;
+        }
+        return true;
+      }
+    },
+
     methods: {
       init(id) {
         this.id = id;
         this.loadDetails();
+      },
+
+      seletableStyle(index) {
+        let o = this.newCommits.indexOf(index) >= 0 ? 0.5 : 1;
+        return {
+          opacity: o
+        };
       },
 
       loadMetricsAfter(delay) {
@@ -171,7 +236,7 @@
               this.details = res.data;
               this.loadClassName();
               this.loadCommits();
-
+              this.loadCodeReviews();
               // Load metrics after short delay (for animation)
               this.loadMetricsAfter(300);
 
@@ -198,6 +263,17 @@
           });
       },
 
+      loadCodeReviews() {
+        axios.get('api/projects/' + this.id + '/codereviews')
+          .then((res) => {
+            this.codeReviews = res.data;
+          })
+          .catch((error) => {
+            console.log(error);
+            console.log('Failed to load code reviews');
+          });
+      },
+
       loadClassName() {
         if (this.details && this.details.classId) {
           axios.get('api/classes/' + this.details.classId)
@@ -209,6 +285,59 @@
               console.log('Failed to load class details');
             });
         }
+      },
+
+      setCreateReview(e, active) {
+        e.preventDefault();
+        this.resetNewReviewData();        
+        this.createReview = active;
+      },
+
+      resetNewReviewData() {
+        this.newTitle = this.newDescription = '';
+        this.newCommits = [];
+        this.selectingCommits = false;
+      },
+
+      selectCommits(e) {
+        e.preventDefault();
+        this.selectingCommits = true;
+        $('#my-tabs a[href="#commits"]').tab('show');     
+      },
+
+      addCommitForReview(index) {
+        if (this.selectingCommits) {
+          let existing = this.newCommits.indexOf(index);
+          if (existing >= 0) {
+            this.newCommits.splice(existing, 1);
+          }
+          else {
+            this.newCommits.push(index);
+          }          
+        }        
+      },
+
+      submitCodeReview(e) {
+        e.preventDefault();
+        if (this.validCodeReviewFields) {
+          let commitIds = "";
+          for (let i = 0; i < this.newCommits.length - 1; i++) {
+            let commitIndex = this.newCommits[i];
+            commitIds += this.commits[commitIndex].id + ','
+          }
+          commitIds += this.commits[this.newCommits[this.newCommits.length - 1]].id;
+
+          axios.post('api/projects/' + this.id + '/codereviews', { title: this.newTitle, description: this.newDescription, commitIds })
+            .then((res) => {
+              console.log('Succeeded in submitting code review.');
+            })
+            .catch((error) => {
+              console.log(error);
+              console.log('Failed to submit code review.');
+            });
+
+          this.setCreateReview(e, false);
+        }        
       },
 
       resetData() {
@@ -225,6 +354,14 @@
 </script>
 
 <style scoped>
+  #codeReviews .if-card {
+    width: 90%;
+    height: 20vw;
+    min-height: 200px;
+    overflow: hidden;
+    padding: 15px;
+  }  
+
   .project .if-card {
     margin: 10px;    
   }
@@ -233,6 +370,8 @@
     width: 90%;
     height: 20vw;
     min-height: 200px;
+    overflow: hidden;
+    padding: 15px;
   }
 
   #commits .if-card {
