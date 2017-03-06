@@ -461,6 +461,10 @@ Includes both classes created as well as those where user was assinged as admin.
 
 > This is a VSTS token protected route
 
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| refresh     | boolean      | OPTIONAL Indicates whether the projects should be brought up to date with VSTS  |
+
  **Response Codes**
  
 | Code | Notes |
@@ -579,6 +583,7 @@ Includes both classes created as well as those where user was assinged as admin.
 | Parameter   | Type         | Notes     |
 | ------------|--------------|-----------|
 | projectId   | string       | A valid project id |
+| refresh     | boolean      | OPTIONAL Indicates whether the commits should be brought up to date with VSTS  |
 
  **Response Codes**
  
