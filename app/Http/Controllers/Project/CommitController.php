@@ -39,7 +39,6 @@ class CommitController extends Controller
             return $this -> respondUnauthorized( 'Token cannot be refresh. Authorize with Vsts again.' );
         }
 
-
         return fractal() -> parseIncludes( [ 'commits' ] ) -> item( $vstsProject, new VstsProjectTransformer );
     }
 

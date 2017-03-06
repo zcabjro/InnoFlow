@@ -30,6 +30,12 @@ class CommentController extends Controller
 
     public function store( VstsProject $vstsProject, CodeReview $codeReview, NewCommentRequest $request )
     {
+        if ( !$codeReview -> is_active )
+        {
+            $codeReview -> is_active = true;
+            $codeReview -> save();
+        }
+
         $this -> commentRepo -> create( $request -> all() );
     }
 

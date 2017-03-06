@@ -9,7 +9,10 @@ class CodeReview extends Model
     protected $primaryKey = 'code_review_id';
 
     protected $fillable = [
-        'user_id', 'project_id'
+        'user_id',
+        'project_id',
+        'title',
+        'description'
     ];
 
 

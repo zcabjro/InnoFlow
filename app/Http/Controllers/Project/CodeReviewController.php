@@ -30,10 +30,11 @@ class CodeReviewController extends Controller
 
     public function store( VstsProject $vstsProject, NewCodeReviewRequest $request )
     {
-        $codeReview = $this -> codeReviewRepo -> create( [
-            'user_id' => Helper::currentUser() -> user_id,
-            'project_id' => $vstsProject -> project_id
-        ]);
+        $data = $request -> all();
+        $data[ 'user_id' ] = Helper::currentUser() -> user_id;
+        $data[ 'project_id' ] = $vstsProject -> project_id;
+
+        $codeReview = $this -> codeReviewRepo -> create( $data );
 
         $codeReview -> commits() -> attach( $request -> commitIds );
     }

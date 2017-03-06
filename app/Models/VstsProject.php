@@ -70,4 +70,21 @@ class VstsProject extends Model
     {
         return $this -> belongsToMany( 'App\Models\User', 'vsts_project_users', 'project_id', 'user_id' );
     }
+
+
+    public function projectCodeReviewScore()
+    {
+        /*$activeCodeReviews = 0;
+        $codeReviews = $this -> codeReviews;
+
+        foreach ( $codeReviews as $codeReview )
+        {
+            if ( $codeReview -> is_active )
+            {
+                $activeCodeReviews++;
+            }
+        }
+
+        return [ $activeCodeReviews, count($codeReviews ) ];*/
+    }
 }

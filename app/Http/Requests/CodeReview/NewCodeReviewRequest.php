@@ -34,6 +34,8 @@ class NewCodeReviewRequest extends ApiRequest
     {
         return [
 
+            'title' => 'required|string|min:10',
+            'description' => 'required|string|min:20',
             'commitIds' => 'required|commit_list',
 
         ];

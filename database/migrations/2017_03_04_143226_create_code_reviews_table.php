@@ -17,6 +17,9 @@ class CreateCodeReviewsTable extends Migration
             $table -> increments( 'code_review_id' );
             $table -> integer( 'user_id' ) -> unsigned();
             $table -> string( 'project_id' );
+            $table -> string( 'title' );
+            $table -> text( 'description' );
+            $table -> boolean( 'is_active' ) ->default( false );
             $table -> timestamps();
 
             $table -> foreign( 'user_id' )
