@@ -229,12 +229,13 @@ class VstsApiService
         $request = new Request( 'GET', 'https://app.vssps.visualstudio.com/_apis/profile/profiles/me?api-version=1.0' );
         $json = $this -> sendAuthRequest( $user, $request );
 
-        if ( is_null( $json ) || is_null( $id = $json[ 'id' ] ) )
+        if ( is_null( $json ) || is_null( $id = $json[ 'id' ] ) || is_null( $email = $json[ 'emailAddress' ] ) )
         {
             return null;
         }
 
         $user -> vsts_profile_id = $id;
+        $user -> vsts_email = $email;
         $user -> save();
     }
 
