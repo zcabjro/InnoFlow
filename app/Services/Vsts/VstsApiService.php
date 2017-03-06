@@ -130,10 +130,7 @@ class VstsApiService
             return;
         }
 
-        $commits = $request -> resource[ 'commits' ];
-        $date = $request -> resource[ 'date' ];
-
-        foreach ( $commits as $commit )
+        foreach ( $request -> resource[ 'commits' ] as $commit )
         {
             // Commit is already stored
             if ( !is_null( $this -> commitRepo -> find( $commit[ 'commitId' ] ) ) )
@@ -148,7 +145,7 @@ class VstsApiService
             $data[ 'project_id' ] = $repositoryId;
             $data[ 'author_email' ] = $commit[ 'author' ][ 'email' ];
             $data[ 'comment' ] = $commit[ 'comment' ];
-            $data[ 'date' ] = $date;
+            $data[ 'date' ] = $commit[ 'author' ][ 'date' ];
 
             $request = new Request( 'GET', $repositoryUrl . '/commits/' . $commit[ 'commitId' ] );
             $json = $this -> sendAuthRequest( $owner, $request );
