@@ -698,6 +698,8 @@ Includes both classes created as well as those where user was assinged as admin.
 | ------------|--------------|-----------|
 | projectId   | string       | A valid project id |
 | commitIds   | list of strings  | A list of valid commit ids |
+| title   | string       | A suitable title (min 10 chars) |
+| description   | string       | A suitable description (min 20 chars) |
 
  **Response Codes**
  
@@ -706,7 +708,7 @@ Includes both classes created as well as those where user was assinged as admin.
 | 200 | Successful creation |
 | 401 | User is not a member of the project |
 | 404 | Invalid projectId parameter |
-| 422  | <ul><li>commitIds parameter is missing</li><li>commitIds parameter has incorrect format</li></ul> |
+| 422  | <ul><li>commitIds, title or description parameter are missing</li><li>commitIds, title or description parameter have incorrect format</li></ul> |
 
 **Sample Request**
 
@@ -714,7 +716,9 @@ Includes both classes created as well as those where user was assinged as admin.
 
 ```json
 {
-  "commitIds" : "e93a59aaa7d627174aa78c686cd13eaaa9e7e7d5"
+  "commitIds" : "e93a59aaa7d627174aa78c686cd13eaaa9e7e7d5",
+  "title" : "This is the title of a code review discussion",
+  "descritpion" : "This is the description of a code review discussion"
 }
 ```
 <br>
@@ -748,7 +752,9 @@ Includes both classes created as well as those where user was assinged as admin.
 [
   {
     "id": 2,
-    "date": "2017-03-04 16:34:17",
+    "date": "2017-03-06 21:53:32",
+    "title": "This is the title of a code review discussion",
+    "description": "This is the description of a code review discussion",
     "owner": {
       "id": 101,
       "username": "SickAustrian"
@@ -756,7 +762,9 @@ Includes both classes created as well as those where user was assinged as admin.
   },
   {
     "id": 1,
-    "date": "2017-03-04 16:33:38",
+    "date": "2017-03-06 21:51:32",
+    "title": "This is the title of a code review discussion",
+    "description": "This is the description of a code review discussion",
     "owner": {
       "id": 101,
       "username": "SickAustrian"
@@ -796,6 +804,8 @@ Includes both classes created as well as those where user was assinged as admin.
 {
   "id": 1,
   "date": "2017-03-04 16:33:38",
+  "title": "This is the title of a code review discussion",
+  "description": "This is the description of a code review discussion",
   "owner": {
     "id": 101,
     "username": "SickAustrian"
