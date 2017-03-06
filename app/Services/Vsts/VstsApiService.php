@@ -10,6 +10,7 @@ namespace App\Services\Vsts;
 
 use App\Models\Commit;
 use App\Models\User;
+use App\Models\VstsAccount;
 use App\Models\VstsProject;
 use App\Repositories\Commit\CommitRepoInterface;
 use App\Repositories\VstsAccount\VstsAccountRepo;
@@ -67,100 +68,82 @@ class VstsApiService
 
     public function updateUser( User $user, $refresh )
     {
-        $expire = Carbon::now() -> subMinute( 10 );
-        $lastUpdate = $user -> vsts_last_update;
-
-        // Update account and project records (every 10 minutes)
-        if ( $refresh || is_null( $lastUpdate ) || $expire > $lastUpdate )
+        if ( !$this -> shouldUpdate( $user, $refresh ) )
         {
-            $this -> storeProfile( $user );
-            $this -> storeAccounts( $user );
-            $this -> storeProjects( $user );
-
-            $user -> vsts_last_update = Carbon::now();
-            $user -> save();
+            return;
         }
+
+        $this -> storeProfile( $user );
+        $this -> storeAccounts( $user );
+        $this -> storeProjects( $user );
+
+        $user -> last_update = Carbon::now();
+        $user -> save();
     }
 
 
-    public function addWebHook( User $user, VstsProject $vstsProject )
+    public function storeCommits( $user, VstsProject $vstsProject, $refresh )
     {
-        $vstsAccount = $vstsProject -> account;
-
-        $body = Psr7\stream_for( '{
-             "publisherId": "tfs",
-             "eventType": "git.push",
-             "consumerId": "webHooks",
-             "consumerActionId": "httpRequest",
-             "publisherInputs": {
-             "projectId": "' . $vstsProject -> project_id . '",
-             },
-             "consumerInputs": {
-                "url": "' . env( 'VSTS_WEBHOOK_URL' ) . '"
-             }
-           }'
-        );
-        $request = new Request( 'POST', 'https://' . $vstsAccount -> name . '.visualstudio.com/DefaultCollection/_apis/hooks/subscriptions?api-version=1.0', [ 'Content-Type' => 'application/json' ], $body );
-
-        $this -> sendAuthRequest( $user, $request );
-    }
-
-
-    public function storeCommit( \Illuminate\Http\Request $request )
-    {
-        // Not a git push
-        if ( !$request -> eventType == 'git.push' )
+        if ( !$this -> shouldUpdate( $vstsProject, $refresh ) )
         {
             return;
         }
 
-        // Get repository data
-        $repositoryUrl = $request -> resource[ 'repository' ][ 'url' ];
-        $repositoryId = $request -> resource[ 'repository' ][ 'project' ][ 'id' ];
+        $request = new Request( 'GET', 'https://' . $vstsProject -> account -> name . '.visualstudio.com/DefaultCollection/_apis/git/repositories?api-version=1.0' );
+        $json = $this -> sendAuthRequest( $user, $request );
+        $repositories = $json[ 'value' ];
 
-        // No registered project id is matching the git push project id
-        if ( is_null( $vstsProject = $this -> vstsProjectRepo -> find( $repositoryId ) ) )
+        foreach ( $repositories as $repository )
         {
-            return;
-        }
+            $projectId = $repository[ 'project' ][ 'id' ];
+            $url = $repository[ 'url' ];
 
-        // Project has no owner
-        if ( is_null( $owner = $vstsProject -> account -> owner() ) )
-        {
-            return;
-        }
-
-        foreach ( $request -> resource[ 'commits' ] as $commit )
-        {
-            // Commit is already stored
-            if ( !is_null( $this -> commitRepo -> find( $commit[ 'commitId' ] ) ) )
+            // Project does not exist in database, hence skip it
+            if ( $projectId != $vstsProject -> project_id )
             {
                 continue;
             }
 
-            // Stores commit details
-            $data = [];
+            // Get all commits for a particular repository
+            $request = new Request( 'GET', $url . '/commits?api-version=1.0&top=1000' );
+            $json = $this -> sendAuthRequest( $user, $request );
 
-            $data[ 'commit_id' ] = $commit[ 'commitId' ];
-            $data[ 'project_id' ] = $repositoryId;
-            $data[ 'author_email' ] = $commit[ 'author' ][ 'email' ];
-            $data[ 'comment' ] = $commit[ 'comment' ];
-            $data[ 'date' ] = $commit[ 'author' ][ 'date' ];
+            // Store each commit
+            foreach ( $json[ 'value' ] as $commit )
+            {
+                // Commit is already stored
+                if ( !is_null( $this -> commitRepo -> find( $commit[ 'commitId' ] ) ) )
+                {
+                    continue;
+                }
 
-            $request = new Request( 'GET', $repositoryUrl . '/commits/' . $commit[ 'commitId' ] );
-            $json = $this -> sendAuthRequest( $owner, $request );
-            $data[ 'web_url' ] = $json[ '_links' ][ 'web' ][ 'href' ];
+                // Stores commit details
+                $data = [];
 
-            $changes_url = $json[ '_links' ][ 'changes' ][ 'href' ];
-            $request = new Request( 'GET', $changes_url );
-            $json = $this -> sendAuthRequest( $owner, $request );
-            $data[ 'adds_counter' ] = key_exists( 'Add', $json[ 'changeCounts' ] ) ? $json[ 'changeCounts' ][ 'Add' ] : 0;
-            $data[ 'edits_counter' ] = key_exists( 'Edit', $json[ 'changeCounts' ] ) ? $json[ 'changeCounts' ][ 'Edit' ] : 0;
-            $data[ 'deletes_counter' ] = key_exists( 'Delete', $json[ 'changeCounts' ] ) ? $json[ 'changeCounts' ][ 'Delete' ] : 0;
+                $data[ 'commit_id' ] = $commit[ 'commitId' ];
+                $data[ 'project_id' ] = $projectId;
+                $data[ 'author_email' ] = $commit[ 'author' ][ 'email' ];
+                $data[ 'date' ] = $commit[ 'author' ][ 'date' ];
+                $data[ 'comment' ] = $commit[ 'comment' ];
+                $data[ 'web_url' ] = $commit[ 'remoteUrl' ];
+                $data[ 'adds_counter' ] = key_exists( 'Add', $commit[ 'changeCounts' ] ) ? $commit[ 'changeCounts' ][ 'Add' ] : 0;
+                $data[ 'edits_counter' ] = key_exists( 'Edit', $commit[ 'changeCounts' ] ) ? $commit[ 'changeCounts' ][ 'Edit' ] : 0;
+                $data[ 'deletes_counter' ] = key_exists( 'Delete', $commit[ 'changeCounts' ] ) ? $commit[ 'changeCounts' ][ 'Delete' ] : 0;
 
-            // Store new commit
-            $this -> commitRepo -> create( $data );
+                // Store new commit
+                $this -> commitRepo -> create( $data );
+            }
         }
+
+        $vstsProject -> last_update = Carbon::now();
+        $vstsProject -> save();
+    }
+
+
+    private function shouldUpdate( $model, $refresh, $refreshInterval = 5 )
+    {
+        $expireTime = Carbon::now() -> subMinute( $refreshInterval );
+        return $refresh || is_null( $model -> last_update ) || $expireTime > $model -> last_update;
     }
 
 

@@ -10,8 +10,9 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-
     protected $primaryKey = 'user_id';
+
+    public $timestamps = false;
 
 
     /**
@@ -47,7 +48,6 @@ class User extends Authenticatable
     {
         $this -> vsts_access_token = null;
         $this -> vsts_refresh_token = null;
-        $this -> vsts_last_update = null;
         $this -> vsts_profile_id = null;
         $this -> vsts_email = null;
         $this -> save();

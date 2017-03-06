@@ -10,6 +10,7 @@
 namespace App\Transformers;
 
 use App\Models\Commit;
+use App\Models\User;
 use League\Fractal\TransformerAbstract;
 
 
@@ -49,7 +50,8 @@ class CommitTransformer extends TransformerAbstract
 
         if ( is_null( $user ) )
         {
-            return null;
+            $user = new User();
+            $user -> username = $commit -> author_email;
         }
 
         return $this -> item( $user, new LightUserTransformer );

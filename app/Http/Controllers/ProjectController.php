@@ -41,8 +41,7 @@ class ProjectController extends Controller
 
         try
         {
-            $refresh = is_null( $request -> refresh ) ? false : $request -> refresh;
-            $this -> vstsService -> updateUser( $user, $refresh );
+            $this -> vstsService -> updateUser( $user, $request -> refresh );
         }
         catch( ClientException $e )
         {
@@ -70,10 +69,6 @@ class ProjectController extends Controller
 
     public function enrol( ProjectEnrolmentRequest $request, VstsProject $vstsProject )
     {
-        // Add web hook
-        $this -> vstsService -> addWebHook( Helper::currentUser(), $vstsProject );
-
-        // Add module id to project
         $vstsProject -> module_id = $request -> module_id;
         $vstsProject -> save();
     }

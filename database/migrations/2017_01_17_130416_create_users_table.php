@@ -20,15 +20,13 @@ class CreateUsersTable extends Migration
             $table -> string( 'email' ) -> unique();
             $table -> string( 'username' ) -> unique();
             $table -> string( 'password' );
+            $table -> dateTime( 'last_update' ) -> nullable();
 
             // vsts
             $table -> string( 'vsts_profile_id' ) -> nullable();
             $table -> string( 'vsts_email' ) -> nullable();
             $table -> text( 'vsts_access_token' ) -> nullable();
             $table -> text( 'vsts_refresh_token' ) -> nullable();
-            $table -> timestamp( 'vsts_last_update' ) -> nullable();
-
-            $table -> timestamps();
         });
     }
 

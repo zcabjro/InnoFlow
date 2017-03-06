@@ -9,6 +9,7 @@
 namespace App\Http\Requests\Project;
 
 use App\Http\Requests\ApiRequest;
+use Illuminate\Support\Facades\Validator;
 
 
 class RefreshProjectRequest extends ApiRequest
@@ -23,6 +24,7 @@ class RefreshProjectRequest extends ApiRequest
         return true;
     }
 
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -35,5 +37,25 @@ class RefreshProjectRequest extends ApiRequest
             'refresh' => 'boolean',
 
         ];
+    }
+
+
+    /**
+     * Overrides parent class to check decode each field prior to validation.
+     *
+     * @return Validator
+     */
+    protected function getValidatorInstance()
+    {
+        $validator = parent::getValidatorInstance();
+
+        $validator -> after( function() use ( $validator )
+        {
+            $data = $this->all();
+            $data[ 'refresh' ] = is_null( $this -> refresh ) ? false : $this -> refresh;
+            $this -> replace( $data );
+        });
+
+        return $validator;
     }
 }
