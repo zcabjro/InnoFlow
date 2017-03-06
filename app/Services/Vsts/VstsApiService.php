@@ -146,12 +146,12 @@ class VstsApiService
 
             $data[ 'commit_id' ] = $commit[ 'commitId' ];
             $data[ 'project_id' ] = $repositoryId;
+            $data[ 'author_email' ] = $commit[ 'author' ][ 'email' ];
             $data[ 'comment' ] = $commit[ 'comment' ];
             $data[ 'date' ] = $date;
 
             $request = new Request( 'GET', $repositoryUrl . '/commits/' . $commit[ 'commitId' ] );
             $json = $this -> sendAuthRequest( $owner, $request );
-            $data[ 'author_email' ] = $json[ 'author' ][ 'email' ];
             $data[ 'web_url' ] = $json[ '_links' ][ 'web' ][ 'href' ];
 
             $changes_url = $json[ '_links' ][ 'changes' ][ 'href' ];
