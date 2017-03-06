@@ -35,16 +35,16 @@
                   <router-link to="dashboard">Dashboard</router-link>
                 </li>
                 <li>
-                  <a v-on:click="logout" href="#">Sign out</a>
+                  <a v-on:click="logout($event)" href="#">Sign out</a>
                 </li>
               </ul>
               <!-- Unauthorised dropdown items -->
               <ul v-else class="dropdown-menu">
                 <li>
-                  <router-link to="login">Login</router-link>
+                  <router-link to="/login">Login</router-link>
                 </li>
                 <li>
-                  <router-link to="register">Register</router-link>
+                  <router-link to="/register">Register</router-link>
                 </li>
               </ul>
             </li>
@@ -143,6 +143,7 @@
         console.log("Logout success");                
         bus.$emit('logout');
         this.setAuthorised(false);
+        this.$router.replace('/');
       },
 
       // On failure, log the failure
