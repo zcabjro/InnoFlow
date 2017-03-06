@@ -49,6 +49,7 @@ class User extends Authenticatable
         $this -> vsts_refresh_token = null;
         $this -> vsts_last_update = null;
         $this -> vsts_profile_id = null;
+        $this -> vsts_email = null;
         $this -> save();
     }
 

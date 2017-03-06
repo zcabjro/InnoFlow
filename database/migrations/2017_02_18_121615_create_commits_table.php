@@ -20,7 +20,7 @@ class CreateCommitsTable extends Migration
             $table -> string( 'project_id' );
             $table -> string( 'comment' );
             $table -> dateTimeTz( 'date' );
-            $table -> string( 'profile_id' );
+            $table -> string( 'author_email' );
             $table -> string( 'web_url' );
             $table -> integer( 'adds_counter' ) ->default( 0 );
             $table -> integer( 'edits_counter' ) ->default( 0 );

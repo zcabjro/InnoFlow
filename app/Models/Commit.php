@@ -33,7 +33,7 @@ class Commit extends Model
 
     public function commiter()
     {
-        return User::where( 'vsts_profile_id', $this -> profile_id ) -> first();
+        return User::where( 'vsts_email', $this -> author_email ) -> first();
     }
 
 

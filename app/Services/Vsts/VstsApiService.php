@@ -151,7 +151,7 @@ class VstsApiService
 
             $request = new Request( 'GET', $repositoryUrl . '/commits/' . $commit[ 'commitId' ] );
             $json = $this -> sendAuthRequest( $owner, $request );
-            $data[ 'profile_id' ] = $json[ 'push' ][ 'pushedBy' ][ 'id' ];
+            $data[ 'author_email' ] = $json[ 'author' ][ 'email' ];
             $data[ 'web_url' ] = $json[ '_links' ][ 'web' ][ 'href' ];
 
             $changes_url = $json[ '_links' ][ 'changes' ][ 'href' ];

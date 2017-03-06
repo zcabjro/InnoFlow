@@ -57,6 +57,8 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
         Route::post( 'projects/{vstsProject}/codereviews/{codeReview}/comments', 'Project\CodeReview\CommentController@store' );
         Route::get( 'projects/{vstsProject}/codereviews/{codeReview}/comments', 'Project\CodeReview\CommentController@index' );
         Route::get( 'projects/{vstsProject}/codereviews/{codeReview}/comments/{comment}', 'Project\CodeReview\CommentController@show' );
+
+        Route::get( 'projects/{vstsProject}/metrics', 'Project\MetricController@index' );
     });
 
 });

@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
 
             // vsts
             $table -> string( 'vsts_profile_id' ) -> nullable();
+            $table -> string( 'vsts_email' ) -> nullable();
             $table -> text( 'vsts_access_token' ) -> nullable();
             $table -> text( 'vsts_refresh_token' ) -> nullable();
             $table -> timestamp( 'vsts_last_update' ) -> nullable();
