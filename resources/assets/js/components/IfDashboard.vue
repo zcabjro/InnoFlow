@@ -155,7 +155,6 @@
           if (isAuthorised) {
             console.log("VSTS Authorised!");
             this.loadProjects();
-            this.loadCommits(); // TEMP: testing VSTS redirect                    
           }
           else if (redirectUrl && confirm('Redirect for VSTS auth?')) {
             //this.$refs.message.display('Missing VSTS Authorisation.');
