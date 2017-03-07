@@ -1,28 +1,53 @@
 <template>            
-  <div class="comment">
+<div class="comment">
 
 
+  <div class="col-lg-12">
+    <h1>Commits</h1>              
+    <div v-for="i in commits">
+      {{i.id}}: {{i.comment}} <br>           
+      by {{i.commiter.username}} ({{i.date}}) <br><br>
+    </div>            
+  </div>
 
     <if-message ref="message"></if-message>
-<div>
-            <div v-for="i in comments">
+  <div >
+    <h1>Comments</h1>              
+            <div v-for="i in comments" style=".if-card { width: 100%; height: 50%;  
+              /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;}" >
               <if-card> 
                 <span class="h3">{{i.text}}</span>                            
                 <br>by {{i.owner.username}} ({{i.date}})
               </if-card>
-            </div>
-          </div>
+            </div> 
 
-    <div>
               <if-card>       
-                <b>Message</b><br><textarea v-model="newComment" style="width: 100%; height: 50%;" placeholder="20+ chars"></textarea><br>
+                <b>Message</b>
+                <br>
+                <textarea v-model="newComment" style="box-sizing:border-box" placeholder="20+ chars"></textarea>
+                <br>
      
                   <a  href="#" v-on:click="submitComment($event)">Submit Comment</a>  
               </if-card>         
 
-              </div>
-
   </div>
+
+
+</div>
 </template>
 
 <script>
@@ -37,6 +62,7 @@
       // Whether innovations have been syntax highlighted or not
       highlighted: false,
       newComment: '',
+      commits: [],
 
       // Innovation markup snippets
       comments: [
@@ -103,8 +129,8 @@
       next();
     },
 */
-    created() {
-      this.loadComments();
+    created() { 
+      this.loadCommitsAndComments();
     },
 
     computed: {
@@ -130,7 +156,7 @@
           axios.get('api/projects/' + this.projectID)
             .then(res => {
               this.details = res.data; 
-              this.loadComments();  
+              this.loadCommitsAndComments();  
 
             })
             .catch(error => {
@@ -145,23 +171,26 @@
       },
 
 
-      loadComments() { 
+      loadCommitsAndComments() { 
 //          axios.get('http://innoflow.app/api/projects/07fa8c3e-546d-4e7a-8edb-4274a9e631c3/codereviews/1/comments')
-        axios.get('api/projects/' + this.projectID +'/codereviews/' + this.codeReviewID + '/comments')
+        axios.get('api/projects/' + this.projectID +'/codereviews/' + this.codeReviewID)
           .then((res) => {
 //            this.comments = res.data.comments;
-console.log("comments has been set");
 console.log(res.data);
-              this.comments = res.data;
+              this.comments = res.data.comments;
+              this.commits = res.data.commits;
+console.log("comments and commits has been set");
 
+console.log(this.commits);
 console.log(this.comments);
 
           })
           .catch((error) => {
             console.log(error);
-            console.log('Failed to load comments');
+            console.log('Failed to load code review');
           });
       },
+ 
 
 
       submitComment(e) {
