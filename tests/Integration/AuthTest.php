@@ -134,7 +134,7 @@ class AuthTest extends TestCase
      }
 
      /**
-     * User is not authorized
+     * Member is not authorized
      *
      * @return void
      */

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: andreas
+ * Member: andreas
  * Date: 31/01/2017
  * Time: 20:43
  */
@@ -75,7 +75,7 @@ class ModuleController extends Controller
         return fractal() -> collection( $users, new UserTransformer );
 
         /*
-        $users = User::hydrate( Searchy::users( [ 'email', 'username' ] ) -> query( $request -> string ) -> getQuery() -> limit( 10 ) -> get() -> toArray() );
+        $users = Member::hydrate( Searchy::users( [ 'email', 'username' ] ) -> query( $request -> string ) -> getQuery() -> limit( 10 ) -> get() -> toArray() );
         return fractal() -> collection( $users, new UserTransformer );*/
     }
 }

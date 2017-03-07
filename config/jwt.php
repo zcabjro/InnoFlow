@@ -65,11 +65,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User Model namespace
+    | Member Model namespace
     |--------------------------------------------------------------------------
     |
-    | Specify the full namespace to your User model.
-    | e.g. 'Acme\Entities\User'
+    | Specify the full namespace to your Member model.
+    | e.g. 'Acme\Entities\Member'
     |
     */
 
@@ -77,7 +77,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | User identifier
+    | Member identifier
     |--------------------------------------------------------------------------
     |
     | Specify a unique property of the user that will be added as the 'sub'
@@ -125,7 +125,7 @@ return [
 
         /*
         |--------------------------------------------------------------------------
-        | User Provider
+        | Member Provider
         |--------------------------------------------------------------------------
         |
         | Specify the provider that is used to find the user based

@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: andreas
+ * Member: andreas
  * Date: 23/01/2017
  * Time: 18:02
  */
@@ -264,7 +264,7 @@ class VstsApiService
             // Loop over all owner accounts
             foreach ( $ownerAccounts as $ownerAccount )
             {
-                // User is owner of the account
+                // Member is owner of the account
                 if ( $ownerAccount[ 'accountId' ] == $memberAccount[ 'accountId' ] )
                 {
                     $isOwner = true;

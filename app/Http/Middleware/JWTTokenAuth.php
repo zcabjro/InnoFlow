@@ -35,10 +35,10 @@ class JWTTokenAuth
             $token = $request -> cookie( config( 'custom.cookie.name' ) );
             JWTAuth::setToken( $token );
 
-            // User cannot be found
+            // Member cannot be found
             if ( is_null( JWTAuth::toUser( $token ) ) )
             {
-                return $this -> respondNotFound( "User not found" );
+                return $this -> respondNotFound( "Member not found" );
             }
         }
         // Token expired

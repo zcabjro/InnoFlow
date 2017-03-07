@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: andreas
+ * Member: andreas
  * Date: 31/01/2017
  * Time: 20:40
  */
@@ -16,7 +16,7 @@ use App\Repositories\Module\ModuleRepoInterface;
 use App\Services\Vsts\VstsApiService;
 use App\Services\Common\Helper;
 use App\Traits\JsonResponseTrait;
-use App\Transformers\VstsProjectTransformer;
+use App\Transformers\ProjectTransformer;
 use GuzzleHttp\Exception\ClientException;
 
 
@@ -57,13 +57,13 @@ class ProjectController extends Controller
             $projects[] = $project;
         }
 
-        return fractal() -> collection( $projects, new VstsProjectTransformer );
+        return fractal() -> collection( $projects, new ProjectTransformer );
     }
 
 
     public function show( VstsProject $vstsProject )
     {
-        return fractal() -> parseIncludes( [ 'members' ] ) -> item( $vstsProject, new VstsProjectTransformer );
+        return fractal() -> parseIncludes( [ 'members' ] ) -> item( $vstsProject, new ProjectTransformer( true ) );
     }
 
 

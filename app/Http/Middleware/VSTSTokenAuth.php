@@ -38,7 +38,7 @@ class VSTSTokenAuth
             $url = $this -> vstsService -> getAuthorizationURL( $user );
 
             return $this -> respondForbidden( [
-                'message' => 'User has not authorized the app.',
+                'message' => 'Member has not authorized the app.',
                 'url' => $url
             ]);
         }
