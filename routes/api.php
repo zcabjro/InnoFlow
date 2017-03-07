@@ -23,9 +23,10 @@ Route::get( 'innoflow', 'AuthController@isLoggedIn' );
 Route::post( 'innovations', 'InnovationController@store' );
 
 
-// VSTS route
+// Public routes
 Route::post( 'commits', 'CommitController@store' );
-
+Route::get( 'users/search', 'UserController@search' );
+Route::get( 'users/{user}/innovations', 'User\InnovationController@index' );
 
 // JWT token protected routes
 Route::group( [ 'middleware' => 'jwt-auth' ], function () {
