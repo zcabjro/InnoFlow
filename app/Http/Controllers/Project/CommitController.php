@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: andreas
+ * Member: andreas
  * Date: 02/03/2017
  * Time: 18:18
  */
@@ -16,7 +16,7 @@ use App\Services\Common\Helper;
 use App\Services\Vsts\VstsApiService;
 use App\Traits\JsonResponseTrait;
 use App\Transformers\CommitTransformer;
-use App\Transformers\VstsProjectTransformer;
+use App\Transformers\ProjectTransformer;
 use GuzzleHttp\Exception\ClientException;
 
 
@@ -39,7 +39,7 @@ class CommitController extends Controller
             return $this -> respondUnauthorized( 'Token cannot be refresh. Authorize with Vsts again.' );
         }
 
-        return fractal() -> parseIncludes( [ 'commits' ] ) -> item( $vstsProject, new VstsProjectTransformer );
+        return fractal() -> parseIncludes( [ 'commits' ] ) -> item( $vstsProject, new ProjectTransformer );
     }
 
 

@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Services\Metric\MetricCalculator;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class VstsProject extends Model
 {
@@ -72,19 +74,41 @@ class VstsProject extends Model
     }
 
 
-    public function projectCodeReviewScore()
+    public function comments()
     {
-        /*$activeCodeReviews = 0;
-        $codeReviews = $this -> codeReviews;
+        return DB::table( 'code_reviews' )
+            -> join( 'comments', 'code_reviews.code_review_id', '=', 'comments.code_review_id')
+            -> where( 'code_reviews.project_id', $this -> project_id )
+            -> get();
+    }
 
-        foreach ( $codeReviews as $codeReview )
-        {
-            if ( $codeReview -> is_active )
-            {
-                $activeCodeReviews++;
-            }
-        }
 
-        return [ $activeCodeReviews, count($codeReviews ) ];*/
+    public function activeCodeReviews()
+    {
+        return $this -> codeReviews() -> where( 'is_active', true );
+    }
+
+
+    public function activeCodeReviewMetric()
+    {
+        return $this -> activeCodeReviews() -> count();
+    }
+
+
+    public function codeReviewMetric()
+    {
+        return $this -> codeReviews() -> count();
+    }
+
+
+    public function commitMetric()
+    {
+        return $this -> commits() -> count();
+    }
+
+
+    public function feedbackMetric()
+    {
+        return $this -> comments() -> count();
     }
 }

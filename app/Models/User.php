@@ -100,4 +100,28 @@ class User extends Authenticatable
     {
         return $this -> belongsToMany( 'App\Models\VstsProject', 'vsts_project_users', 'user_id', 'project_id' );
     }
+
+
+    public function codeReviewMetric( VstsProject $vstsProject )
+    {
+        return $vstsProject -> codeReviews() -> where( 'user_id', $this -> user_id ) -> count();
+    }
+
+
+    public function activeCodeReviewMetric( VstsProject $vstsProject )
+    {
+        return $vstsProject -> activeCodeReviews() -> where( 'user_id', $this -> user_id ) -> count();
+    }
+
+
+    public function commitMetric( VstsProject $vstsProject )
+    {
+        return $vstsProject -> comments() -> where( 'author_email', $this -> vsts_email ) -> count();
+    }
+
+
+    public function feedbackMetric( VstsProject $vstsProject  )
+    {
+        return $vstsProject -> comments() -> where( 'user_id', $this -> user_id ) -> count();
+    }
 }

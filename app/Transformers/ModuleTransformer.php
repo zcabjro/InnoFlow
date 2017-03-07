@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: andreas
+ * Member: andreas
  * Date: 19/02/2017
  * Time: 18:55
  */
@@ -55,6 +55,6 @@ class ModuleTransformer extends TransformerAbstract
     public function includeProjects( Module $module )
     {
         $projects = $module -> projects;
-        return $this -> collection( $projects, new VstsProjectTransformer );
+        return $this -> collection( $projects, new ProjectTransformer );
     }
 }
