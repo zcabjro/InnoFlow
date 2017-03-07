@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\VSTS\VstsApiService;
+use App\Services\Vsts\VstsApiService;
 use App\Services\Common\Helper;
 use App\Traits\JsonResponseTrait;
 use Closure;
@@ -13,12 +13,12 @@ class VSTSTokenAuth
 {
     use JsonResponseTrait;
 
-    private $vstsService;
+    private $vstsApiService;
 
 
-    public function __construct( VstsApiService $vstsService )
+    public function __construct( VstsApiService $vstsApiService )
     {
-        $this -> vstsService = $vstsService;
+        $this -> vstsApiService = $vstsApiService;
     }
 
 
@@ -35,7 +35,7 @@ class VSTSTokenAuth
 
         if ( is_null( $user ) || is_null( $user -> vsts_access_token ) )
         {
-            $url = $this -> vstsService -> getAuthorizationURL( $user );
+            $url = $this -> vstsApiService -> getAuthorizationURL( $user );
 
             return $this -> respondForbidden( [
                 'message' => 'Member has not authorized the app.',
