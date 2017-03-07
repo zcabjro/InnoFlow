@@ -130,7 +130,6 @@ class VstsApiService
         }
 
         $commits = $request -> resource[ 'commits' ];
-        $date = $request -> resource[ 'date' ];
 
         foreach ( $commits as $commit )
         {
@@ -145,8 +144,8 @@ class VstsApiService
             $data[ 'commit_id' ] = $commit[ 'commitId' ];
             $data[ 'project_id' ] = $repositoryId;
             $data[ 'author_email' ] = $commit[ 'author' ][ 'email' ];
+            $data[ 'date' ] = $commit[ 'author' ][ 'date' ];
             $data[ 'comment' ] = $commit[ 'comment' ];
-            $data[ 'date' ] = $date;
 
             $request = new Request( 'GET', $repositoryUrl . '/commits/' . $commit[ 'commitId' ] );
             $json = $this -> sendAuthRequest( $owner, $request );
