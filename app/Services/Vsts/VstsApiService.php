@@ -6,7 +6,7 @@
  * Time: 18:02
  */
 
-namespace App\Services\Vsts;
+namespace App\Services\Vsts\VstsApiService;
 
 use App\Models\User;
 use App\Models\VstsAccount;
