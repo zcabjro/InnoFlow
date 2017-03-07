@@ -97,8 +97,10 @@
                 <p class="pull-right">{{codeReview.date}}</p>
                 <h3>{{codeReview.title}}</h3>
                 <p>{{codeReview.description}}</p>
+                <p>{{codeReview.id}}</p>
                 <b>{{codeReview.owner ? codeReview.owner.username : ''}}</b>
               </if-card>
+              <if-comments :projectID="id" :codeReviewID="codeReview.id"></if-comments>
             </div>
           </div>
         </div>
@@ -110,6 +112,7 @@
 <script>
   import IfCard from './IfCard.vue'
   import IfMessage from './IfMessage.vue'
+  import IfComments from './IfComments.vue'
 
   function defaultProjectData() {
     return {
@@ -132,7 +135,8 @@
 
     components: {
       IfCard,
-      IfMessage
+      IfMessage,
+      IfComments
     },
 
     data() {
@@ -140,6 +144,7 @@
     },
     
     beforeRouteEnter(to, from, next) {
+      console.log("project beforeRouteEnter called");
       next(projectComponent => {
         projectComponent.init(to.params.id);
       });

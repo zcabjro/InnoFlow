@@ -12,6 +12,7 @@ import IfEnrolProject from './components/IfEnrolProject.vue'
 import IfInnovations from './components/IfInnovations.vue'
 import IfProject from './components/IfProject.vue'
 import IfClass from './components/IfClass.vue'
+import IfComments from './components/IfComments.vue'
 
 Vue.use(VueRouter)
 
@@ -37,7 +38,7 @@ const routes = [{
     // Login
     path: 'login',
     component: IfLogin
-  }, {
+  },   {
     
     // Dashboard
     path: 'dashboard',
@@ -52,7 +53,11 @@ const routes = [{
 
       // Projects
       path: 'projects/:id',
-      component: IfProject
+      component: IfProject,
+      children: [{
+        path: 'codereviews/:codeReviewID',
+        component: IfComments
+      }]
     }, {
 
       // Classes
