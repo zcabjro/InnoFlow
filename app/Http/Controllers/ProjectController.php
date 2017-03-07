@@ -67,8 +67,12 @@ class ProjectController extends Controller
     }
 
 
-    public function enrol( ProjectEnrolmentRequest $request, VstsProject $vstsProject )
+    public function enrol( ProjectEnrolmentRequest $request, VstsProject $vstsProject, VstsApiService $vstsApiService )
     {
+        $user = Helper::currentUser();
+
+        $vstsApiService -> addWebHook( $user, $vstsProject );
+
         $vstsProject -> module_id = $request -> module_id;
         $vstsProject -> save();
     }

@@ -20,7 +20,6 @@ class CreateVstsProjectsTable extends Migration
             $table -> string('name') -> nullable();
             $table -> text('description') -> nullable();
             $table -> integer('revision');
-            $table -> dateTime( 'last_update' ) -> nullable();
 
             $table -> primary( array( 'project_id' ) );
 

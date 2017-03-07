@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\Metric\MetricCalculator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +14,11 @@ class VstsProject extends Model
     protected $primaryKey = 'project_id';
 
     protected $fillable = [
-        'project_id', 'account_id', 'name', 'description', 'revision'
+        'project_id',
+        'account_id',
+        'name',
+        'description',
+        'revision'
     ];
 
 
