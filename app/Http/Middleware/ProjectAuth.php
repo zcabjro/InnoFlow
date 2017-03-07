@@ -28,6 +28,12 @@ class ProjectAuth
     public function handle( $request, Closure $next )
     {
         $vstsProject = $request -> route() -> parameter( 'vstsProject' );
+
+        if ( is_null( $vstsProject -> module_id ) )
+        {
+            return $this -> respondUnauthorized( 'Project is not enrolled yet.' );
+        }
+
         $members = $vstsProject -> account -> users;
         $user = Helper::currentUser();
 

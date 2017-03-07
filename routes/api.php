@@ -23,6 +23,10 @@ Route::get( 'innoflow', 'AuthController@isLoggedIn' );
 Route::post( 'innovations', 'InnovationController@store' );
 
 
+// VSTS route
+Route::post( 'commits', 'CommitController@store' );
+
+
 // JWT token protected routes
 Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
@@ -38,10 +42,11 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
     Route::get( 'classes/admins/search', 'ModuleController@searchAdmin' );
 
     Route::get( 'projects', 'ProjectController@index' ) -> middleware( 'vsts-auth' );
+    Route::post( 'projects/{vstsProject}/enrol', 'ProjectController@enrol' ) -> middleware( 'vsts-auth' );
+
     Route::group( [ 'middleware' => 'project-auth' ], function () {
 
         Route::get( 'projects/{vstsProject}', 'ProjectController@show' );
-        Route::post( 'projects/{vstsProject}/enrol', 'ProjectController@enrol' ) -> middleware( 'vsts-auth' );
 
         Route::get( 'projects/{vstsProject}/commits', 'Project\CommitController@index' ) -> middleware( 'vsts-auth' );
         Route::get( 'projects/{vstsProject}/commits/{commit}', 'Project\CommitController@show' );
