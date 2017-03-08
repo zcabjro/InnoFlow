@@ -32,7 +32,7 @@
               <!-- Authorised dropdown items -->
               <ul v-if="auth" class="dropdown-menu">
                 <li>
-                  <router-link to="dashboard">Dashboard</router-link>
+                  <router-link to="/dashboard">Dashboard</router-link>
                 </li>
                 <li>
                   <a v-on:click="logout($event)" href="#">Sign out</a>
