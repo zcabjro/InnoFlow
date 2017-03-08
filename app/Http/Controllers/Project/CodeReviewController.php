@@ -32,6 +32,8 @@ class CodeReviewController extends Controller
         $codeReview = $this -> codeReviewRepo -> create( $request -> except( [ 'commitIds' ] ) );
 
         $codeReview -> commits() -> attach( $request -> commitIds );
+
+        return fractal() -> item( $codeReview, new CodeReviewTransformer );
     }
 
 

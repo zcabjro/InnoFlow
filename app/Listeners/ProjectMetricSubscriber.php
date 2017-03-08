@@ -43,10 +43,16 @@ class ProjectMetricSubscriber
 
     public function commitCreated( CommitCreatedEvent $event )
     {
+        $commit = $event -> commit;
         $vstsProject = $event -> vstsProject;
 
-        $commitMetric = $vstsProject -> commit_metric;
-        $vstsProject -> commit_metric = ++$commitMetric;
+        if ( $vstsProject -> members() -> where( 'users.vsts_email', $commit -> author_email  ) -> count() == 0 )
+        {
+            return;
+        }
+
+        $commitCounter = $vstsProject -> commit_counter;
+        $vstsProject -> commit_counter = ++$commitCounter;
         $vstsProject -> save();
     }
 
@@ -64,8 +70,8 @@ class ProjectMetricSubscriber
         $codeReview -> is_active = true;
         $codeReview -> save();
 
-        $codeReviewMetric = $vstsProject -> code_review_metric;
-        $vstsProject -> code_review_metric = ++$codeReviewMetric;
+        $codeReviewCounter = $vstsProject -> code_review_counter;
+        $vstsProject -> code_review_counter = ++$codeReviewCounter;
         $vstsProject -> save();
     }
 
@@ -74,8 +80,8 @@ class ProjectMetricSubscriber
     {
         $vstsProject = $event -> vstsProject;
 
-        $feedbackMetric = $vstsProject -> feedback_metric;
-        $vstsProject -> feedback_metric = ++$feedbackMetric;
+        $feedbackCounter = $vstsProject -> feedback_counter;
+        $vstsProject -> feedback_counter = ++$feedbackCounter;
         $vstsProject -> save();
     }
 }

@@ -22,9 +22,9 @@ class CreateVstsProjectsTable extends Migration
             $table -> text('description') -> nullable();
             $table -> integer('revision');
 
-            $table -> integer('code_review_metric') ->default( 0 );
-            $table -> integer('commit_metric')->default( 0 );
-            $table -> integer('feedback_metric')->default( 0 );
+            $table -> integer('code_review_counter') ->default( 0 );
+            $table -> integer('commit_counter')->default( 0 );
+            $table -> integer('feedback_counter')->default( 0 );
 
             $table -> primary( array( 'project_id' ) );
 

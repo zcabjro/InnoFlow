@@ -17,31 +17,64 @@ class ProjectMetricsTransformer extends TransformerAbstract
 {
     public function transform( VstsProject $project )
     {
-        $fields = [];
+        $members = $project -> members;
+        $metrics = [];
 
-        $fields[ 'projectMetrics' ] = [
-            'activeCodeReviews' => $project -> activeCodeReviewMetric(),
-            'codeReviews' => $project -> codeReviewMetric(),
-            'commits' => $project -> commitMetric(),
-            'feedback' => $project -> feedbackMetric(),
-        ];
 
-        $membersMetrics = [];
-        foreach ( $project -> members as $member )
+        $individual = [];
+
+        foreach ( $members as $member )
         {
-            $membersMetrics[] = [
-                'user' => [
-                    'id' => $member -> user_id,
-                    'username' => $member -> username
-                ],
-                'activeCodeReviews' => $member -> activeCodeReviewMetric( $project ),
-                'codeReviews' => $member -> codeReviewMetric( $project ),
-                'commits' => $member -> commitMetric( $project ),
-                'feedback' => $member -> feedbackMetric( $project ),
+            $individual[] = [
+                'username' => $member -> username,
+                'id' => $member -> user_id,
+                'contribution' => $member -> codeReviewMetric( $project ) . '%'
             ];
         }
-        $fields[ 'membersMetrics' ] = $membersMetrics;
 
-        return $fields;
+        $metrics[ 'codeReviewMetric' ] = [
+            'totalValidCodeReviews' => $project -> codeReviewMetric(),
+            'individual' => $individual
+        ];
+
+
+
+        $individual = [];
+
+        foreach ( $members as $member )
+        {
+            $individual[] = [
+                'username' => $member -> username,
+                'id' => $member -> user_id,
+                'commitBalanceMetric' => $member -> commitBalanceMetric( $project )
+            ];
+        }
+
+        $metrics[ 'commitBalanceMetric' ] = [
+            'averageCommitBalance' => $project -> commitBalanceMetric() ,
+            'individual' => $individual
+        ];
+
+
+
+        $individual = [];
+
+        foreach ( $members as $member )
+        {
+            $individual[] = [
+                'username' => $member -> username,
+                'id' => $member -> user_id,
+                'contribution' => $member -> feedbackMetric( $project ) . '%'
+            ];
+        }
+
+        $metrics[ 'feedbackMetric' ] = [
+            'totalFeedback' => $project -> feedbackMetric(),
+            'individual' => $individual
+        ];
+
+
+
+        return $metrics;
     }
 }

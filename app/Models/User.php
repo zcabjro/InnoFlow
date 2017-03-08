@@ -104,24 +104,27 @@ class User extends Authenticatable
 
     public function codeReviewMetric( VstsProject $vstsProject )
     {
-        return $vstsProject -> codeReviews() -> where( 'user_id', $this -> user_id ) -> count();
+        $individual = $vstsProject -> activeCodeReviews() -> where( 'user_id', $this -> user_id ) -> count();
+        return $vstsProject -> code_review_counter == 0 ? 0 : ( $individual / $vstsProject -> code_review_counter ) * 100;
     }
 
 
-    public function activeCodeReviewMetric( VstsProject $vstsProject )
+    public function commitBalanceMetric( VstsProject $vstsProject )
     {
-        return $vstsProject -> activeCodeReviews() -> where( 'user_id', $this -> user_id ) -> count();
-    }
+        $individual = $vstsProject -> commits() -> where( 'author_email', $this -> vsts_email ) -> count();
 
+        $contributed = ( $individual / $vstsProject -> commit_counter ) * 100;
+        $expected = 100 / $vstsProject -> members() -> count();
 
-    public function commitMetric( VstsProject $vstsProject )
-    {
-        return $vstsProject -> comments() -> where( 'author_email', $this -> vsts_email ) -> count();
+        $metric = $contributed >= $expected ? 1 : $contributed / $expected;
+
+        return $metric;
     }
 
 
     public function feedbackMetric( VstsProject $vstsProject  )
     {
-        return $vstsProject -> comments() -> where( 'user_id', $this -> user_id ) -> count();
+        $individual = $vstsProject -> comments() -> where( 'user_id', $this -> user_id ) -> count();
+        return $vstsProject -> feedback_counter == 0 ? 0 : ( $individual / $vstsProject -> feedback_counter ) * 100;
     }
 }
