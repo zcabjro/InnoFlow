@@ -12,7 +12,6 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Transformers\InnovationTransformer;
-use Illuminate\Http\Request;
 
 
 class InnovationController extends Controller

@@ -14,12 +14,17 @@ class CreateVstsProjectsTable extends Migration
     public function up()
     {
         Schema::create('vsts_projects', function (Blueprint $table) {
+
             $table -> string('project_id');
             $table -> string('account_id');
             $table -> integer( 'module_id' ) -> unsigned() -> nullable();
             $table -> string('name') -> nullable();
             $table -> text('description') -> nullable();
             $table -> integer('revision');
+
+            $table -> integer('code_review_metric') ->default( 0 );
+            $table -> integer('commit_metric')->default( 0 );
+            $table -> integer('feedback_metric')->default( 0 );
 
             $table -> primary( array( 'project_id' ) );
 
@@ -34,6 +39,7 @@ class CreateVstsProjectsTable extends Migration
                 -> on( 'modules' )
                 -> onUpdate( 'cascade' )
                 -> onDelete( 'set null' );
+
         });
     }
 

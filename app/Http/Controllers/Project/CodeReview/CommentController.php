@@ -8,6 +8,9 @@
 
 namespace App\Http\Controllers\Project\CodeReview;
 
+use App\Events\CodeReviewActiveEvent;
+use App\Events\CodeReviewCreatedEvent;
+use App\Events\CommentCreatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Comment\NewCommentRequest;
 use App\Models\CodeReview;
@@ -30,19 +33,18 @@ class CommentController extends Controller
 
     public function store( VstsProject $vstsProject, CodeReview $codeReview, NewCommentRequest $request )
     {
-        if ( !$codeReview -> is_active )
-        {
-            $codeReview -> is_active = true;
-            $codeReview -> save();
-        }
-
         $this -> commentRepo -> create( $request -> all() );
+
+        event( new CodeReviewActiveEvent( $codeReview, $vstsProject ) );
+
+        event( new CommentCreatedEvent( $vstsProject ) );
     }
 
 
     public function index( VstsProject $vstsProject, CodeReview $codeReview )
     {
         $comments = $codeReview -> comments;
+
         return fractal() -> collection( $comments, new CommentTransformer );
     }
 

@@ -49,7 +49,7 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
         Route::get( 'projects/{vstsProject}', 'ProjectController@show' );
 
-        Route::get( 'projects/{vstsProject}/commits', 'Project\CommitController@index' ) -> middleware( 'vsts-auth' );
+        Route::get( 'projects/{vstsProject}/commits', 'Project\CommitController@index' );
         Route::get( 'projects/{vstsProject}/commits/{commit}', 'Project\CommitController@show' );
 
         Route::post( 'projects/{vstsProject}/codereviews', 'Project\CodeReviewController@store' );
