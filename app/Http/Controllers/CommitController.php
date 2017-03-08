@@ -9,6 +9,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CommitCreatedEvent;
 use App\Services\Vsts\VstsApiService;
 use Illuminate\Http\Request;
 
@@ -16,6 +17,11 @@ class CommitController extends Controller
 {
     public function store( Request $request, VstsApiService $vstsApiService )
     {
-        $vstsApiService -> storeCommit( $request );
+        $vstsProject = $vstsApiService -> storeCommit( $request );
+
+        if ( !is_null( $vstsProject ) )
+        {
+            event( new CommitCreatedEvent( $vstsProject ) );
+        }
     }
 }

@@ -9,6 +9,7 @@
 namespace App\Http\Requests\CodeReview;
 
 use App\Http\Requests\ApiRequest;
+use App\Services\Common\Helper;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -54,10 +55,13 @@ class NewCodeReviewRequest extends ApiRequest
         $validator -> after( function() use ( $validator )
         {
             $commit_ids = array_unique( explode( ',', $this -> get( 'commitIds' ) ) );
+            $vstsProject = $this -> route() -> parameter( 'vstsProject' );
 
-            $all = $this -> all();
-            $all[ 'commitIds' ] = $commit_ids;
-            $this -> replace( $all );
+            $data = $this -> all();
+            $data[ 'commitIds' ] = $commit_ids;
+            $data[ 'project_id' ] = $vstsProject -> project_id;
+            $data[ 'user_id' ] = Helper::currentUser() -> user_id;
+            $this -> replace( $data );
         });
 
         return $validator;

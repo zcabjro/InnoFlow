@@ -13,7 +13,6 @@ use App\Http\Requests\CodeReview\NewCodeReviewRequest;
 use App\Models\CodeReview;
 use App\Models\VstsProject;
 use App\Repositories\CodeReview\CodeReviewRepoInterface;
-use App\Services\Common\Helper;
 use App\Transformers\CodeReviewTransformer;
 
 
@@ -30,11 +29,7 @@ class CodeReviewController extends Controller
 
     public function store( VstsProject $vstsProject, NewCodeReviewRequest $request )
     {
-        $data = $request -> all();
-        $data[ 'user_id' ] = Helper::currentUser() -> user_id;
-        $data[ 'project_id' ] = $vstsProject -> project_id;
-
-        $codeReview = $this -> codeReviewRepo -> create( $data );
+        $codeReview = $this -> codeReviewRepo -> create( $request -> except( [ 'commitIds' ] ) );
 
         $codeReview -> commits() -> attach( $request -> commitIds );
     }
@@ -43,6 +38,7 @@ class CodeReviewController extends Controller
     public function index( VstsProject $vstsProject )
     {
         $codeReviews = $vstsProject -> codeReviews;
+
         return fractal() -> collection( $codeReviews, new CodeReviewTransformer );
     }
 

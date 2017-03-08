@@ -161,6 +161,8 @@ class VstsApiService
             // Store new commit
             $this -> commitRepo -> create( $data );
         }
+
+        return $vstsProject;
     }
 
 
@@ -353,6 +355,8 @@ class VstsApiService
         $json = $this -> sendAuthRequest( $user, $request );
         $repositories = $json[ 'value' ];
 
+        $totalCommits = 0;
+
         foreach ( $repositories as $repository )
         {
             $projectId = $repository[ 'project' ][ 'id' ];
@@ -392,7 +396,13 @@ class VstsApiService
 
                 // Store new commit
                 $this -> commitRepo -> create( $data );
+
+                // Increment commit counter
+                $totalCommits++;
             }
         }
+
+        $vstsProject -> commit_metric = $totalCommits;
+        $vstsProject -> save();
     }
 }

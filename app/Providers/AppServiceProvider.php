@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Comment;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Validators\CustomValidator;
 use Validator;
