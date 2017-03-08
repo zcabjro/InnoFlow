@@ -167,7 +167,7 @@ export default {
 		onSearchProjects(searchInput, resultsCallback) {
 			let results = [];
 			for (let i = 0; i < this.projects.length; i++) {
-				if (this.projects[i].isOwner && this.projects[i].name.toLowerCase().indexOf(searchInput.toLowerCase()) >= 0) {
+				if (this.projects[i].isOwner || this.projects[i].name.toLowerCase().indexOf(searchInput.toLowerCase()) >= 0) {
 					results.push(this.projects[i]);
 				}
 			}
