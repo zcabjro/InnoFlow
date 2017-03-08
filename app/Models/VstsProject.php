@@ -51,7 +51,7 @@ class VstsProject extends Model
      */
     public function commits()
     {
-        return $this -> hasMany( 'App\Models\Commit', 'project_id', 'project_id' ) -> orderBy( 'date', 'DESC' );
+        return $this -> hasMany( 'App\Models\Commit', 'project_id', 'project_id' );
     }
 
 

@@ -39,7 +39,7 @@ class CodeReviewController extends Controller
 
     public function index( VstsProject $vstsProject )
     {
-        $codeReviews = $vstsProject -> codeReviews() -> orderBy( 'created_at', 'DESC' );
+        $codeReviews = $vstsProject -> codeReviews() -> orderBy( 'created_at', 'DESC' ) -> get();
 
         return fractal() -> collection( $codeReviews, new CodeReviewTransformer );
     }

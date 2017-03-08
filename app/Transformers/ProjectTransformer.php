@@ -75,7 +75,7 @@ class ProjectTransformer extends TransformerAbstract
      */
     public function includeCommits( VstsProject $project )
     {
-        $commits = $project -> commits;
+        $commits = $project -> commits() -> orderBy( 'date', 'DESC' ) -> get();
         return $this -> collection( $commits, new CommitTransformer );
     }
 }
