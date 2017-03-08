@@ -87,7 +87,7 @@ class ProjectEnrolmentRequest extends ApiRequest
         switch ( $this -> errorMessage )
         {
             case self::ALREADY_ENROLED:
-                return $this -> respondBadRequest( $this -> errorMessage );
+                return $this -> respondUnprocessable( $this -> errorMessage );
 
             case self::WRONG_CREDENTIALS: case self::NOT_OWNER:
                 return $this -> respondUnauthorized( $this -> errorMessage );

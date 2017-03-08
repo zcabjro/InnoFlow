@@ -98,6 +98,15 @@ trait JsonResponseTrait
         return $this -> setStatusCode( 404 ) -> respondWithError( $message );
     }
 
+    /**
+     * @param string $message
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondUnprocessable( $message )
+    {
+        return $this -> setStatusCode( 422 ) -> respondWithError( $message );
+    }
+
 
 
     /**
