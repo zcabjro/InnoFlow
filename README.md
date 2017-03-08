@@ -712,7 +712,7 @@ Includes both classes created as well as those where user was assinged as admin.
 {
   "codeReviewMetric": {
     "totalValidCodeReviews": 12,
-    "individual": [
+    "individualLevel": [
       {
         "username": "AndreasLukas",
         "id": 102,
@@ -727,7 +727,7 @@ Includes both classes created as well as those where user was assinged as admin.
   },
   "commitBalanceMetric": {
     "averageCommitBalance": 1,
-    "individual": [
+    "individualLevel": [
       {
         "username": "AndreasLukas",
         "id": 102,
@@ -742,7 +742,7 @@ Includes both classes created as well as those where user was assinged as admin.
   },
   "feedbackMetric": {
     "totalFeedback": 30,
-    "individual": [
+    "individualLevel": [
       {
         "username": "AndreasLukas",
         "id": 102,
