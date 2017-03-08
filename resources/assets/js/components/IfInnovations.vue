@@ -15,6 +15,8 @@
   function defaultInnovationsData() {
     return {
 
+      userId: null,
+
       // Whether innovations have been syntax highlighted or not
       highlighted: false,
 
@@ -32,6 +34,17 @@
       VueMarkdown
     },
 
+    beforeRouteEnter(to, from, next) {
+      next(innovationsComponent => {
+        innovationsComponent.init(to.params.userId);
+      });
+    },
+
+    beforeRouteUpdate(to, from, next) {
+      this.init(to.params.id);
+      next();
+    },
+
     data() {
       return defaultInnovationsData();
     },
@@ -41,9 +54,16 @@
     },
 
     methods: {
+
+      init(userId) {
+        this.userId = userId;
+        this.loadInnovations();
+      },
+
       // Request innovations
       loadInnovations() {
-        axios.get('/api/innovations')
+        let url = this.userId ? '/api/users/' + this.userId + '/innovations' : '/api/innovations';
+        axios.get(url)
           .then((res) => {
             this.highlighted = false;
             this.innovations = res.data;  

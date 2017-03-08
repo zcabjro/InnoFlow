@@ -188,14 +188,26 @@
       loadProjects(refresh) {
         axios.get('/api/projects?refresh=' + (refresh ? 1 : 0))
           .then((res) => {
-            // Update project list
-            this.menu.projects.children = res.data ? res.data : [];
+            // Update project list            
+            this.menu.projects.children = this.filterEnrolledProjects(res.data);
           })
           .catch(function (error) {
             // Log failure
             console.log(error.response);
             console.log("Load projects failed");
           });
+      },
+
+      filterEnrolledProjects(projects) {
+        let owned = [];
+        if (projects) {
+          for (let i = 0; i < projects.length; i++) {
+            if (projects[i].classId) {
+              owned.push(projects[i]);
+            }
+          }
+        }        
+        return owned;
       },
 
       // Request classes
