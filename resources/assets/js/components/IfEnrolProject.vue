@@ -16,7 +16,7 @@
 				</div>
 				<div class="col-md-4 col-md-offset-4">
 					<!-- Dropdown component -->
-					<if-search-dropdown :onSearch="onSearchProjects" :getOptions="getProjects" :getName="getProjectName" :onSelect="onSelectProject"></if-search-dropdown>
+					<if-search-dropdown minLength=0 :onSearch="onSearchProjects" :getOptions="getProjects" :getName="getProjectName" :onSelect="onSelectProject"></if-search-dropdown>
 				</div>
 				<div class="col-md-4 col-md-offset-4">
 					<!-- Selected project -->
@@ -28,7 +28,7 @@
 				</div>
 				<div class="col-md-4 col-md-offset-4">
 					<!-- Search Dropdown component -->
-					<if-search-dropdown :onSearch="onSearchClasses" :getOptions="getClasses" :getName="getClassName" :onSelect="onSelectClass"></if-dropdown>
+					<if-search-dropdown minLength=2 :onSearch="onSearchClasses" :getOptions="getClasses" :getName="getClassName" :onSelect="onSelectClass"></if-dropdown>
 				</div>
 				<div class="col-md-4 col-md-offset-4">
 					<!-- Selected class -->
@@ -167,7 +167,7 @@ export default {
 		onSearchProjects(searchInput, resultsCallback) {
 			let results = [];
 			for (let i = 0; i < this.projects.length; i++) {
-				if (this.projects[i].isOwner || this.projects[i].name.toLowerCase().indexOf(searchInput.toLowerCase()) >= 0) {
+				if (this.projects[i].isOwner && this.projects[i].name.toLowerCase().indexOf(searchInput.toLowerCase()) >= 0) {
 					results.push(this.projects[i]);
 				}
 			}

@@ -21,7 +21,7 @@
 				
 				<div class="col-md-4 col-md-offset-4">
 					<!-- Dropdown component -->
-					<if-search-dropdown :onSearch="onSearch" :getOptions="getOptions" :getName="getName" :onSelect="onSelect"></if-search-dropdown>
+					<if-search-dropdown minLength=2 :onSearch="onSearch" :getOptions="getOptions" :getName="getName" :onSelect="onSelect"></if-search-dropdown>
 				</div>							
 
 				<!-- Spacer -->

@@ -1,6 +1,6 @@
 <template>  
   <div class="btn-group open">    
-    <input v-model="searchInput" v-on:blur="resetOptions" class="form-control input-md">
+    <input v-model="searchInput" v-on:click="search" v-on:blur="resetOptions" class="form-control input-md">
     <if-dropdown :options="options" :getName="getName" :onSelect="onSelect" v-if="!dirty"></if-dropdown>
   </div>
 </template>
@@ -30,7 +30,7 @@
       'onSearch',
       'getName',
       'onSelect',
-      ''
+      'minLength'
     ],
 
     watch: {
@@ -40,8 +40,8 @@
     },
 
     methods: {
-      search: _.debounce(function() {
-        if (this.onSearch && this.searchInput.length > 1) {
+      search: _.debounce(function() {        
+        if (this.onSearch && (this.minLength === undefined || this.searchInput.length >= this.minLength)) {
           this.dirty = true;
           this.onSearch(this.searchInput, this.resultsCallback);
         }

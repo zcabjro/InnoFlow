@@ -268,6 +268,40 @@ or
    "admins" : "12,52,73"
 }
 ```
+
+**Sample Response**
+
+```json
+{
+  "id": 2,
+  "name": "Software Abstractions and Systems Integration",
+  "description": "This is a MEng software engineering class",
+  "code": "COMPGS02",
+  "admins": [
+    {
+      "userId": 12,
+      "email": "justina71@yahoo.com",
+      "username": "alana.bartell"
+    },
+    {
+      "userId": 52,
+      "email": "waelchi.cristal@kessler.com",
+      "username": "vivian.boehm"
+    },
+    {
+      "userId": 73,
+      "email": "betsy.dare@mcglynn.com",
+      "username": "florine.gutmann"
+    },
+    {
+      "userId": 101,
+      "email": "andreas@gmail.com",
+      "username": "SickAustrian"
+    }
+  ],
+  "projects": []
+}
+```
 <br>
 
 
@@ -717,7 +751,21 @@ Includes both classes created as well as those where user was assinged as admin.
 {
   "commitIds" : "e93a59aaa7d627174aa78c686cd13eaaa9e7e7d5",
   "title" : "This is the title of a code review discussion",
-  "descritpion" : "This is the description of a code review discussion"
+  "description" : "This is the description of a code review discussion"
+}
+```
+
+**Sample Response**
+```json
+{
+  "id": 3,
+  "date": "2017-03-08 18:14:42",
+  "title": "This is the title of a code review discussion",
+  "description": "This is the description of a code review discussion",
+  "owner": {
+    "id": 101,
+    "username": "SickAustrian"
+  }
 }
 ```
 <br>
@@ -887,10 +935,25 @@ Includes both classes created as well as those where user was assinged as admin.
 
 `POST` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/codereviews/1/comments
 
+```json
 {
   "message" : "This is a comment. Always make sure a comment is useful."
 }
+```
 
+**Sample Response**
+
+```json
+{
+  "id": 3,
+  "date": "2017-03-08 18:16:27",
+  "text": "This is a comment. Always make sure a comment is useful.",
+  "owner": {
+    "id": 101,
+    "username": "SickAustrian"
+  }
+}
+```
 <br>
 
 
