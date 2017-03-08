@@ -37,7 +37,6 @@
                 <div class="col-md-4">
                   <if-card>
                     <span class="h3">Code Review</span>
-                    <span class="pull-right">(1st /13)</span>
                     <div style="width: 100%; height: 80%;">
                       <canvas id="codeReviewChart" width="200" height="200"></canvas>
                     </div>
@@ -46,7 +45,6 @@
                 <div class="col-md-4">
                   <if-card>
                     <span class="h3">Feedback</span>
-                    <span class="pull-right">(1st /13)</span>
                     <div style="width: 100%; height: 80%;">
                       <canvas id="feedbackChart" width="200" height="200"></canvas>
                     </div>
@@ -55,7 +53,6 @@
                 <div class="col-md-4">
                   <if-card>
                     <span class="h3">Commit Balance</span>
-                    <span class="pull-right">(1st /13)</span>
                     <div style="width: 100%; height: 80%;">
                       <canvas id="commitBalanceChart" width="200" height="200"></canvas>
                     </div>
@@ -94,10 +91,8 @@
             </div>
             <div v-for="codeReview in codeReviews" style="padding: 0px;" class="col-md-3">
               <if-card>
-              <div class="goofball"  @click="toggleModal(codeReview.id)" @click.stop style="
-
-    position: absolute; left: 48%; top: 50%; transform: translate(-50%, -50%);width: 90%; height: 92%;">
-                <div style = "margin:14px; width: 91%; height: 87%; overflow:scroll;">
+              <div @click="toggleModal(codeReview.id)" @click.stop style="position: absolute; left: 48%; top: 50%; transform: translate(-50%, -50%);width: 90%; height: 92%;">
+                <div style = "margin:14px; width: 91%; height: 87%;">
                 <p class="pull-right">{{codeReview.date}}</p>
                 <h3>{{codeReview.title}}</h3>
                 <p>{{codeReview.description}}</p> 
@@ -211,46 +206,82 @@ this.showModal = [...this.showModal];
       },
 
       loadMetrics() {
-        this.metrics = [];
-        let codeReviewChartId = 'codeReviewChart';
-        var myChart = new Chart(codeReviewChartId, {
-          type: 'bar',
-          data: {
-            showModal: [],
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-          },
+        if (this.id) {
+          axios.get('api/projects/' + this.id + '/metrics')
+            .then((res) => {
+              this.loadCodeReviewMetric(res.data.codeReviewMetric);
+              this.loadFeedbackMetric(res.data.feedbackMetric);
+              this.loadCommitBalanceMetric(res.data.commitBalanceMetric);
+            })
+            .catch((error) => {
+              console.log(error);
+              console.log('Failed to load metric data');
+            });
+        }       
+      },
+
+      loadCodeReviewMetric(metric) {
+        console.log(metric.totalValidCodeReviews);
+
+        // Draw chart
+        let canvas = document.getElementById('codeReviewChart');
+
+        console.log(this.extractIndividualData(metric, '% Code Reviews'));
+
+        let codeReviewChart = new Chart(canvas, {
+          type: 'doughnut',
+          data: this.extractIndividualData(metric, '% Code Reviews'),
           options: {
-            maintainAspectRatio: false,
-            scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero:true
-                  }
-              }]
-            }
+            maintainAspectRatio: false
           }
-        });        
+        });
+      },
+
+      loadFeedbackMetric(metric) {
+        console.log(metric.totalFeedback);
+
+        // Draw chart
+        let canvas = document.getElementById('feedbackChart');
+        let feedbackChart = new Chart(canvas, {
+          type: 'doughnut',
+          data: this.extractIndividualData(metric, '% Comments'),
+          options: {
+            maintainAspectRatio: false
+          }
+        });
+      },
+
+      loadCommitBalanceMetric(metric) {
+        console.log(metric.averageCommitBalance);
+
+        // Draw chart
+        let canvas = document.getElementById('commitBalanceChart');
+        let commitBalanceChart = new Chart(canvas, {
+          type: 'doughnut',
+          data: this.extractIndividualData(metric, '% Commits'),
+          options: {
+            maintainAspectRatio: false
+          }
+        });
+      },
+
+      extractIndividualData(metric, label) {
+        let labels = [];
+
+        // Single dataset
+        let dataset = {
+          label: label,
+          data: []
+        };
+
+        for (let i = 0; i < metric.individualLevel.length; i++) {
+          labels.push(metric.individualLevel[i].username);
+          dataset.data.push(metric.individualLevel[i].contribution);
+        }
+        return {
+          labels,
+          datasets: [dataset]
+        };
       },
 
       loadDetails() {
