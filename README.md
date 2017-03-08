@@ -589,8 +589,9 @@ Includes both classes created as well as those where user was assinged as admin.
 | Code | Notes |
 | -----|-------|
 | 200 | Successful enrolment |
-| 400 | <ul><li>The project is already enrolled </li><li>The user is not the owner of the project</li></ul> |
-| 401 | <ul><li>code or key are incorrect and do not match any registered class</li><li>User is not a member of the project</li></ul> |
+| 401 | <ul><li>The user is not the owner of the project</li><li>code or key are incorrect and do not match any registered class</li><li>User is not a member of the project</li></ul> |
+| 404 | Invalid projectId parameter |
+| 422 | The project is already enrolled |
 
 **Sample Request**
 
@@ -601,6 +602,38 @@ Includes both classes created as well as those where user was assinged as admin.
   "code" : "COMPGS02",
   "key" : "AwesomeClass2017"
 }
+```
+<br>
+
+
+
+### Get a list of project metrics:
+
+**Route**
+
+`GET` api/projects/{projectId}/metrics
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| projectId   | string       | A valid project id |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200  | Successful fetch |
+| 401  | User is not a member of the project |
+| 404  | Invalid projectId parameter |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/projects/a2288f0f-c6f6-4c64-aaea-d993a3e1d333
+
+**Sample Response**
+
+```json
+
 ```
 <br>
 
