@@ -111,7 +111,7 @@ class User extends Authenticatable
 
     public function commitBalanceMetric( VstsProject $vstsProject )
     {
-        $individual = $vstsProject -> commits() -> where( 'author_email', $this -> vsts_email ) -> count();
+        $individual = $vstsProject -> commits() -> where( 'author_email', $this -> email ) -> count();
 
         if ( $vstsProject -> commit_counter == 0 )
         {
