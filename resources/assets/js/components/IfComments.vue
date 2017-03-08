@@ -1,4 +1,4 @@
-<template>            
+<template>             
 <div class="comment">
 
 
@@ -47,7 +47,7 @@
   </div>
 
 
-</div>
+</div> 
 </template>
 
 <script>
@@ -109,15 +109,10 @@
     },
  
     beforeRouteEnter(to, from, next) {
-      console.log(to);
-      console.log(to.params.id+"i like sandwiches");
-      console.log(to.params.codeReviewID+"i like sandwiches2");
-      console.log(next);
+      console.log(to);  
       next(commentsComponent => {
         commentsComponent.init(to.params.id, to.params.codeReviewID);
-      });
-      console.log(next);
-      console.log("executed next?");
+      }); 
     },
 
 /*    beforeRouteUpdate (to, from, next) {
@@ -214,5 +209,5 @@ console.log(this.comments);
   }
 </script>
 
-<style scoped>
+<style scoped> 
 </style>
