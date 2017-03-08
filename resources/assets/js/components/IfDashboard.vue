@@ -7,7 +7,7 @@
     <div v-show="display" id="wrapper">
 
       <!-- Sidebar -->
-      <div v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
+      <div :style="sideBarStyle" v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
         <ul class="sidebar-nav">
           <if-item :options="menu.innovations" :active="menuOpen"></if-item>
           <if-item :options="menu.projects" :active="menuOpen">
@@ -120,6 +120,18 @@
         // Load dashboard
         dashboardComponent.loadDashboard();        
       });
+    },
+
+    computed: {
+      sideBarStyle() {
+        return {
+          "overflow-y": this.sideBarScroll
+        }
+      },
+
+      sideBarScroll() {
+        return this.menuOpen ? 'scroll' : 'hidden';
+      }
     },
 
     // Dashboard component methods
