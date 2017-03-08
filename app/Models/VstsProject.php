@@ -62,7 +62,7 @@ class VstsProject extends Model
      */
     public function codeReviews()
     {
-        return $this -> hasMany( 'App\Models\CodeReview', 'project_id', 'project_id' ) -> orderBy( 'created_at', 'DESC' );
+        return $this -> hasMany( 'App\Models\CodeReview', 'project_id', 'project_id' );
     }
 
 
