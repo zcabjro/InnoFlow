@@ -633,7 +633,53 @@ Includes both classes created as well as those where user was assinged as admin.
 **Sample Response**
 
 ```json
-
+{
+  "codeReviewMetric": {
+    "totalValidCodeReviews": 12,
+    "individual": [
+      {
+        "username": "AndreasLukas",
+        "id": 102,
+        "contribution": 0.8
+      },
+      {
+        "username": "JediJack",
+        "id": 102,
+        "contribution": 0.2
+      }
+    ]
+  },
+  "commitBalanceMetric": {
+    "averageCommitBalance": 1,
+    "individual": [
+      {
+        "username": "AndreasLukas",
+        "id": 102,
+        "contribution": 1
+      },
+      {
+        "username": "JediJack",
+        "id": 102,
+        "contribution": 1
+      }
+    ]
+  },
+  "feedbackMetric": {
+    "totalFeedback": 30,
+    "individual": [
+      {
+        "username": "AndreasLukas",
+        "id": 102,
+        "contribution": 0.3
+      },
+      {
+        "username": "JediJack",
+        "id": 102,
+        "contribution": 0.7
+      }
+    ]
+  }
+}
 ```
 <br>
 
