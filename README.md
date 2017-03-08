@@ -268,6 +268,40 @@ or
    "admins" : "12,52,73"
 }
 ```
+
+**Sample Response**
+
+```json
+{
+  "id": 2,
+  "name": "Software Abstractions and Systems Integration",
+  "description": "This is a MEng software engineering class",
+  "code": "COMPGS02",
+  "admins": [
+    {
+      "userId": 12,
+      "email": "justina71@yahoo.com",
+      "username": "alana.bartell"
+    },
+    {
+      "userId": 52,
+      "email": "waelchi.cristal@kessler.com",
+      "username": "vivian.boehm"
+    },
+    {
+      "userId": 73,
+      "email": "betsy.dare@mcglynn.com",
+      "username": "florine.gutmann"
+    },
+    {
+      "userId": 101,
+      "email": "andreas@gmail.com",
+      "username": "SickAustrian"
+    }
+  ],
+  "projects": []
+}
+```
 <br>
 
 
