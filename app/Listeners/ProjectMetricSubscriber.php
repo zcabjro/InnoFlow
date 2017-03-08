@@ -46,7 +46,7 @@ class ProjectMetricSubscriber
         $commit = $event -> commit;
         $vstsProject = $event -> vstsProject;
 
-        if ( $vstsProject -> members() -> where( 'users.vsts_email', $commit -> author_email  ) -> count() == 0 )
+        if ( $vstsProject -> members() -> where( 'users.email', $commit -> author_email  ) -> count() == 0 )
         {
             return;
         }

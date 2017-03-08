@@ -8,6 +8,7 @@
 
 namespace App\Services\Vsts;
 
+use App\Events\CommitCreatedEvent;
 use App\Models\User;
 use App\Models\VstsAccount;
 use App\Models\VstsProject;
@@ -159,10 +160,9 @@ class VstsApiService
             $data[ 'deletes_counter' ] = key_exists( 'Delete', $json[ 'changeCounts' ] ) ? $json[ 'changeCounts' ][ 'Delete' ] : 0;
 
             // Store new commit
-            $this -> commitRepo -> create( $data );
+            $commit = $this -> commitRepo -> create( $data );
+            event( new CommitCreatedEvent( $commit, $vstsProject ) );
         }
-
-        return $vstsProject;
     }
 
 
@@ -398,7 +398,7 @@ class VstsApiService
                 $this -> commitRepo -> create( $data );
 
                 // Increment commit counter only if a project member has issued the commit
-                if ( $this -> userRepo -> findBy( 'vsts_email', $data[ 'author_email' ] ) )
+                if ( $this -> userRepo -> findBy( 'email', $data[ 'author_email' ] ) )
                 {
                     $totalCommits++;
                 }

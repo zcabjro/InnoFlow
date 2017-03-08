@@ -28,7 +28,7 @@ class ProjectMetricsTransformer extends TransformerAbstract
             $individual[] = [
                 'username' => $member -> username,
                 'id' => $member -> user_id,
-                'contribution' => $member -> codeReviewMetric( $project ) . '%'
+                'contribution' => $member -> codeReviewMetric( $project )
             ];
         }
 
@@ -46,7 +46,7 @@ class ProjectMetricsTransformer extends TransformerAbstract
             $individual[] = [
                 'username' => $member -> username,
                 'id' => $member -> user_id,
-                'commitBalanceMetric' => $member -> commitBalanceMetric( $project )
+                'contribution' => $member -> commitBalanceMetric( $project )
             ];
         }
 
@@ -64,7 +64,7 @@ class ProjectMetricsTransformer extends TransformerAbstract
             $individual[] = [
                 'username' => $member -> username,
                 'id' => $member -> user_id,
-                'contribution' => $member -> feedbackMetric( $project ) . '%'
+                'contribution' => $member -> feedbackMetric( $project )
             ];
         }
 
