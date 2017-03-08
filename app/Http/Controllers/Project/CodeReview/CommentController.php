@@ -45,7 +45,7 @@ class CommentController extends Controller
 
     public function index( VstsProject $vstsProject, CodeReview $codeReview )
     {
-        $comments = $codeReview -> comments;
+        $comments = $codeReview -> comments() -> orderBy( 'created_at', 'DESC' ) -> get();
 
         return fractal() -> collection( $comments, new CommentTransformer );
     }

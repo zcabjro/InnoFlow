@@ -116,7 +116,7 @@ class User extends Authenticatable
         $contributed = ( $individual / $vstsProject -> commit_counter ) * 100;
         $expected = 100 / $vstsProject -> members() -> count();
 
-        $metric = $contributed >= $expected ? 1 : $contributed / $expected;
+        $metric = $contributed >= $expected ? 1 : $contributed / $expected ;
 
         return $metric;
     }
