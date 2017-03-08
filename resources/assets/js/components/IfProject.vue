@@ -1,5 +1,5 @@
 <template>
-  <div class="project">
+  <div class="project" >
 
     <if-message ref="message"></if-message>
 
@@ -29,7 +29,7 @@
         
         <br>
 
-        <div class="tab-content" style="max-height: 60vh; overflow-y: auto; overflow-x: hidden;">
+        <div class="tab-content" style="max-height: 60vh; overflow-y: auto; overflow-x: hidden;"   @click="close()">
           
           <div id="metrics" class="tab-pane fade in active">
             <div v-show="details" id="project-metrics">              
@@ -94,13 +94,19 @@
             </div>
             <div v-for="codeReview in codeReviews" style="padding: 0px;" class="col-md-3">
               <if-card>
+              <div class="goofball"  @click="toggleModal(codeReview.id)" @click.stop style="
+
+    position: absolute; left: 48%; top: 50%; transform: translate(-50%, -50%);width: 90%; height: 92%;">
+                <div style = "margin:14px; width: 91%; height: 87%; overflow:scroll;">
                 <p class="pull-right">{{codeReview.date}}</p>
                 <h3>{{codeReview.title}}</h3>
-                <p>{{codeReview.description}}</p>
-                <p>{{codeReview.id}}</p>
+                <p>{{codeReview.description}}</p> 
                 <b>{{codeReview.owner ? codeReview.owner.username : ''}}</b>
-              </if-card>
-              <if-comments :projectID="id" :codeReviewID="codeReview.id"></if-comments>
+                </div>
+                </div>
+              </if-card> 
+              <if-modal-box :showModal="showModal" v-if="showModal[codeReview.id]">
+              <if-comments :projectID="id" :codeReviewID="codeReview.id"></if-comments></if-modal-box>
             </div>
           </div>
         </div>
@@ -113,6 +119,7 @@
   import IfCard from './IfCard.vue'
   import IfMessage from './IfMessage.vue'
   import IfComments from './IfComments.vue'
+  import IfModalBox from './IfModalBox.vue'
 
   function defaultProjectData() {
     return {
@@ -125,7 +132,8 @@
       newTitle: '',
       newDescription: '',
       newCommits: [],
-      commits: null
+      commits: null,
+      showModal: []
     }
   }
 
@@ -136,7 +144,8 @@
     components: {
       IfCard,
       IfMessage,
-      IfComments
+      IfComments,
+      IfModalBox
     },
 
     data() {
@@ -176,10 +185,19 @@
     },
 
     methods: {
+      close(){
+        console.log("clicked"); 
+        this.showModal=[];
+      },
       init(id) {
         this.id = id;
         this.loadDetails();
       },
+
+    toggleModal(index) {
+      this.showModal[index] = !this.showModal[index];
+this.showModal = [...this.showModal]; 
+    },
 
       seletableStyle(index) {
         let o = this.newCommits.indexOf(index) >= 0 ? 0.5 : 1;
@@ -198,6 +216,7 @@
         var myChart = new Chart(codeReviewChartId, {
           type: 'bar',
           data: {
+            showModal: [],
             labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
             datasets: [{
                 label: '# of Votes',
