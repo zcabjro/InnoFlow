@@ -12,7 +12,6 @@ import IfEnrolProject from './components/IfEnrolProject.vue'
 import IfInnovations from './components/IfInnovations.vue'
 import IfProject from './components/IfProject.vue'
 import IfClass from './components/IfClass.vue'
-import IfComments from './components/IfComments.vue'
 
 Vue.use(VueRouter)
 
@@ -53,11 +52,7 @@ const routes = [{
 
       // Projects
       path: 'projects/:id',
-      component: IfProject,
-      children: [{
-        path: 'codereviews/:codeReviewID',
-        component: IfComments
-      }]
+      component: IfProject
     }, {
 
       // Classes
@@ -74,6 +69,11 @@ const routes = [{
     // Enroll project
     path: 'enrol',
     component: IfEnrolProject
+  }, {
+
+    // Public users
+    path: 'users/:userId/innovations',
+    component: IfInnovations
   }]
 },  {
   path: '/notFound'
