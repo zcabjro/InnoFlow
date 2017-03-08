@@ -6,7 +6,7 @@
     <div v-if="details" class="row">
       <div v-if="details" id="projectDetails" class="col-sm-6" style="max-height: 33vh; overflow: auto;">
         <h1>{{details.name}}</h1>
-        <a v-if="className" href="#" v-on:click="selectClass($event)">{{className}}</a>
+        <p v-if="className">Class: {{className}}</p>
         <p v-if="details.description">{{details.description}}</p>
       </div>
 

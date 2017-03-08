@@ -1,5 +1,5 @@
 <template>
-  <div v-show="highlighted" class="col-lg-12">
+  <div style="height: 90vh; overflow-y: scroll;" v-show="highlighted" class="col-lg-12">
     <h1>Innovations</h1>              
     <div v-for="i in innovations">
       <p>{{i.created}}</p>
