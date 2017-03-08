@@ -39,4 +39,46 @@ class Module extends Model
     {
         return $this -> hasMany( 'App\Models\VstsProject', 'module_id', 'module_id' );
     }
+
+
+    public function codeReviewMetric()
+    {
+        $metric = 0;
+        $projects = $this -> projects;
+
+        foreach ( $projects as $project )
+        {
+            $metric += $project -> codeReviewMetric();
+        }
+
+        return $metric / count( $projects );
+    }
+
+
+    public function commitBalanceMetric()
+    {
+        $metric = 0;
+        $projects = $this -> projects;
+
+        foreach ( $projects as $project )
+        {
+            $metric += $project -> commitBalanceMetric();
+        }
+
+        return $metric / count( $projects );
+    }
+
+
+    public function feedbackMetric()
+    {
+        $metric = 0;
+        $projects = $this -> projects;
+
+        foreach ( $projects as $project )
+        {
+            $metric += $project -> feedbackMetric();
+        }
+
+        return $metric / count( $projects );
+    }
 }

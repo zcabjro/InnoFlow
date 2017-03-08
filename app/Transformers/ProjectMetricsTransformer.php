@@ -21,11 +21,11 @@ class ProjectMetricsTransformer extends TransformerAbstract
         $metrics = [];
 
 
-        $individual = [];
+        $individualLevel = [];
 
         foreach ( $members as $member )
         {
-            $individual[] = [
+            $individualLevel[] = [
                 'username' => $member -> username,
                 'id' => $member -> user_id,
                 'contribution' => $member -> codeReviewMetric( $project )
@@ -34,16 +34,16 @@ class ProjectMetricsTransformer extends TransformerAbstract
 
         $metrics[ 'codeReviewMetric' ] = [
             'totalValidCodeReviews' => $project -> codeReviewMetric(),
-            'individual' => $individual
+            'individualLevel' => $individualLevel
         ];
 
 
 
-        $individual = [];
+        $individualLevel = [];
 
         foreach ( $members as $member )
         {
-            $individual[] = [
+            $individualLevel[] = [
                 'username' => $member -> username,
                 'id' => $member -> user_id,
                 'contribution' => $member -> commitBalanceMetric( $project )
@@ -52,16 +52,16 @@ class ProjectMetricsTransformer extends TransformerAbstract
 
         $metrics[ 'commitBalanceMetric' ] = [
             'averageCommitBalance' => $project -> commitBalanceMetric() ,
-            'individual' => $individual
+            'individualLevel' => $individualLevel
         ];
 
 
 
-        $individual = [];
+        $individualLevel = [];
 
         foreach ( $members as $member )
         {
-            $individual[] = [
+            $individualLevel[] = [
                 'username' => $member -> username,
                 'id' => $member -> user_id,
                 'contribution' => $member -> feedbackMetric( $project )
@@ -70,7 +70,7 @@ class ProjectMetricsTransformer extends TransformerAbstract
 
         $metrics[ 'feedbackMetric' ] = [
             'totalFeedback' => $project -> feedbackMetric(),
-            'individual' => $individual
+            'individualLevel' => $individualLevel
         ];
 
 

@@ -108,9 +108,7 @@ class VstsProject extends Model
             $metric += $member -> commitBalanceMetric( $this );
         }
 
-        $metric = ( $metric / count( $members ) );
-
-        return $metric;
+        return $metric / count( $members );
     }
 
 
