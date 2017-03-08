@@ -100,8 +100,7 @@
                 <div style = "margin:14px; width: 91%; height: 87%; overflow:scroll;">
                 <p class="pull-right">{{codeReview.date}}</p>
                 <h3>{{codeReview.title}}</h3>
-                <p>{{codeReview.description}}</p>
-                <p>{{codeReview.id}}</p>
+                <p>{{codeReview.description}}</p> 
                 <b>{{codeReview.owner ? codeReview.owner.username : ''}}</b>
                 </div>
                 </div>
