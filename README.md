@@ -484,6 +484,82 @@ Includes both classes created as well as those where user was assinged as admin.
 
 
 
+### Get list of class metrics:
+
+**Route**
+
+`GET` api/classes/{classId}/metrics
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| classId     | int          | A valid class id |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200  | Successful fetch |
+| 401  | User is not an admin of the module |
+| 404  | Invalid class id |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/classes/1/metrics
+
+```json
+{
+  "codeReviewMetric": {
+    "averageValidCodeReviews": 1.5,
+    "projectLevel": [
+      {
+        "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
+        "name": "Freshly",
+        "contribution": 3
+      },
+      {
+        "id": "f2df9ad9-2281-4265-bda3-ded1da89fb2d",
+        "name": "SnapPro",
+        "contribution": 0
+      }
+    ]
+  },
+  "commitBalanceMetric": {
+    "averageCommitBalance": 0,
+    "projectLevel": [
+      {
+        "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
+        "name": "Freshly",
+        "contribution": 0
+      },
+      {
+        "id": "f2df9ad9-2281-4265-bda3-ded1da89fb2d",
+        "name": "SnapPro",
+        "contribution": 0
+      }
+    ]
+  },
+  "feedbackMetric": {
+    "totalFeedback": 1.5,
+    "projectLevel": [
+      {
+        "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
+        "name": "Freshly",
+        "contribution": 3
+      },
+      {
+        "id": "f2df9ad9-2281-4265-bda3-ded1da89fb2d",
+        "name": "SnapPro",
+        "contribution": 0
+      }
+    ]
+  }
+}
+```
+<br>
+
+
+
 ## 4. Projects
 
 ### Get a list of projects:
