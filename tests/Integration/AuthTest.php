@@ -4,8 +4,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Test\Support\IntegrationTrait;
 use Test\Support\UserTrait;
 use App\Models\User;
-
-
+use App\Services\Vsts\VstsApiService;
 
 class AuthTest extends TestCase
 {
@@ -19,13 +18,24 @@ class AuthTest extends TestCase
      * @var array
      */
     private $credentials = [
-
-        'email' => 'andreas.buddy@gmail.com',
-        'password' => 'password12345'
-
+        'email' => 'test@innoflow.com',
+        'password' => 'password12345',
+        'username' => 'testname'
     ];
 
+    // Same email
+    private $credentials2 = [
+        'email' => 'test@innoflow.com',
+        'password' => 'password12345',
+        'username' => 'testname2'
+    ];
 
+    // Same username
+    private $credentials3 = [
+        'email' => 'test3@innoflow.com',
+        'password' => 'password12345',
+        'username' => 'testname'
+    ];
 
     /**
      * Successful registration.
@@ -38,6 +48,7 @@ class AuthTest extends TestCase
         $this -> seeInDatabase( 'users', [ 'email' => $this -> credentials[ "email" ] ] );
         $this -> assertNotEmpty( User::all() -> last() -> password );
         $this -> assertNotEquals( User::all() -> last() -> password, $this -> credentials[ "password" ] );
+        $this -> assertEquals( User::all() -> last() -> username, $this -> credentials[ "username" ] );
     }
 
     /**
@@ -47,7 +58,7 @@ class AuthTest extends TestCase
      */
     public function testRegistrationMissingParameters()
     {
-        $this -> missingParameters( array( $this, 'callRegister' ), $this -> credentials );
+        $this -> missingParametersRegister( array( $this, 'callRegister' ), $this -> credentials );
     }
 
     /**
@@ -59,26 +70,38 @@ class AuthTest extends TestCase
     public function testRegistrationWrongParameters()
     {
         // Wrong email format
-        $this -> callRegister( [ 'email' => 'andreas', 'password' => $this -> credentials[ "password" ] ], 422 );
+        $this -> callRegister( [ 'email' => 'andreas', 'password' => $this -> credentials[ "password" ], 'username' => $this -> credentials["username"] ], 422 );
         $this -> seeJsonEquals( [
             'email' => [ 'The email must be a valid email address.' ]
         ] );
 
-        // Password to short
-        $this -> callRegister( [ 'email' => $this -> credentials[ "email" ], 'password' => 'abc' ], 422 );
+        // Password too short
+        $this -> callRegister( [ 'email' => $this -> credentials[ "email" ], 'password' => 'abc', 'username' => $this -> credentials["username"] ], 422 );
         $this -> seeJsonEquals( [
             'password' => [ 'The password must be at least 10 characters.' ]
         ] );
 
-        // Email already taken
+        // Username too short
+        $this -> callRegister( [ 'email' => $this -> credentials[ "email" ], 'password' => $this -> credentials[ "password" ], 'username' => 'user' ], 422 );
+        $this -> seeJsonEquals( [
+            'username' => [ 'The username must be at least 5 characters.' ]
+        ] );
+
+        // Create existing user
         $this -> createUser( $this -> credentials );
-        $this -> callRegister( $this -> credentials, 422 );
+
+        // Email already taken
+        $this -> callRegister( $this -> credentials2, 422 );
         $this -> seeJsonEquals( [
             'email' => [ 'The email has already been taken.' ]
         ] );
+
+        // Username already taken
+        $this -> callRegister( $this -> credentials3, 422 );
+        $this -> seeJsonEquals( [
+            'username' => [ 'The username has already been taken.' ]
+        ] );
     }
-
-
 
     /**
      * Successful login.
@@ -88,7 +111,7 @@ class AuthTest extends TestCase
     public function testLoginSuccessful()
     {
         $this -> createUser( $this -> credentials );
-        $this -> callLogin( $this -> credentials, 200 );
+        $this -> callLogin( [ 'email' => $this -> credentials["email"], 'password' => $this -> credentials["password"] ], 200 );
     }
 
     /**
@@ -98,7 +121,7 @@ class AuthTest extends TestCase
      */
     public function testLoginMissingParameters()
     {
-        $this -> missingParameters( array( $this, 'callLogin'), $this -> credentials );
+        $this -> missingParametersLogin( array( $this, 'callLogin'), $this -> credentials );
     }
 
     /**
@@ -147,10 +170,13 @@ class AuthTest extends TestCase
         $user = User::where('email',$this -> credentials)->first();
         $token = JWTAuth::fromUser($user);
         JWTAuth::setToken($token);
+        $user_id = $user -> user_id;
 
-        $this -> call('GET','api/vsts');
+        $response = $this -> call('GET','api/vsts');
+        //dd($response);
         $this -> seeJsonEquals( [
-            'is_authorized' => false
+            'isAuthorized' => false,
+            'url' => "https://app.vssps.visualstudio.com/oauth2/authorize?response_type=Assertion&state=$user_id"
         ] );
      }
 
@@ -190,19 +216,19 @@ class AuthTest extends TestCase
     }
 
     /**
-     * Checks if either email, password or both are missing.
+     * Checks if either email or password missing while login.
      *
      * @param
      * @param string $data
      * @return void
      */
-    private function missingParameters( $callback, $data )
+    private function missingParametersLogin( $callback, $data )
     {
-        // No email or password
+        // No email, password or username
         $callback( [], 422 );
         $this -> seeJsonEquals( [
             'email' => [ 'The email field is required.'],
-            'password' => [ 'The password field is required.' ]
+            'password' => [ 'The password field is required.' ],
         ] );
 
         // No email
@@ -215,6 +241,42 @@ class AuthTest extends TestCase
         $callback( [ 'email' => $data[ "email" ] ], 422 );
         $this -> seeJsonEquals( [
             'password' => [ 'The password field is required.' ]
+        ] );
+    }
+
+    /**
+     * Checks if email, password or username are missing while register.
+     *
+     * @param
+     * @param string $data
+     * @return void
+     */
+    private function missingParametersRegister( $callback, $data )
+    {
+        // No email, password or username
+        $callback( [], 422 );
+        $this -> seeJsonEquals( [
+            'email' => [ 'The email field is required.'],
+            'password' => [ 'The password field is required.' ],
+            'username' => [ 'The username field is required.']
+        ] );
+
+        // No email
+        $callback( [ 'password' => $data[ "password" ], 'username' => $data[ "username" ] ], 422 );
+        $this -> seeJsonEquals( [
+            'email' => [ 'The email field is required.' ]
+        ] );
+
+        // No password
+        $callback( [ 'email' => $data[ "email" ], 'username' => $data[ "username" ] ], 422 );
+        $this -> seeJsonEquals( [
+            'password' => [ 'The password field is required.' ]
+        ] );
+
+        // No username
+        $callback( [ 'email' => $data[ "email" ], 'password' => $data[ "password" ] ], 422 );
+        $this -> seeJsonEquals( [
+            'username' => [ 'The username field is required.' ]
         ] );
     }
 }
