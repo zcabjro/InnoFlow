@@ -1,28 +1,26 @@
 <template>             
-  <div class="comment">
+  <div>
 
     <div class="col-lg-12">
       <h1>Review Commits</h1>              
-      <div v-for="commit in commits">
-        <if-card>
-          <h3>{{commit.comment}}</h3>
-          <p>by {{commit.commiter.username}} ({{commit.date}})</p>
-          <a :href="commit.commit_url" target="_blank">View</a>
-        </if-card>
-      </div>            
+      <if-card v-for="commit in commits">
+        <h3>{{commit.comment}}</h3>
+        <p>by {{commit.commiter.username}} ({{commit.date}})</p>
+        <a :href="commit.commit_url" target="_blank">View</a>
+      </if-card>        
     </div>
 
     <if-message ref="message"></if-message>
     
-    <div class="col-lg-12" id="comments">
+    <div class="col-lg-12 comment">
       <h1>Comments</h1>       
 
-      <div v-for="i in comments" style="" >
-        <if-card> 
-          <p >{{i.text}}</p><br>
-          <span class="pull-right">by {{i.owner.username}} ({{i.date}})</span>
+      <div v-for="comment in comments">
+        <if-card>
+          <p >{{comment.text}}</p><br>
+          <span class="pull-right">by {{comment.owner.username}} ({{comment.date}})</span>
         </if-card>
-      </div> 
+      </div>
 
       <if-card style="width: 100%;">       
         <b>Message</b><br>
@@ -39,30 +37,9 @@
   import IfMessage from './IfMessage.vue' 
   function defaultCommentsData() {
     return {
- 
       newComment: '',
       commits: [],
- 
-      comments: [
-        {
-          "id": 4,
-          "date": "2017-03-04 18:13:18",
-          "text": "This is a comment. Always make sure a comment is useful.",
-          "owner": {
-            "id": 101,
-            "username": "SickAustrian"
-          }
-        },
-        {
-          "id": 3,
-          "date": "2017-03-04 17:26:39",
-          "text": "This is a comment. Always make sure a comment is useful.",
-          "owner": {
-            "id": 3,
-            "username": "JackRoper"
-          }
-        },
-      ]
+      comments: []
     }
   }
 
