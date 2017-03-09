@@ -1,71 +1,103 @@
 <template>
-  <div class="row class">
-    <div v-if="details" class="col-md-8">
-      <h1>{{details.code}}: {{details.name}}</h1>
-      <p v-if="details.description">{{details.description}}</p>      
+  <div class="class" >
 
-      <div id="admins">
+    <if-message ref="message"></if-message>
+
+    <div v-if="details" class="row">
+      <div v-if="details" id="projectDetails" class="col-sm-6" style="max-height: 33vh; overflow: auto;">
+        <h1>{{details.code}}: {{details.name}}</h1>
+        <p v-if="details.description">{{details.description}}</p>
+      </div>
+
+      <div id="admins" class="col-sm-6" style="max-height: 33vh; overflow: auto;">
         <h2>Admins</h2>
-        <if-card v-for="admin in details.admins">
-          <span class="glyphicon glyphicon-user"></span>
-          <b>{{admin.email}}</b>
-        </if-card>
-      </div>
-
-      <div id="projects">
-        <h2>Projects</h2>
-        <a href="#" v-for="project in details.projects" v-on:click="selectProject($event, project)">
-          <if-card>
-            <span class="glyphicon glyphicon-th-list"></span>
-            <b>{{project.name}}</b>
+          <if-card v-for="admin in details.admins">
+            <span class="glyphicon glyphicon-user"></span>
+            <b>{{admin.username}}</b>
           </if-card>
-        </a>
       </div>
     </div>
 
-    <div v-show="details" class="col-md-4">
-      <div id="class-metrics">
-        <if-card>
-          <span class="h3">Code Review</span><span class="pull-right">(1st /13)</span>
-          <div class="col-md-12" style="height: 80%;">
-            <canvas id="codeReviewChart" width="200" height="200"></canvas>
+    <div style="margin-top: 25px;" class="row">
+      <div class="col-md-12">      
+        <ul id="my-tabs" class="nav nav-tabs">
+          <li class="active"><a v-on:click="loadMetrics()" data-toggle="tab" href="#metrics">Metrics</a></li>
+          <li><a data-toggle="tab" href="#projects">Projects</a></li>
+        </ul>
+        
+        <br>
+
+        <div class="tab-content" style="max-height: 60vh; overflow-y: auto; overflow-x: hidden;">
+          
+          <div id="metrics" class="tab-pane fade in active">
+            <div v-show="details" id="class-metrics">              
+              <div class="row">
+                <div class="col-md-4">
+                  <if-card>
+                    <span class="h3">Code Review</span>                    
+                    <div style="width: 100%; height: 80%;">
+                      <canvas id="codeReviewChart" width="200" height="200"></canvas>
+                    </div>
+                    <span v-show="averageCodeReviews !== null" class="pull-right">Avg. Code Reviews: {{averageCodeReviews}}</span>
+                  </if-card>
+                </div>
+                <div class="col-md-4">
+                  <if-card>
+                    <span class="h3">Feedback</span>                    
+                    <div style="width: 100%; height: 80%;">
+                      <canvas id="feedbackChart" width="200" height="200"></canvas>
+                    </div>
+                    <span v-show="averageComments !== null" class="pull-right">Avg. Comments: {{averageComments}}</span>
+                  </if-card>
+                </div>
+                <div class="col-md-4">
+                  <if-card>
+                    <span class="h3">Commit Balance</span>                    
+                    <div style="width: 100%; height: 80%;">
+                      <canvas id="commitBalanceChart" width="200" height="200"></canvas>
+                    </div>
+                    <span v-show="averageCommitBalance !== null" class="pull-right">Avg. Commit Balance: {{averageCommitBalance}}</span>
+                  </if-card>
+                </div>
+              </div>
+            </div>
           </div>
-        </if-card>
-        <if-card>
-          <span class="h3">Feedback</span><span class="pull-right">(2nd /13)</span>
-          <div class="col-md-12" style="height: 80%;">
-            <canvas id="feedbackChart" width="200" height="200"></canvas>
+
+          <div v-if="details" id="projects" class="tab-pane fade">
+            <div v-for="project in details.projects">
+              <if-card>
+                <a href="#" v-on:click="selectProject($event, project.id)"><span class="h3">{{project.name}}</span></a>
+              </if-card>
+            </div>
           </div>
-        </if-card>
-        <if-card>
-          <span class="h3">Commit Activity</span><span class="pull-right">(1st /13)</span>
-          <div class="col-md-12" style="height: 80%;">
-            <canvas id="commitActivityChart" width="200" height="200"></canvas>
-          </div>
-        </if-card>
+        </div>
       </div>      
-    </div>
+    </div>    
   </div>
 </template>
 
 <script>
-  import IfCard from './IfCard.vue' // Card component for displaying projects
-  import Chart from 'chart.js' // Charts used for metric visualisation
+  import IfCard from './IfCard.vue'
+  import IfMessage from './IfMessage.vue'
+  import Chart from 'chart.js'
 
   function defaultClassData() {
     return {
       id: '',
       details: null,
-      metrics: null
+      averageCodeReviews: null,
+      averageComments: null,
+      averageCommitBalance: null
     }
   }
 
   export default {
     // Debug name and html tag of this component
-    name: 'if-project',
+    name: 'if-class',
 
     components: {
-      IfCard
+      IfCard,
+      IfMessage     
     },
 
     data() {
@@ -80,67 +112,108 @@
 
     beforeRouteUpdate (to, from, next) {
       if (to.params.id !== this.id) {
-        this.init(to.params.id);              
+        this.init(to.params.id);
       }
       next();
     },
 
     methods: {
+
       init(id) {
         this.id = id;
         this.loadDetails();
       },
 
+      loadMetricsAfter(delay) {
+        setTimeout(this.loadMetrics, delay);
+      },
+
       loadMetrics() {
-        this.metrics = [];
-        let codeReviewChartId = 'codeReviewChart';
-        var myChart = new Chart(codeReviewChartId, {
-          type: 'bar',
-          data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-          },
+        if (this.id) {
+          axios.get('api/classes/' + this.id + '/metrics')
+            .then((res) => {
+              console.log(res);
+              this.loadCodeReviewMetric(res.data.codeReviewMetric);
+              this.loadFeedbackMetric(res.data.feedbackMetric);
+              this.loadCommitBalanceMetric(res.data.commitBalanceMetric);
+            })
+            .catch((error) => {
+              console.log(error);
+              console.log('Failed to load metric data');
+            });
+        }       
+      },
+
+      loadCodeReviewMetric(metric) {
+        this.averageCodeReviews = metric.averageValidCodeReviews;
+
+        // Draw chart
+        let canvas = document.getElementById('codeReviewChart');
+
+        let codeReviewChart = new Chart(canvas, {
+          type: 'doughnut',
+          data: this.extractProjectData(metric, '% Code Reviews'),
           options: {
-            maintainAspectRatio: false,
-            scales: {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero:true
-                  }
-              }]
-            }
+            maintainAspectRatio: false
           }
         });
       },
 
-      loadDetails() {      
+      loadFeedbackMetric(metric) {
+        this.averageComments = metric.totalFeedback;
+
+        // Draw chart
+        let canvas = document.getElementById('feedbackChart');
+        let feedbackChart = new Chart(canvas, {
+          type: 'doughnut',
+          data: this.extractProjectData(metric, '% Comments'),
+          options: {
+            maintainAspectRatio: false
+          }
+        });
+      },
+
+      loadCommitBalanceMetric(metric) {
+        this.averageCommitBalance = metric.averageCommitBalance;
+
+        // Draw chart
+        let canvas = document.getElementById('commitBalanceChart');
+        let commitBalanceChart = new Chart(canvas, {
+          type: 'doughnut',
+          data: this.extractProjectData(metric, '% Commits'),
+          options: {
+            maintainAspectRatio: false
+          }
+        });
+      },
+
+      extractProjectData(metric, label) {
+        let labels = [];
+
+        // Single dataset
+        let dataset = {
+          label: label,
+          data: []
+        };
+
+        for (let i = 0; i < metric.projectLevel.length; i++) {
+          labels.push(metric.projectLevel[i].name);
+          dataset.data.push(metric.projectLevel[i].contribution);
+        }
+        return {
+          labels,
+          datasets: [dataset]
+        };
+      },
+
+      loadDetails() {
         if (this.id) {
           axios.get('api/classes/' + this.id)
             .then(res => {
               this.details = res.data;
-              setTimeout(() => {
-                this.loadMetrics();
-              }, 300);
+
+              // Load metrics after short delay (for animation)
+              this.loadMetricsAfter(300);              
             })
             .catch(error => {
               console.log(error);
@@ -157,11 +230,9 @@
         Object.assign(this.$data, defaultClassData());
       },
 
-      selectProject(e, project) {
+      selectProject(e, projectId) {
         e.preventDefault();
-        let url = '/dashboard/projects/' + project.id;
-        console.log(url);
-        this.$router.push(url);
+        this.$router.push('/dashboard/projects/' + projectId);
       }
     }
 
@@ -169,20 +240,15 @@
 </script>
 
 <style scoped>
-  #class-metrics {
-    height: 90vh;
-    overflow-y: auto;
-    overflow-x: auto;    
-  }
-
   .class .if-card {
-    margin-right: 1vw;
-    margin-bottom: 1vw;
+    margin: 10px;    
   }
-
-  #class-metrics > *.if-card {
-    width: 80%;
-    height: 33vh;
-    margin-right: 0;
+  
+  #class-metrics .if-card {
+    width: 90%;
+    height: 20vw;
+    min-height: 200px;
+    overflow: hidden;
+    padding: 15px;
   }
 </style>

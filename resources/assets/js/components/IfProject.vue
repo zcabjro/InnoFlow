@@ -37,6 +37,7 @@
                 <div class="col-md-4">
                   <if-card>
                     <span class="h3">Code Review</span>
+                    <span v-show="validCodeReviews !== null" class="pull-right">Code Reviews: {{validCodeReviews}}</span>
                     <div style="width: 100%; height: 80%;">
                       <canvas id="codeReviewChart" width="200" height="200"></canvas>
                     </div>
@@ -45,6 +46,7 @@
                 <div class="col-md-4">
                   <if-card>
                     <span class="h3">Feedback</span>
+                    <span v-show="comments !== null" class="pull-right">Comments: {{comments}}</span>
                     <div style="width: 100%; height: 80%;">
                       <canvas id="feedbackChart" width="200" height="200"></canvas>
                     </div>
@@ -53,6 +55,7 @@
                 <div class="col-md-4">
                   <if-card>
                     <span class="h3">Commit Balance</span>
+                    <span v-show="averageCommitBalance !== null" class="pull-right">Avg. Commit Balance: {{averageCommitBalance}}</span>
                     <div style="width: 100%; height: 80%;">
                       <canvas id="commitBalanceChart" width="200" height="200"></canvas>
                     </div>
@@ -115,20 +118,25 @@
   import IfMessage from './IfMessage.vue'
   import IfComments from './IfComments.vue'
   import IfModalBox from './IfModalBox.vue'
+  import Chart from 'chart.js'
 
   function defaultProjectData() {
     return {
       id: '',
       details: null,
       className: '',
-      metrics: null,
       codeReviews: null,
       createReview: false,
       newTitle: '',
       newDescription: '',
       newCommits: [],
       commits: null,
-      showModal: []
+      showModal: [],
+      
+      
+      validCodeReviews: null,
+      comments: null,
+      averageCommitBalance: null
     }
   }
 
@@ -148,7 +156,6 @@
     },
     
     beforeRouteEnter(to, from, next) {
-      console.log("project beforeRouteEnter called");
       next(projectComponent => {
         projectComponent.init(to.params.id);
       });
@@ -189,10 +196,10 @@
         this.loadDetails();
       },
 
-    toggleModal(index) {
-      this.showModal[index] = !this.showModal[index];
-this.showModal = [...this.showModal]; 
-    },
+      toggleModal(index) {
+        this.showModal[index] = !this.showModal[index];
+        this.showModal = [...this.showModal]; 
+      },
 
       seletableStyle(index) {
         let o = this.newCommits.indexOf(index) >= 0 ? 0.5 : 1;
@@ -221,12 +228,10 @@ this.showModal = [...this.showModal];
       },
 
       loadCodeReviewMetric(metric) {
-        console.log(metric.totalValidCodeReviews);
+        this.validCodeReviews = metric.totalValidCodeReviews;
 
         // Draw chart
         let canvas = document.getElementById('codeReviewChart');
-
-        console.log(this.extractIndividualData(metric, '% Code Reviews'));
 
         let codeReviewChart = new Chart(canvas, {
           type: 'doughnut',
@@ -238,7 +243,7 @@ this.showModal = [...this.showModal];
       },
 
       loadFeedbackMetric(metric) {
-        console.log(metric.totalFeedback);
+        this.comments = metric.totalFeedback;
 
         // Draw chart
         let canvas = document.getElementById('feedbackChart');
@@ -252,7 +257,7 @@ this.showModal = [...this.showModal];
       },
 
       loadCommitBalanceMetric(metric) {
-        console.log(metric.averageCommitBalance);
+        this.averageCommitBalance = metric.averageCommitBalance;
 
         // Draw chart
         let canvas = document.getElementById('commitBalanceChart');
