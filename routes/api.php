@@ -28,6 +28,7 @@ Route::post( 'commits', 'CommitController@store' );
 Route::get( 'users/search', 'UserController@search' );
 Route::get( 'users/{user}/innovations', 'User\InnovationController@index' );
 
+
 // JWT token protected routes
 Route::group( [ 'middleware' => 'jwt-auth' ], function () {
 
@@ -39,8 +40,14 @@ Route::group( [ 'middleware' => 'jwt-auth' ], function () {
     Route::post( 'classes', 'ModuleController@store' );
     Route::get( 'classes', 'ModuleController@index' );
     Route::get( 'classes/search', 'ModuleController@search' );
-    Route::get( 'classes/{module}', 'ModuleController@show' ) -> middleware( 'module-auth' );
     Route::get( 'classes/admins/search', 'ModuleController@searchAdmin' );
+
+    Route::group( [ 'middleware' => 'module-auth' ], function () {
+
+        Route::get( 'classes/{module}', 'ModuleController@show' );
+        Route::get( 'classes/{module}/metrics', 'Module\MetricController@index' );
+
+    });
 
     Route::get( 'projects', 'ProjectController@index' ) -> middleware( 'vsts-auth' );
     Route::post( 'projects/{vstsProject}/enrol', 'ProjectController@enrol' ) -> middleware( 'vsts-auth' );

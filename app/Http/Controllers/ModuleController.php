@@ -56,6 +56,8 @@ class ModuleController extends Controller
         {
             $module -> admins() -> attach( $admins, [ 'is_owner' => false ] );
         }
+
+        return fractal() -> parseIncludes( [ 'admins', 'projects' ] ) -> item( $module, new ModuleTransformer );
     }
 
 

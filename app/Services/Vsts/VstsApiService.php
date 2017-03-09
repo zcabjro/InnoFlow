@@ -8,9 +8,11 @@
 
 namespace App\Services\Vsts;
 
+use App\Events\CommitCreatedEvent;
 use App\Models\User;
 use App\Models\VstsAccount;
 use App\Models\VstsProject;
+use App\Repositories\User\UserRepoInterface;
 use App\Repositories\Commit\CommitRepoInterface;
 use App\Repositories\VstsAccount\VstsAccountRepo;
 use App\Repositories\VstsProject\VstsProjectRepoInterface;
@@ -18,7 +20,6 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Request;
-use Tymon\JWTAuth\Providers\User\UserInterface;
 
 
 class VstsApiService
@@ -30,7 +31,7 @@ class VstsApiService
     private $commitRepo;
 
 
-    public function __construct( UserInterface $userRepo, VstsAccountRepo $vstsAccountRepo, VstsProjectRepoInterface $vstsProjectRepo, CommitRepoInterface $commitRepo )
+    public function __construct( UserRepoInterface $userRepo, VstsAccountRepo $vstsAccountRepo, VstsProjectRepoInterface $vstsProjectRepo, CommitRepoInterface $commitRepo )
     {
         $this -> client = new Client();
         $this -> userRepo = $userRepo;
@@ -159,10 +160,9 @@ class VstsApiService
             $data[ 'deletes_counter' ] = key_exists( 'Delete', $json[ 'changeCounts' ] ) ? $json[ 'changeCounts' ][ 'Delete' ] : 0;
 
             // Store new commit
-            $this -> commitRepo -> create( $data );
+            $commit = $this -> commitRepo -> create( $data );
+            event( new CommitCreatedEvent( $commit, $vstsProject ) );
         }
-
-        return $vstsProject;
     }
 
 
@@ -397,12 +397,15 @@ class VstsApiService
                 // Store new commit
                 $this -> commitRepo -> create( $data );
 
-                // Increment commit counter
-                $totalCommits++;
+                // Increment commit counter only if a project member has issued the commit
+                if ( $this -> userRepo -> findBy( 'email', $data[ 'author_email' ] ) )
+                {
+                    $totalCommits++;
+                }
             }
         }
 
-        $vstsProject -> commit_metric = $totalCommits;
+        $vstsProject -> commit_counter = $totalCommits;
         $vstsProject -> save();
     }
 }

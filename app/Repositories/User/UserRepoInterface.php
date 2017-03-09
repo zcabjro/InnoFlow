@@ -40,6 +40,16 @@ interface UserRepoInterface
      */
     public function find( $id );
 
+
+    /**
+     * Find a user based on a column value.
+     *
+     * @param $attribute
+     * @param $value
+     * @return mixed
+     */
+    public function findBy( $attribute, $value );
+
     /**
      * Update a user's information.
      *

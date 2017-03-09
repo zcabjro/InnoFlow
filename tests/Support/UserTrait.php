@@ -25,6 +25,7 @@ trait UserTrait
         $user = new User();
         $user -> email = $data[ "email" ];
         $user -> password = bcrypt( $data[ "password" ] );
+        $user -> username = $data[ "username" ];
         $user -> vsts_access_token = $token;
         $user -> save();
     }

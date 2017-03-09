@@ -51,7 +51,7 @@ class VstsProject extends Model
      */
     public function commits()
     {
-        return $this -> hasMany( 'App\Models\Commit', 'project_id', 'project_id' ) -> orderBy( 'date', 'DESC' );
+        return $this -> hasMany( 'App\Models\Commit', 'project_id', 'project_id' );
     }
 
 
@@ -62,7 +62,7 @@ class VstsProject extends Model
      */
     public function codeReviews()
     {
-        return $this -> hasMany( 'App\Models\CodeReview', 'project_id', 'project_id' ) -> orderBy( 'created_at', 'DESC' );
+        return $this -> hasMany( 'App\Models\CodeReview', 'project_id', 'project_id' );
     }
 
 
@@ -92,26 +92,28 @@ class VstsProject extends Model
     }
 
 
-    public function activeCodeReviewMetric()
-    {
-        return $this -> activeCodeReviews() -> count();
-    }
-
-
     public function codeReviewMetric()
     {
-        return $this -> codeReviews() -> count();
+        return $this -> code_review_counter;
     }
 
 
-    public function commitMetric()
+    public function commitBalanceMetric()
     {
-        return $this -> commits() -> count();
+        $metric = 0;
+
+        $members = $this -> members;
+        foreach ( $members as $member )
+        {
+            $metric += $member -> commitBalanceMetric( $this );
+        }
+
+        return $metric / count( $members );
     }
 
 
     public function feedbackMetric()
     {
-        return $this -> comments() -> count();
+        return $this -> feedback_counter;
     }
 }

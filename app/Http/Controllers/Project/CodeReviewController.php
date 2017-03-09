@@ -32,12 +32,14 @@ class CodeReviewController extends Controller
         $codeReview = $this -> codeReviewRepo -> create( $request -> except( [ 'commitIds' ] ) );
 
         $codeReview -> commits() -> attach( $request -> commitIds );
+
+        return fractal() -> item( $codeReview, new CodeReviewTransformer );
     }
 
 
     public function index( VstsProject $vstsProject )
     {
-        $codeReviews = $vstsProject -> codeReviews;
+        $codeReviews = $vstsProject -> codeReviews() -> orderBy( 'created_at', 'DESC' ) -> get();
 
         return fractal() -> collection( $codeReviews, new CodeReviewTransformer );
     }

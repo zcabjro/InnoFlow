@@ -268,6 +268,40 @@ or
    "admins" : "12,52,73"
 }
 ```
+
+**Sample Response**
+
+```json
+{
+  "id": 2,
+  "name": "Software Abstractions and Systems Integration",
+  "description": "This is a MEng software engineering class",
+  "code": "COMPGS02",
+  "admins": [
+    {
+      "userId": 12,
+      "email": "justina71@yahoo.com",
+      "username": "alana.bartell"
+    },
+    {
+      "userId": 52,
+      "email": "waelchi.cristal@kessler.com",
+      "username": "vivian.boehm"
+    },
+    {
+      "userId": 73,
+      "email": "betsy.dare@mcglynn.com",
+      "username": "florine.gutmann"
+    },
+    {
+      "userId": 101,
+      "email": "andreas@gmail.com",
+      "username": "SickAustrian"
+    }
+  ],
+  "projects": []
+}
+```
 <br>
 
 
@@ -450,6 +484,82 @@ Includes both classes created as well as those where user was assinged as admin.
 
 
 
+### Get list of class metrics:
+
+**Route**
+
+`GET` api/classes/{classId}/metrics
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| classId     | int          | A valid class id |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200  | Successful fetch |
+| 401  | User is not an admin of the module |
+| 404  | Invalid class id |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/classes/1/metrics
+
+```json
+{
+  "codeReviewMetric": {
+    "averageValidCodeReviews": 1.5,
+    "projectLevel": [
+      {
+        "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
+        "name": "Freshly",
+        "contribution": 3
+      },
+      {
+        "id": "f2df9ad9-2281-4265-bda3-ded1da89fb2d",
+        "name": "SnapPro",
+        "contribution": 0
+      }
+    ]
+  },
+  "commitBalanceMetric": {
+    "averageCommitBalance": 0,
+    "projectLevel": [
+      {
+        "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
+        "name": "Freshly",
+        "contribution": 0
+      },
+      {
+        "id": "f2df9ad9-2281-4265-bda3-ded1da89fb2d",
+        "name": "SnapPro",
+        "contribution": 0
+      }
+    ]
+  },
+  "feedbackMetric": {
+    "totalFeedback": 1.5,
+    "projectLevel": [
+      {
+        "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
+        "name": "Freshly",
+        "contribution": 3
+      },
+      {
+        "id": "f2df9ad9-2281-4265-bda3-ded1da89fb2d",
+        "name": "SnapPro",
+        "contribution": 0
+      }
+    ]
+  }
+}
+```
+<br>
+
+
+
 ## 4. Projects
 
 ### Get a list of projects:
@@ -555,8 +665,9 @@ Includes both classes created as well as those where user was assinged as admin.
 | Code | Notes |
 | -----|-------|
 | 200 | Successful enrolment |
-| 400 | <ul><li>The project is already enrolled </li><li>The user is not the owner of the project</li></ul> |
-| 401 | <ul><li>code or key are incorrect and do not match any registered class</li><li>User is not a member of the project</li></ul> |
+| 401 | <ul><li>The user is not the owner of the project</li><li>code or key are incorrect and do not match any registered class</li><li>User is not a member of the project</li></ul> |
+| 404 | Invalid projectId parameter |
+| 422 | The project is already enrolled |
 
 **Sample Request**
 
@@ -566,6 +677,84 @@ Includes both classes created as well as those where user was assinged as admin.
 {
   "code" : "COMPGS02",
   "key" : "AwesomeClass2017"
+}
+```
+<br>
+
+
+
+### Get a list of project metrics:
+
+**Route**
+
+`GET` api/projects/{projectId}/metrics
+> This is a JWT token protected route
+
+| Parameter   | Type         | Notes     |
+| ------------|--------------|-----------|
+| projectId   | string       | A valid project id |
+
+ **Response Codes**
+ 
+| Code | Notes |
+| -----|-------|
+| 200  | Successful fetch |
+| 401  | User is not a member of the project |
+| 404  | Invalid projectId parameter |
+
+**Sample Request**
+
+`GET` http://innoflow.app/api/projects/a2288f0f-c6f6-4c64-aaea-d993a3e1d333
+
+**Sample Response**
+
+```json
+{
+  "codeReviewMetric": {
+    "totalValidCodeReviews": 12,
+    "individualLevel": [
+      {
+        "username": "AndreasLukas",
+        "id": 102,
+        "contribution": 0.8
+      },
+      {
+        "username": "JediJack",
+        "id": 102,
+        "contribution": 0.2
+      }
+    ]
+  },
+  "commitBalanceMetric": {
+    "averageCommitBalance": 1,
+    "individualLevel": [
+      {
+        "username": "AndreasLukas",
+        "id": 102,
+        "contribution": 1
+      },
+      {
+        "username": "JediJack",
+        "id": 102,
+        "contribution": 1
+      }
+    ]
+  },
+  "feedbackMetric": {
+    "totalFeedback": 30,
+    "individualLevel": [
+      {
+        "username": "AndreasLukas",
+        "id": 102,
+        "contribution": 0.3
+      },
+      {
+        "username": "JediJack",
+        "id": 102,
+        "contribution": 0.7
+      }
+    ]
+  }
 }
 ```
 <br>
@@ -717,7 +906,21 @@ Includes both classes created as well as those where user was assinged as admin.
 {
   "commitIds" : "e93a59aaa7d627174aa78c686cd13eaaa9e7e7d5",
   "title" : "This is the title of a code review discussion",
-  "descritpion" : "This is the description of a code review discussion"
+  "description" : "This is the description of a code review discussion"
+}
+```
+
+**Sample Response**
+```json
+{
+  "id": 3,
+  "date": "2017-03-08 18:14:42",
+  "title": "This is the title of a code review discussion",
+  "description": "This is the description of a code review discussion",
+  "owner": {
+    "id": 101,
+    "username": "SickAustrian"
+  }
 }
 ```
 <br>
@@ -887,10 +1090,25 @@ Includes both classes created as well as those where user was assinged as admin.
 
 `POST` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61/codereviews/1/comments
 
+```json
 {
   "message" : "This is a comment. Always make sure a comment is useful."
 }
+```
 
+**Sample Response**
+
+```json
+{
+  "id": 3,
+  "date": "2017-03-08 18:16:27",
+  "text": "This is a comment. Always make sure a comment is useful.",
+  "owner": {
+    "id": 101,
+    "username": "SickAustrian"
+  }
+}
+```
 <br>
 
 

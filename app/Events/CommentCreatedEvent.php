@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Commit;
 use App\Models\VstsProject;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\InteractsWithSockets;

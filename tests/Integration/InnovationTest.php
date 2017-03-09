@@ -15,7 +15,8 @@ class InnovationTest extends TestCase
 
     private $userCredentials = [
         'email' => 'abc@email.com',
-        'password' => '1234567890'
+        'password' => '1234567890',
+        'username' => 'abcuser'
     ];
 
     private $codeCredentials = [
@@ -25,7 +26,8 @@ class InnovationTest extends TestCase
     
     private $userCredentials2 = [
         'email' => 'def@email.com',
-        'password' => '0987654321'
+        'password' => '0987654321',
+        'username' => 'defuser'
     ];
 
     private $codeCredentials2 = [
@@ -95,7 +97,7 @@ class InnovationTest extends TestCase
          // Code field is not Base64 encoded
          $this -> call('POST','api/innovations',['email' => $this -> userCredentials["email"],'password' => $this -> userCredentials["password"],'code' => '12345']);
          $this -> seeJsonEquals([
-             'code' => ['The code must be base_64 encoded']
+             'code' => ['The code must be base_64 encoded.']
          ]);
      }
 

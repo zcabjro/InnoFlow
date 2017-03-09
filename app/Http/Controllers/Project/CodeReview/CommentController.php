@@ -33,17 +33,19 @@ class CommentController extends Controller
 
     public function store( VstsProject $vstsProject, CodeReview $codeReview, NewCommentRequest $request )
     {
-        $this -> commentRepo -> create( $request -> all() );
+        $comment = $this -> commentRepo -> create( $request -> all() );
 
         event( new CodeReviewActiveEvent( $codeReview, $vstsProject ) );
 
         event( new CommentCreatedEvent( $vstsProject ) );
+
+        return fractal() -> item( $comment, new CommentTransformer );
     }
 
 
     public function index( VstsProject $vstsProject, CodeReview $codeReview )
     {
-        $comments = $codeReview -> comments;
+        $comments = $codeReview -> comments() -> orderBy( 'created_at', 'DESC' ) -> get();
 
         return fractal() -> collection( $comments, new CommentTransformer );
     }

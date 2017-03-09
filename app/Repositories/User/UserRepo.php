@@ -43,6 +43,12 @@ class UserRepo implements UserRepoInterface
     }
 
 
+    public function findBy( $attribute, $value )
+    {
+        return $this -> model -> where( $attribute, $value ) -> first();
+    }
+
+
     public function update( $id, array $data )
     {
         $this -> model -> where( $this -> model -> getKeyName(), '=', $id ) -> update( $data );

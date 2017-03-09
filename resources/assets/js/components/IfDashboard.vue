@@ -7,9 +7,11 @@
     <div v-show="display" id="wrapper">
 
       <!-- Sidebar -->
-      <div v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
+      <div :style="sideBarStyle" v-on:mousedown="toggleMenu('sidebar')" id="sidebar-wrapper">
         <ul class="sidebar-nav">
-          <if-item :options="menu.innovations" :active="menuOpen"></if-item>
+          <if-item :options="menu.innovations" :active="menuOpen">
+            <a href="#" v-on:click="redirectFromLink($event, vsCodeExtUrl, true)">[?] VS Code Extension</a>
+          </if-item>
           <if-item :options="menu.projects" :active="menuOpen">
             <a href="#" v-on:click="refreshProjects($event)">[+] Refresh</a>  
           </if-item>          
@@ -44,6 +46,8 @@
       // Whether or not side-bar is open
       menuOpen: $('#wrapper').hasClass('toggled'),
 
+      vsCodeExtUrl: 'https://marketplace.visualstudio.com/items?itemName=UCLTeam3.InnoflowVSCode',
+
       // Menu data
       menu: {
         innovations: {
@@ -53,8 +57,8 @@
             name: 'Innovations'
           }],
           selectUrl: '/dashboard/innovations',
-          addText: '[?] About',
-          addUrl: '/vscodeExtension',
+          addText: '',
+          addUrl: '',
           getName(p) {
             return p.name;
           }
@@ -122,6 +126,18 @@
       });
     },
 
+    computed: {
+      sideBarStyle() {
+        return {
+          "overflow-y": this.sideBarScroll
+        }
+      },
+
+      sideBarScroll() {
+        return this.menuOpen ? 'scroll' : 'hidden';
+      }
+    },
+
     // Dashboard component methods
     methods: {
       // Resets the dashboard contents
@@ -137,10 +153,15 @@
         }
       },
 
+      redirectFromLink(e, url, external) {
+        e.preventDefault(0);
+        this.redirect(url, external);
+      },
+
       // Helper for redirecting the user
       redirect(url, external) {
         if (external) {
-          window.location.replace(url);
+          window.open(url);
         }
         else {
           this.resetDashboardData();

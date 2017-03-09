@@ -53,7 +53,8 @@ class ProjectController extends Controller
 
         foreach ( $user -> projects as $project )
         {
-            $project -> is_owner = !is_null( $project -> account -> owner() );
+            $owner = $project -> account -> owner();
+            $project -> is_owner = is_null( $project -> account -> owner() ) ? false : $user -> user_id == $owner -> user_id;
             $projects[] = $project;
         }
 
