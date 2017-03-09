@@ -35,8 +35,7 @@
 
 <script> 
   import IfCard from './IfCard.vue'
-  import IfMessage from './IfMessage.vue'
-  // Helper for setting default IfInnovations data
+  import IfMessage from './IfMessage.vue' 
   function defaultCommentsData() {
     return {
  
