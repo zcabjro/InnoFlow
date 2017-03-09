@@ -37,7 +37,8 @@
 ```json
 {
   "email" : "andreas@gmail.com",
-  "password" : "1234567890"
+  "password" : "1234567890",
+  "username" : "SickAustrian"
 }
 ```
 <br>
