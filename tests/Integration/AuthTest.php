@@ -156,29 +156,6 @@ class AuthTest extends TestCase
         ] );
      }
 
-     /**
-     * Member is not authorized
-     *
-     * @return void
-     */
-     public function testTokenNotAuthorized()
-     {
-         $this->withoutMiddleware();
-
-        // Create user and login
-        $this -> createUser($this -> credentials);
-        $user = User::where('email',$this -> credentials)->first();
-        $token = JWTAuth::fromUser($user);
-        JWTAuth::setToken($token);
-        $user_id = $user -> user_id;
-
-        $response = $this -> call('GET','api/vsts');
-        //dd($response);
-        $this -> seeJsonEquals( [
-            'isAuthorized' => false,
-            'url' => "https://app.vssps.visualstudio.com/oauth2/authorize?response_type=Assertion&state=$user_id"
-        ] );
-     }
 
      /**
      * Can not check authorization because token expired/haven't login
