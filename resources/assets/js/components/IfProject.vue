@@ -68,7 +68,7 @@
           <div id="commits" class="tab-pane fade">
             <div v-for="(commit, index) in commits" v-on:click="addCommitForReview(index)">
               <if-card :style="seletableStyle(index)">
-                <a :href="commit.commit_url" class="pull-right">{{commit.commit_url}}</a>
+                <a :href="commit.commit_url" target="_blank" class="pull-right">{{commit.commit_url}}</a>
                 <span class="h3">{{commit.comment}}</span>                            
                 <br>by {{commit.commiter.username}} ({{commit.date}})
               </if-card>
@@ -95,7 +95,7 @@
             <div v-for="codeReview in codeReviews" style="padding: 0px;" class="col-md-3">
               <if-card>
               <div @click="toggleModal(codeReview.id)" @click.stop style="position: absolute; left: 48%; top: 50%; transform: translate(-50%, -50%);width: 90%; height: 92%;">
-                <div style = "margin:14px; width: 91%; height: 87%;">
+                <div style = "margin:14px; width: 91%; height: 87%; overflow: hidden;">
                 <p class="pull-right">{{codeReview.date}}</p>
                 <h3>{{codeReview.title}}</h3>
                 <p>{{codeReview.description}}</p> 
@@ -389,7 +389,7 @@
 
           axios.post('api/projects/' + this.id + '/codereviews', { title: this.newTitle, description: this.newDescription, commitIds })
             .then((res) => {
-              console.log('Succeeded in submitting code review.');
+              this.codeReviews.unshift(res.data);
             })
             .catch((error) => {
               console.log(error);

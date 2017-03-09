@@ -178,12 +178,8 @@
             this.loadProjects();
           }
           else if (redirectUrl && confirm('Redirect for VSTS auth?')) {
-            //this.$refs.message.display('Missing VSTS Authorisation.');
-            //console.log("Not VSTS Authorised!");
-            this.redirect(redirectUrl, true);
+            window.location.href = redirectUrl;
           }
-          
-          // TODO: Set this when all content has been received
           this.display = true;
         });
       },
