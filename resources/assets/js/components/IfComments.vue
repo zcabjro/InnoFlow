@@ -33,21 +33,16 @@
   </div> 
 </template>
 
-<script>
-  import VueMarkdown from 'vue-markdown' // Markdown display component
-
+<script> 
   import IfCard from './IfCard.vue'
   import IfMessage from './IfMessage.vue'
   // Helper for setting default IfInnovations data
   function defaultCommentsData() {
     return {
-
-      // Whether innovations have been syntax highlighted or not
-      highlighted: false,
+ 
       newComment: '',
       commits: [],
-
-      // Innovation markup snippets
+ 
       comments: [
         {
           "id": 4,
@@ -75,9 +70,7 @@
     // Debug name and html tag of this component
     name: 'if-comments',
     
-    // Components used by IfInnovations
-    components: {
-      VueMarkdown,
+    components: { 
       IfCard,
       IfMessage
     },
