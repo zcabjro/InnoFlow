@@ -40,9 +40,12 @@ class ProjectTransformer extends TransformerAbstract
             $fields[ 'description' ] = $description;
         }
 
-        if ( !is_null( $moduleId = $project -> module_id ) )
+        if ( !is_null( $module = $project -> module ) )
         {
-            $fields[ 'classId' ] = $moduleId;
+            $fields[ 'class' ] = [
+                'id' => $module -> module_id,
+                'name' => $module -> name
+            ];
         }
 
         if ( !is_null( $isOwner = $project -> is_owner ) )
