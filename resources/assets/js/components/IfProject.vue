@@ -257,7 +257,7 @@
       },
 
       loadCommitBalanceMetric(metric) {
-        this.averageCommitBalance = metric.averageCommitBalance;
+        this.averageCommitBalance = Math.round(metric.averageCommitBalance * 100);
 
         // Draw chart
         let canvas = document.getElementById('commitBalanceChart');

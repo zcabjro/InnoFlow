@@ -145,7 +145,7 @@
       },
 
       loadCodeReviewMetric(metric) {
-        this.averageCodeReviews = metric.averageValidCodeReviews;
+        this.averageCodeReviews = Math.round(metric.averageValidCodeReviews * 100);
 
         // Draw chart
         let canvas = document.getElementById('codeReviewChart');
@@ -160,7 +160,7 @@
       },
 
       loadFeedbackMetric(metric) {
-        this.averageComments = metric.totalFeedback;
+        this.averageComments = Math.round(metric.totalFeedback * 100); // Should be averageFeedback
 
         // Draw chart
         let canvas = document.getElementById('feedbackChart');
@@ -174,7 +174,7 @@
       },
 
       loadCommitBalanceMetric(metric) {
-        this.averageCommitBalance = metric.averageCommitBalance;
+        this.averageCommitBalance = Math.round(metric.averageCommitBalance * 100);
 
         // Draw chart
         let canvas = document.getElementById('commitBalanceChart');
