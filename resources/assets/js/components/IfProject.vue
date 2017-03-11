@@ -281,7 +281,7 @@
 
         for (let i = 0; i < metric.individualLevel.length; i++) {
           labels.push(metric.individualLevel[i].username);
-          dataset.data.push(metric.individualLevel[i].contribution);
+          dataset.data.push(Math.round(metric.individualLevel[i].contribution * 100));
         }
         return {
           labels,

@@ -198,7 +198,7 @@
 
         for (let i = 0; i < metric.projectLevel.length; i++) {
           labels.push(metric.projectLevel[i].name);
-          dataset.data.push(metric.projectLevel[i].contribution);
+          dataset.data.push(Math.round(metric.projectLevel[i].contribution * 100));
         }
         return {
           labels,
