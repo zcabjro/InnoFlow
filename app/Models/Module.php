@@ -51,7 +51,7 @@ class Module extends Model
             $metric += $project -> codeReviewMetric();
         }
 
-        return $metric / count( $projects );
+        return count( $projects ) == 0 ? 0 : $metric / count( $projects );
     }
 
 
@@ -65,7 +65,7 @@ class Module extends Model
             $metric += $project -> commitBalanceMetric();
         }
 
-        return $metric / count( $projects );
+        return count( $projects ) == 0 ? 0 : $metric / count( $projects );
     }
 
 
@@ -79,6 +79,6 @@ class Module extends Model
             $metric += $project -> feedbackMetric();
         }
 
-        return $metric / count( $projects );
+        return count( $projects ) == 0 ? 0 : $metric / count( $projects );
     }
 }

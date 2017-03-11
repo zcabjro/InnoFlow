@@ -124,6 +124,7 @@ class VstsApiService
         {
             return;
         }
+
         // Project has no owner
         if ( is_null( $owner = $vstsProject -> account -> owner() ) )
         {
