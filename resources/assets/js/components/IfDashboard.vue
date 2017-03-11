@@ -219,7 +219,7 @@
         let owned = [];
         if (projects) {
           for (let i = 0; i < projects.length; i++) {
-            if (projects[i].classId) {
+            if (projects[i].class) {
               owned.push(projects[i]);
             }
           }

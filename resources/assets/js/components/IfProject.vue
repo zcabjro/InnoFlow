@@ -388,11 +388,6 @@
 
       resetData() {
         Object.assign(this.$data, defaultProjectData());
-      },
-
-      selectClass(e) {
-        e.preventDefault();
-        this.$router.push('/dashboard/classes/' + this.details.classId);
       }
     }
 
