@@ -6,7 +6,7 @@
     <div v-if="details" class="row">
       <div v-if="details" id="projectDetails" class="col-sm-6" style="max-height: 33vh; overflow: auto;">
         <h1>{{details.name}}</h1>
-        <p v-if="className">Class: {{className}}</p>
+        <p v-if="details.class && details.class.name">Class: {{details.class.name}}</p>
         <p v-if="details.description">{{details.description}}</p>
       </div>
 
@@ -294,7 +294,6 @@
           axios.get('api/projects/' + this.id)
             .then(res => {
               this.details = res.data;
-              this.loadClassName();
               this.loadCommits();
               this.loadCodeReviews();
               // Load metrics after short delay (for animation)
@@ -332,19 +331,6 @@
             console.log(error);
             console.log('Failed to load code reviews');
           });
-      },
-
-      loadClassName() {
-        if (this.details && this.details.classId) {
-          axios.get('api/classes/' + this.details.classId)
-            .then(res => {
-              this.className = res.data.code;                    
-            })
-            .catch(error => {
-              console.log(error);
-              console.log('Failed to load class details');
-            });
-        }
       },
 
       setCreateReview(e, active) {
