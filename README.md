@@ -589,16 +589,34 @@ Includes both classes created as well as those where user was assinged as admin.
 ```json
 [
   {
-    "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
-    "name": "MyFirstProject",
+    "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd55",
+    "name": "Freshly",
+    "class": {
+      "id": 1,
+      "name": "Systems Engineering"
+    },
     "isOwner": true
   },
   {
-    "id": "fa856987-4cf7-4ad4-bdba-5fbd1374865d",
-    "name": "Innoflow",
-    "description": "A university project",
+    "id": "8cc6621f-6d02-4de2-8a2c-ef1765ff2288",
+    "name": "WordSheriff",
     "isOwner": true
   },
+  {
+    "id": "a2271f0f-c6f6-4c64-aaea-d993a3e1d324",
+    "name": "InnoFlow v2",
+    "description": "CS Education Tool.",
+    "isOwner": false
+  },
+  {
+    "id": "f2df9ad9-2281-4265-bda3-ded1da89fabt",
+    "name": "SnapPro",
+    "class": {
+      "id": 1,
+      "name": "Systems Engineering"
+    },
+    "isOwner": true
+  }
 ]
 ```
 <br>
@@ -626,18 +644,21 @@ Includes both classes created as well as those where user was assinged as admin.
 
 **Sample Request**
 
-`GET` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd61
+`GET` http://innoflow.app/api/projects/1b37c498-0c27-42e2-ba44-c3a90e86cd55
 
 ```json
 {
   "id": "1b37c498-0c27-42e2-ba44-c3a90e86cd61",
-  "name": "MyFirstProject",
-  "classId": 1,
+  "name": "Freshly",
+  "class": {
+    "id": 1,
+    "name": "Systems Engineering"
+  },
   "members": [
     {
       "userId": 101,
-      "email": "jack@gmail.com",
-      "username": "Crocodile Killer"
+      "email": "andreas@gmail.com",
+      "username": "SickAustrian"
     }
   ]
 }
