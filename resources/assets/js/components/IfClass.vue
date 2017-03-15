@@ -145,14 +145,14 @@
       },
 
       loadCodeReviewMetric(metric) {
-        this.averageCodeReviews = Math.round(metric.averageValidCodeReviews * 100);
+        this.averageCodeReviews = Math.round(metric.averageValidCodeReviews);
 
         // Draw chart
         let canvas = document.getElementById('codeReviewChart');
 
         let codeReviewChart = new Chart(canvas, {
-          type: 'doughnut',
-          data: this.extractProjectData(metric, '% Code Reviews'),
+          type: 'bar',
+          data: this.extractProjectData(metric, 'Avg. Code Reviews'),
           options: {
             maintainAspectRatio: false
           }
@@ -160,13 +160,13 @@
       },
 
       loadFeedbackMetric(metric) {
-        this.averageComments = Math.round(metric.totalFeedback * 100); // Should be averageFeedback
+        this.averageComments = Math.round(metric.totalFeedback); // Should be averageFeedback
 
         // Draw chart
         let canvas = document.getElementById('feedbackChart');
         let feedbackChart = new Chart(canvas, {
-          type: 'doughnut',
-          data: this.extractProjectData(metric, '% Comments'),
+          type: 'bar',
+          data: this.extractProjectData(metric, 'Avg. Comments'),
           options: {
             maintainAspectRatio: false
           }
@@ -179,15 +179,15 @@
         // Draw chart
         let canvas = document.getElementById('commitBalanceChart');
         let commitBalanceChart = new Chart(canvas, {
-          type: 'doughnut',
-          data: this.extractProjectData(metric, '% Commits'),
+          type: 'bar',
+          data: this.extractProjectData(metric, 'Avg. Commit Balance', (data => data * 100)),
           options: {
             maintainAspectRatio: false
           }
         });
       },
 
-      extractProjectData(metric, label) {
+      extractProjectData(metric, label, format) {
         let labels = [];
 
         // Single dataset
@@ -198,7 +198,7 @@
 
         for (let i = 0; i < metric.projectLevel.length; i++) {
           labels.push(metric.projectLevel[i].name);
-          dataset.data.push(Math.round(metric.projectLevel[i].contribution * 100));
+          dataset.data.push(Math.round(format ? format(metric.projectLevel[i].contribution) : metric.projectLevel[i].contribution));
         }
         return {
           labels,
