@@ -187,8 +187,7 @@
     },
 
     methods: {
-      close(){
-        console.log("clicked"); 
+      close(){        
         this.showModal=[];
       },
       init(id) {
@@ -202,9 +201,9 @@
       },
 
       seletableStyle(index) {
-        let o = this.newCommits.indexOf(index) >= 0 ? 0.5 : 1;
+        let c = this.newCommits.indexOf(index) >= 0 ? '#af0f0f' : 'black';
         return {
-          opacity: o
+          color: c
         };
       },
 
