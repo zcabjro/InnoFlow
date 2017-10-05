@@ -1,8 +1,13 @@
 # Overview
-### A VSTS Extension dedicated to:
+### InnoFlow is a VSTS based platform dedicated to:
 * Project transparency
 * Feedback included
 * Innovation showcased
+
+This repository holds the implementation of the RESTful API as well the VSTS extension (web app). InnoFlow's other two components can be found via the following GitHub repositories:
+
+* IDE Extension: https://github.com/zcabjro/InnoFlow_VSCode#usage
+* Chrome Extension: https://github.com/zcabjro/InnoFlowChrome
 
 
 # RESTful API
